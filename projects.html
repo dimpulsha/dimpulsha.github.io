@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nautilus.CIM - Проекты</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+     <div class="app-container">
+        <!-- SIDEBAR -->
+        <div class="sidebar" id="sidebar">
+            <button class="sidebar-toggle sidebar-open" onclick="toggleSidebar()" aria-label="Toggle sidebar">
+                <span class="toggle-icon">☰</span>
+            </button>
+
+            <div class="sidebar-nav">
+                            <div class="sidebar-header">
+                <strong>Nautilus.CIM</strong>
+            </div>
+                <a href="index.html" class="nav-item">📊 Главная</a>
+                <!-- <a href="projects.html" class="nav-item active">📁 Проекты</a> -->
+                <!-- Projects Tree -->
+                <div class="nav-tree-item">
+                    <button class="nav-tree-toggle" onclick="handleProjectsClick()" aria-expanded="true" aria-label="Toggle projects list">
+                        <span class="tree-icon">▶</span>
+                        📁 Проекты
+                    </button>
+                    <div id="projects-tree-container" class="nav-tree-children nav-tree-collapsed">
+                        <!-- <a href="projects.html" class="nav-tree-link">→ Все проекты</a> -->
+                        <div id="projects-list-tree"></div>
+                        <!-- <a href="projects.html" class="nav-tree-link">→ Все проекты</a> -->
+                    </div>
+                </div>
+
+                <!-- <a href="models.html" class="nav-item">📋 Модели</a> -->
+                <!-- <a href="profiles.html" class="nav-item">⚙️ Профили</a> -->
+
+                <div class="nav-section-title">Текущий проект</div>
+                <div id="current-project" style="padding: 10px 15px; font-size: 12px; color: rgba(255,255,255,0.7);">
+                    Нет проекта
+                </div>
+
+                <div class="nav-section-title">Действия</div>
+                <div class="nav-item" onclick="openModal('new-project-modal')">+ Новый проект</div>
+                <!-- <div class="nav-item" onclick="openModal('new-model-modal')">⬆️ Импорт модели</div> -->
+                <a href="compare.html" class="nav-item">🔍 Сравнение</a>
+            </div>
+        </div>
+        <div class="sidebar-resize-handle" id="sidebar-resize-handle"></div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <div class="toolbar">
+                <div class="toolbar-title">Проекты</div>
+                <div class="toolbar-actions">
+                    <button class="btn btn-primary" onclick="openModal('new-project-modal')">+ Новый проект</button>
+                    <button class="btn btn-secondary" onclick="location.reload()">🔄 Обновить</button>
+                </div>
+            </div>
+
+            <div class="content-area">
+                <div class="search-box" id="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" id="search-projects" placeholder="Поиск проектов..." oninput="filterProjects()">
+                </div>
+
+                <div id="projects-list"></div>
+
+                <!-- Models and Profiles containers (hidden by default) -->
+                <div id="models-container" class="hidden">
+                    <div class="split-view">
+                        <div class="split-left">
+                            <div class="flex-between mb-15">
+                                <h3 class="no-margin">Модели</h3>
+                            </div>
+                            <div id="models-list"></div>
+                        </div>
+                        <div class="split-right">
+                            <div id="model-details"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="profiles-container" class="mt-30 hidden">
+                    <div class="divider mb-15"></div>
+                    <div class="split-view">
+                        <div class="split-left">
+                            <div class="flex-between mb-15">
+                                <h3 class="no-margin">Профили</h3>
+                            </div>
+                            <div id="profiles-list"></div>
+                        </div>
+                        <div class="split-right">
+                            <div id="profile-details"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="quick-actions hidden" id="open-project-action">
+                    <button class="btn btn-primary" onclick="openCurrentProject()">Открыть проект</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: New Project -->
+    <div id="new-project-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title">Создать новый проект</div>
+            <div class="form-group">
+                <label class="form-label">Название проекта *</label>
+                <input type="text" id="project-name" class="form-input" placeholder="Введите название">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Описание</label>
+                <textarea id="project-desc" class="form-textarea" placeholder="Описание проекта"></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Версия</label>
+                <input type="text" id="project-version" class="form-input" value="1.0">
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeModal('new-project-modal')">Отмена</button>
+                <button class="btn btn-primary" onclick="createProject()">Создать</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Edit Project -->
+    <div id="edit-project-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title">Редактировать проект</div>
+            <div class="form-group">
+                <label class="form-label">Название проекта *</label>
+                <input type="text" id="edit-project-name" class="form-input">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Описание</label>
+                <textarea id="edit-project-desc" class="form-textarea"></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Версия</label>
+                <input type="text" id="edit-project-version" class="form-input">
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeModal('edit-project-modal')">Отмена</button>
+                <button class="btn btn-primary" onclick="saveProjectEdit()">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <script src="data.js"></script>
+    <script src="sidebar.js"></script>
+    <script src="projects.js"></script>
+</body>
+</html>

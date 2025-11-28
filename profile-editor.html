@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nautilus.CIM - Редактор профиля</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body,
+      html {
+        height: 100vh;
+        margin: 0;
+        overflow: hidden;
+        line-height: 1.5;
+      }
+
+      .app-container {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .main-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .toolbar {
+        flex-shrink: 0;
+      }
+
+      .editor-content-area {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 5px 20px;
+        overflow: hidden;
+      }
+
+      .editor-container {
+        flex: 1;
+        display: flex;
+        gap: 10px;
+        overflow: hidden;
+      }
+
+      .editor-panel {
+        /* flex: 1; */
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background: white;
+        width: 350px;
+      }
+
+      .editor-panel-header {
+        padding: 5px 15px;
+        background: #f5f5f5;
+        border-bottom: 1px solid #ddd;
+        font-weight: 600;
+      }
+
+      .editor-panel-content {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: auto;
+        padding: 5px 15px;
+      }
+
+      #available-tree,
+      #profile-tree {
+        min-width: min-content;
+      }
+
+      .editor-panel-actions {
+        padding: 5px 15px;
+        border-top: 1px solid #ddd;
+        background: #f9f9f9;
+      }
+
+      /* Details panel */
+      .details-panel {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background: #fff;
+        min-width: 0; /* allow flex container to shrink properly */
+      }
+      .details-panel-content {
+        flex: 1;
+        padding: 5px 15px;
+        overflow-y: auto;
+        overflow-x: auto;
+      }
+
+      /* Tabs styling */
+      .tabs {
+        display: flex;
+        gap: 8px;
+        border-bottom: 1px solid #e5e5e5;
+        margin-bottom: 8px;
+      }
+      .tab {
+        padding: 6px 10px;
+        font-size: 13px;
+        color: #444;
+        cursor: pointer;
+        border: 1px solid transparent;
+        border-bottom: none;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+      }
+      .tab.active {
+        background: #f5f5f5;
+        border-color: #e5e5e5;
+        color: #000;
+        font-weight: 600;
+      }
+      .tab-content { display: none; }
+      .tab-content.active { display: block; }
+
+      .transfer-options {
+        margin-bottom: 15px;
+      }
+
+      .transfer-options h4 {
+        margin: 0 0 10px 0;
+        font-size: 14px;
+      }
+
+      .option-checkbox {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+
+      .option-checkbox input[type="checkbox"] {
+        margin-right: 8px;
+      }
+
+      .option-checkbox label {
+        font-size: 13px;
+        cursor: pointer;
+      }
+
+      .tree-item-with-checkbox {
+        display: flex;
+        align-items: center;
+        padding: 3px 0;
+        white-space: nowrap;
+      }
+
+      .tree-item-checkbox {
+        margin-right: 8px;
+        cursor: pointer;
+      }
+
+      .tree-item-label {
+        cursor: pointer;
+        user-select: none;
+        font-size: 13px;
+        white-space: nowrap;
+      }
+
+      .tree-indent {
+        display: inline-block;
+        width: 20px;
+      }
+
+      .tree-toggle {
+        display: inline-block;
+        width: 16px;
+        cursor: pointer;
+        user-select: none;
+        font-size: 12px;
+        margin-right: 4px;
+      }
+
+      .tree-children {
+        display: block;
+      }
+
+      .tree-children.collapsed {
+        display: none;
+      }
+
+      .tree-item-with-checkbox.tree-item-selected {
+        background-color: #e3f2fd;
+      }
+
+      .tree-item-with-checkbox:hover {
+        background-color: #f5f5f5;
+      }
+
+      .tree-item-with-checkbox.tree-item-selected:hover {
+        background-color: #d1e7fd;
+      }
+
+      .search-box {
+        margin-bottom: 10px;
+      }
+
+      .search-input {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+
+      .search-input:focus {
+        outline: none;
+        border-color: #4a90e2;
+      }
+
+      .btn-group {
+        display: flex;
+        gap: 10px;
+      }
+
+      .profile-name-display {
+        font-size: 18px;
+        font-weight: 600;
+        color: #666;
+        padding-left: 20px;
+
+        /* margin-top: 5px; */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- MAIN CONTENT -->
+      <div class="main-content">
+        <div class="toolbar">
+          <div class="toolbar-title">
+            <span id="page-title">Редактор профиля</span>
+            <span class="profile-name-display" id="profile-name-display"
+              >Новый профиль</span
+            >
+          </div>
+          <div class="toolbar-actions">
+            <button
+              class="btn btn-secondary"
+              onclick="window.location.href='project-details.html'"
+            >
+              ← Назад
+            </button>
+            <button class="btn btn-primary" onclick="saveProfile()">
+              💾 Сохранить профиль
+            </button>
+          </div>
+        </div>
+
+        <div class="editor-content-area">
+          <div class="editor-container">
+            <!-- LEFT PANEL: Available Models and Profiles -->
+            <div class="editor-panel">
+              <div class="editor-panel-header">Модели и профили проекта</div>
+              <div class="editor-panel-content">
+                <div class="search-box">
+                  <input
+                    type="text"
+                    class="search-input"
+                    placeholder="Поиск..."
+                    id="left-search"
+                    oninput="filterLeftTree()"
+                  />
+                </div>
+                <div id="available-tree">
+                  <!-- Tree will be rendered here -->
+                </div>
+              </div>
+              <div class="editor-panel-actions">
+                <!-- <div class="transfer-options">
+                                <h4>Опции переноса</h4>
+                                <div class="option-checkbox">
+                                    <input type="checkbox" id="option-selected-only" checked>
+                                    <label for="option-selected-only">Перенести только выделенные объекты</label>
+                                </div>
+                                <div class="option-checkbox">
+                                    <input type="checkbox" id="option-include-attributes">
+                                    <label for="option-include-attributes">Включить атрибуты</label>
+                                </div>
+                                <div class="option-checkbox">
+                                    <input type="checkbox" id="option-include-links">
+                                    <label for="option-include-links">Включить связи</label>
+                                </div>
+                                <div class="option-checkbox">
+                                    <input type="checkbox" id="option-include-parents">
+                                    <label for="option-include-parents">Включить классы - родители</label>
+                                </div>
+                                <div class="option-checkbox">
+                                    <input type="checkbox" id="option-include-associations">
+                                    <label for="option-include-associations">Включить классы, связанные через ассоциацию</label>
+                                </div>
+                            </div> -->
+                <button
+                  class="btn btn-primary"
+                  onclick="transferToProfile()"
+                  style="width: 100%"
+                >
+                  → Перенести в профиль
+                </button>
+
+                <button
+                  class="btn btn-primary"
+                  onclick="transferToProfile()"
+                  style="width: 100%"
+                >
+                  ✕ Снять выделение
+                </button>
+              </div>
+            </div>
+
+            <!-- RIGHT PANEL: Profile Being Edited -->
+            <div class="editor-panel">
+              <div class="editor-panel-header">
+                <span id="profile-header-name">Новый профиль</span>
+              </div>
+              <div class="editor-panel-content">
+                <div class="search-box">
+                  <input
+                    type="text"
+                    class="search-input"
+                    placeholder="Поиск..."
+                    id="right-search"
+                    oninput="filterRightTree()"
+                  />
+                </div>
+                <div id="profile-tree">
+                  <div
+                    class="text-center text-muted"
+                    style="padding: 40px 20px"
+                  >
+                    Профиль пуст. Выберите элементы слева и перенесите их в
+                    профиль.
+                  </div>
+                </div>
+              </div>
+              <div class="editor-panel-actions">
+                <button
+                  class="btn btn-secondary"
+                  onclick="removeFromProfile()"
+                  style="width: 100%"
+                >
+                  ✕ Исключить выделенное
+                </button>
+
+                <button
+                  class="btn btn-primary"
+                  onclick="transferToProfile()"
+                  style="width: 100%"
+                >
+                  ✕ Снять выделение
+                </button>
+              </div>
+            </div>
+            <div class="details-panel">
+              <div class="details-panel-content">
+                <div class="tabs" id="details-tabs">
+                  <div class="tab active" data-tab="model" onclick="switchDetailsTab('model')">информация из модели</div>
+                  <div class="tab" data-tab="profile" onclick="switchDetailsTab('profile')">информация из профиля</div>
+                  <div class="tab" data-tab="misc" onclick="switchDetailsTab('misc')">разное</div>
+                </div>
+
+                <div class="tab-content active" data-tab-content="model">
+                  <div class="text-muted" style="padding: 10px 0;">
+                    Здесь будет отображаться информация из выбранной модели.
+                  </div>
+                </div>
+
+                <div class="tab-content" data-tab-content="profile">
+                  <div class="text-muted" style="padding: 10px 0;">
+                    Здесь будет отображаться информация из выбранного профиля.
+                  </div>
+                </div>
+
+                <div class="tab-content" data-tab-content="misc">
+                  <div class="text-muted" style="padding: 10px 0;">
+                    Прочие сведения и служебная информация.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script>
+      let profileData = {
+        id: null,
+        name: "Новый профиль",
+        items: [],
+      };
+
+      let availableData = [];
+      let selectedLeftItems = new Set();
+      let selectedRightItems = new Set();
+      let expandedLeftItems = new Set();
+      let expandedRightItems = new Set();
+      let activeLeftItem = null;
+      let activeRightItem = null;
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        await loadSampleData();
+        loadProfileFromUrl();
+        loadAvailableData();
+        renderAvailableTree();
+        renderProfileTree();
+      });
+
+      function loadProfileFromUrl() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const profileId = urlParams.get("profileId");
+        const projectId = getCurrentProjectId();
+
+        if (profileId && projectId) {
+          const profile = getProfile(projectId, parseInt(profileId));
+          if (profile) {
+            profileData.id = profile.id;
+            profileData.name = profile.name;
+            profileData.items = profile.rootPackages || [];
+
+            document.getElementById("profile-name-display").textContent =
+              profile.name;
+            document.getElementById("profile-header-name").textContent =
+              profile.name;
+          }
+        }
+      }
+
+      function loadAvailableData() {
+        const projectId = getCurrentProjectId();
+        if (!projectId) return;
+
+        const project = getProject(projectId);
+        if (!project) return;
+
+        availableData = [];
+
+        // Add models
+        if (project.models) {
+          project.models.forEach((model) => {
+            availableData.push({
+              type: "model",
+              id: model.id,
+              name: model.name,
+              data: model,
+              children: model.rootPackages || [],
+            });
+          });
+        }
+
+        // Add profiles
+        if (project.profiles) {
+          project.profiles.forEach((profile) => {
+            // Don't include the profile being edited
+            if (profile.id !== profileData.id) {
+              availableData.push({
+                type: "profile",
+                id: profile.id,
+                name: profile.name,
+                data: profile,
+                children: profile.rootPackages || [],
+              });
+            }
+          });
+        }
+      }
+
+      function renderAvailableTree() {
+        const container = document.getElementById("available-tree");
+        let html = "";
+
+        availableData.forEach((item, index) => {
+          const itemKey = `left-${item.type}-${item.id}`;
+          const isChecked = selectedLeftItems.has(itemKey);
+          const isExpanded = expandedLeftItems.has(itemKey);
+          const icon = item.type === "model" ? "📋" : "⚙️";
+          const hasChildren = item.children && item.children.length > 0;
+
+          const isActive = activeLeftItem === itemKey;
+
+          html += `
+                    <div class="tree-item-with-checkbox ${
+                      isActive ? "tree-item-selected" : ""
+                    }" onclick="setActiveLeftItem('${itemKey}', event)">
+                        <span class="tree-toggle" onclick="toggleLeftExpand('${itemKey}'); event.stopPropagation();">
+                            ${hasChildren ? (isExpanded ? "▼" : "▶") : " "}
+                        </span>
+                        <input 
+                            type="checkbox" 
+                            class="tree-item-checkbox" 
+                            id="${itemKey}"
+                            ${isChecked ? "checked" : ""}
+                            onchange="toggleLeftItem('${itemKey}'); event.stopPropagation();"
+                            onclick="event.stopPropagation();"
+                        >
+                        <span class="tree-item-label">
+                            ${icon} ${item.name} (${
+            item.type === "model" ? "Model" : "Profile"
+          })
+                        </span>
+                    </div>
+                `;
+
+          // Render children (packages)
+          if (hasChildren) {
+            html += `<div class="tree-children ${
+              isExpanded ? "" : "collapsed"
+            }" id="children-${itemKey}">`;
+            html += renderTreeChildren(item.children, 1, "left", itemKey);
+            html += `</div>`;
+          }
+        });
+
+        container.innerHTML =
+          html || '<div class="text-center text-muted">Нет данных</div>';
+      }
+
+      function renderTreeChildren(items, level, side, parentKey) {
+        let html = "";
+
+        items.forEach((item, index) => {
+          const itemKey = `${parentKey}-pkg-${index}`;
+          const isChecked =
+            side === "left"
+              ? selectedLeftItems.has(itemKey)
+              : selectedRightItems.has(itemKey);
+          const isExpanded =
+            side === "left"
+              ? expandedLeftItems.has(itemKey)
+              : expandedRightItems.has(itemKey);
+
+          const hasChildren =
+            (item.elements && item.elements.length > 0) ||
+            (item.children && item.children.length > 0);
+
+          const isActive =
+            side === "left"
+              ? activeLeftItem === itemKey
+              : activeRightItem === itemKey;
+
+          // const indent = '<span class="tree-indent"></span>'.repeat(level);
+
+          html += `
+                    <div class="tree-item-with-checkbox ${
+                      isActive ? "tree-item-selected" : ""
+                    }" onclick="${
+            side === "left" ? "setActiveLeftItem" : "setActiveRightItem"
+          }('${itemKey}', event)">
+                        <span class="tree-toggle" onclick="${
+                          side === "left"
+                            ? "toggleLeftExpand"
+                            : "toggleRightExpand"
+                        }('${itemKey}'); event.stopPropagation();">
+                            ${hasChildren ? (isExpanded ? "▼" : "▶") : " "}
+                        </span>
+                        <input 
+                            type="checkbox" 
+                            class="tree-item-checkbox" 
+                            id="${itemKey}"
+                            ${isChecked ? "checked" : ""}
+                            onchange="${
+                              side === "left"
+                                ? "toggleLeftItem"
+                                : "toggleRightItem"
+                            }('${itemKey}'); event.stopPropagation();"
+                            onclick="event.stopPropagation();"
+                        >
+                        <span class="tree-item-label">
+                            📦 ${item.name || "Package"}
+                        </span>
+                    </div>
+                `;
+
+          // Render children container
+          if (hasChildren) {
+            html += `<div class="tree-children ${
+              isExpanded ? "" : "collapsed"
+            }" id="children-${itemKey}">`;
+
+            // Render elements
+            if (item.elements && item.elements.length > 0) {
+              item.elements.forEach((elem, elemIndex) => {
+                const elemKey = `${itemKey}-elem-${elemIndex}`;
+                const elemChecked =
+                  side === "left"
+                    ? selectedLeftItems.has(elemKey)
+                    : selectedRightItems.has(elemKey);
+                const elemActive =
+                  side === "left"
+                    ? activeLeftItem === elemKey
+                    : activeRightItem === elemKey;
+                // const elemIndent = '<span class="tree-indent"></span>'.repeat(level + 1);
+
+                html += `
+                                <div class="tree-item-with-checkbox ${
+                                  elemActive ? "tree-item-selected" : ""
+                                }" onclick="${
+                  side === "left" ? "setActiveLeftItem" : "setActiveRightItem"
+                }('${elemKey}', event)">
+                                    <span class="tree-toggle"> </span>
+                                    <input 
+                                        type="checkbox" 
+                                        class="tree-item-checkbox" 
+                                        id="${elemKey}"
+                                        ${elemChecked ? "checked" : ""}
+                                        onchange="${
+                                          side === "left"
+                                            ? "toggleLeftItem"
+                                            : "toggleRightItem"
+                                        }('${elemKey}'); event.stopPropagation();"
+                                        onclick="event.stopPropagation();"
+                                    >
+                                    <span class="tree-item-label">
+                                        📄 ${elem.name || "Class"}
+                                    </span>
+                                </div>
+                            `;
+              });
+            }
+
+            // Render child packages
+            if (item.children && item.children.length > 0) {
+              html += renderTreeChildren(
+                item.children,
+                level + 1,
+                side,
+                itemKey
+              );
+            }
+
+            html += `</div>`;
+          }
+        });
+
+        return html;
+      }
+
+      function renderProfileTree() {
+        const container = document.getElementById("profile-tree");
+
+        if (!profileData.items || profileData.items.length === 0) {
+          container.innerHTML = `
+                    <div class="text-center text-muted" style="padding: 40px 20px;">
+                        Профиль пуст. Выберите элементы слева и перенесите их в профиль.
+                    </div>
+                `;
+          return;
+        }
+
+        let html = renderTreeChildren(profileData.items, 0, "right", "profile");
+        container.innerHTML = html;
+      }
+
+      function toggleLeftItem(itemKey) {
+        const checkbox = document.getElementById(itemKey);
+        if (checkbox.checked) {
+          selectedLeftItems.add(itemKey);
+        } else {
+          selectedLeftItems.delete(itemKey);
+        }
+      }
+
+      function toggleRightItem(itemKey) {
+        const checkbox = document.getElementById(itemKey);
+        if (checkbox.checked) {
+          selectedRightItems.add(itemKey);
+        } else {
+          selectedRightItems.delete(itemKey);
+        }
+      }
+
+      function toggleLeftExpand(itemKey) {
+        if (expandedLeftItems.has(itemKey)) {
+          expandedLeftItems.delete(itemKey);
+        } else {
+          expandedLeftItems.add(itemKey);
+        }
+        renderAvailableTree();
+      }
+
+      function toggleRightExpand(itemKey) {
+        if (expandedRightItems.has(itemKey)) {
+          expandedRightItems.delete(itemKey);
+        } else {
+          expandedRightItems.add(itemKey);
+        }
+        renderProfileTree();
+      }
+
+      function setActiveLeftItem(itemKey, event) {
+        if (event) event.stopPropagation();
+        activeLeftItem = itemKey;
+        renderAvailableTree();
+        updateDetailsPanel('left');
+      }
+
+      function setActiveRightItem(itemKey, event) {
+        if (event) event.stopPropagation();
+        activeRightItem = itemKey;
+        renderProfileTree();
+        updateDetailsPanel('right');
+      }
+
+      function transferToProfile() {
+        if (selectedLeftItems.size === 0) {
+          alert("Выберите элементы для переноса");
+          return;
+        }
+
+        let transferredCount = 0;
+
+        selectedLeftItems.forEach(itemKey => {
+          const info = resolveLeftKey(itemKey);
+          if (!info || !info.data) return;
+
+          // Parse the path to understand package hierarchy
+          const pathInfo = parseItemPath(itemKey, info);
+          
+          // Transfer the item
+          if (transferItem(pathInfo, info)) {
+            transferredCount++;
+          }
+        });
+
+        if (transferredCount > 0) {
+          // Save to MemoryStore
+          saveProfileToMemoryStore();
+          
+          // Clear selections
+          selectedLeftItems.clear();
+          
+          // Re-render both trees
+          renderAvailableTree();
+          renderProfileTree();
+          
+          alert(`Успешно перенесено элементов: ${transferredCount}`);
+        } else {
+          alert("Не удалось перенести элементы");
+        }
+      }
+
+      function parseItemPath(itemKey, info) {
+        // Extract package path from itemKey
+        // itemKey format: left-{type}-{id}[-pkg-{idx}]*[-elem-{idx}]
+        const baseEntry = availableData.find(e => itemKey.startsWith(`left-${e.type}-${e.id}`));
+        if (!baseEntry) return null;
+
+        const baseKey = `left-${baseEntry.type}-${baseEntry.id}`;
+        const tail = itemKey.slice(baseKey.length);
+        
+        const packagePath = [];
+        let currentPackages = baseEntry.children || [];
+        
+        if (tail) {
+          const tokens = tail.split('-').filter(Boolean);
+          for (let i = 0; i < tokens.length; i += 2) {
+            const t = tokens[i];
+            const idx = parseInt(tokens[i + 1], 10);
+            
+            if (t === 'pkg') {
+              const pkg = currentPackages[idx];
+              if (pkg) {
+                packagePath.push({ name: pkg.name, type: pkg.type, originalData: pkg });
+                currentPackages = pkg.children || [];
+              }
+            } else if (t === 'elem') {
+              // Element is inside the last package
+              break;
+            }
+          }
+        }
+
+        return {
+          packagePath,
+          itemKind: info.kind,
+          itemData: info.data
+        };
+      }
+
+      function transferItem(pathInfo, info) {
+        if (!pathInfo) return false;
+
+        // Deep copy the item data
+        const copiedData = deepCopy(info.data);
+
+        // Navigate/create package structure in profile
+        let targetPackages = profileData.items;
+        
+        for (const pkgInfo of pathInfo.packagePath) {
+          // Find or create package at this level
+          let existingPkg = targetPackages.find(p => p.name === pkgInfo.name && p.type === pkgInfo.type);
+          
+          if (!existingPkg) {
+            // Create new package
+            existingPkg = {
+              id: generateId(),
+              name: pkgInfo.name,
+              type: pkgInfo.type,
+              description: pkgInfo.originalData.description || '',
+              description_ru: pkgInfo.originalData.description_ru || '',
+              children: [],
+              elements: []
+            };
+            targetPackages.push(existingPkg);
+          }
+          
+          // Navigate deeper
+          if (info.kind === 'element') {
+            // If transferring an element, it goes into elements array
+            targetPackages = existingPkg.elements;
+          } else {
+            // If transferring a package, it goes into children
+            targetPackages = existingPkg.children;
+          }
+        }
+
+        // Add the copied item to target location
+        if (info.kind === 'package') {
+          // Check if package already exists
+          const exists = targetPackages.some(p => p.name === copiedData.name && p.type === copiedData.type);
+          if (!exists) {
+            copiedData.id = generateId();
+            targetPackages.push(copiedData);
+            return true;
+          }
+        } else if (info.kind === 'element') {
+          // Check if element already exists
+          const exists = targetPackages.some(e => e.name === copiedData.name && e.type === copiedData.type);
+          if (!exists) {
+            copiedData.id = generateId();
+            targetPackages.push(copiedData);
+            return true;
+          }
+        }
+
+        return false;
+      }
+
+      function deepCopy(obj) {
+        if (obj === null || typeof obj !== 'object') return obj;
+        if (Array.isArray(obj)) return obj.map(item => deepCopy(item));
+        
+        const copy = {};
+        for (const key in obj) {
+          if (obj.hasOwnProperty(key)) {
+            copy[key] = deepCopy(obj[key]);
+          }
+        }
+        return copy;
+      }
+
+      function generateId() {
+        return Date.now() + Math.floor(Math.random() * 10000);
+      }
+
+      function saveProfileToMemoryStore() {
+        const projectId = getCurrentProjectId();
+        if (!projectId) return;
+
+        const project = getProject(projectId);
+        if (!project) return;
+
+        // Find the profile in the project
+        const profile = project.profiles.find(p => p.id === profileData.id);
+        if (profile) {
+          // Update rootPackages with current profileData.items
+          profile.rootPackages = profileData.items;
+          console.log('✅ Profile saved to MemoryStore:', profile.name);
+        }
+      }
+
+      function removeFromProfile() {
+        if (selectedRightItems.size === 0) {
+          alert("Выберите элементы для удаления");
+          return;
+        }
+
+        let removedCount = 0;
+
+        // Convert Set to Array and sort by depth (deepest first) to avoid index issues
+        const sortedItems = Array.from(selectedRightItems).sort((a, b) => {
+          const depthA = (a.match(/-/g) || []).length;
+          const depthB = (b.match(/-/g) || []).length;
+          return depthB - depthA; // Sort descending by depth
+        });
+
+        sortedItems.forEach(itemKey => {
+          if (removeItemFromProfile(itemKey)) {
+            removedCount++;
+          }
+        });
+
+        if (removedCount > 0) {
+          // Save to MemoryStore
+          saveProfileToMemoryStore();
+          
+          // Clear selections
+          selectedRightItems.clear();
+          activeRightItem = null;
+          
+          // Re-render profile tree
+          renderProfileTree();
+          
+          // Clear details panel
+          const profileContainer = document.querySelector('.details-panel [data-tab-content="profile"]');
+          if (profileContainer) {
+            profileContainer.innerHTML = '<div class="text-muted" style="padding: 10px 0;">Здесь будет отображаться информация из выбранного профиля.</div>';
+          }
+          
+          alert(`Успешно удалено элементов: ${removedCount}`);
+        } else {
+          alert("Не удалось удалить элементы");
+        }
+      }
+
+      function removeItemFromProfile(itemKey) {
+        // Parse itemKey to find the item location
+        // itemKey format: profile[-pkg-{idx}]*[-elem-{idx}]
+        const prefix = 'profile';
+        if (!itemKey.startsWith(prefix)) return false;
+
+        const tail = itemKey.slice(prefix.length);
+        if (!tail) return false; // Cannot remove root
+
+        const tokens = tail.split('-').filter(Boolean);
+        
+        // Navigate to parent and get index to remove
+        let currentContainer = profileData.items;
+        let parentContainer = null;
+        let indexToRemove = -1;
+        let isElement = false;
+
+        for (let i = 0; i < tokens.length; i += 2) {
+          const t = tokens[i];
+          const idx = parseInt(tokens[i + 1], 10);
+          
+          if (i === tokens.length - 2) {
+            // Last token - this is what we want to remove
+            indexToRemove = idx;
+            parentContainer = currentContainer;
+            isElement = (t === 'elem');
+            break;
+          } else {
+            // Navigate deeper
+            if (t === 'pkg') {
+              const pkg = currentContainer[idx];
+              if (!pkg) return false;
+              
+              // Check if next token is 'elem' to switch to elements array
+              if (i + 2 < tokens.length && tokens[i + 2] === 'elem') {
+                currentContainer = pkg.elements || [];
+              } else {
+                currentContainer = pkg.children || [];
+              }
+            }
+          }
+        }
+
+        // Remove the item
+        if (parentContainer && indexToRemove >= 0 && indexToRemove < parentContainer.length) {
+          parentContainer.splice(indexToRemove, 1);
+          return true;
+        }
+
+        return false;
+      }
+
+      function saveProfile() {
+        const projectId = getCurrentProjectId();
+        if (!projectId) {
+          alert("Проект не выбран");
+          return;
+        }
+
+        // Placeholder for save logic
+        alert(
+          `Сохранение профиля "${profileData.name}"...\n\nФункциональность сохранения будет реализована позже.`
+        );
+
+        // TODO: Implement actual save logic
+        // This would involve:
+        // 1. Validating profile data
+        // 2. Saving to data structure
+        // 3. Redirecting back to project-details.html
+      }
+
+      function filterLeftTree() {
+        // Placeholder for filter logic
+        console.log("Filter left tree");
+      }
+
+      function filterRightTree() {
+        // Placeholder for filter logic
+        console.log("Filter right tree");
+      }
+
+      // Переключение вкладок в панели деталей
+      function switchDetailsTab(tabKey) {
+        const tabsContainer = document.getElementById('details-tabs');
+        if (!tabsContainer) return;
+
+        const tabs = tabsContainer.querySelectorAll('.tab');
+        const contents = document.querySelectorAll('.details-panel .tab-content');
+
+        tabs.forEach(t => {
+          if (t.getAttribute('data-tab') === tabKey) t.classList.add('active');
+          else t.classList.remove('active');
+        });
+
+        contents.forEach(c => {
+          if (c.getAttribute('data-tab-content') === tabKey) c.classList.add('active');
+          else c.classList.remove('active');
+        });
+      }
+
+      function updateDetailsPanel(side) {
+        if (side === 'left' && activeLeftItem) {
+          const info = resolveLeftKey(activeLeftItem);
+          const html = renderDetailsHtml(info);
+          const container = document.querySelector('.details-panel [data-tab-content="model"]');
+          if (container) container.innerHTML = html;
+          switchDetailsTab('model');
+        } else if (side === 'right' && activeRightItem) {
+          const info = resolveRightKey(activeRightItem);
+          const html = renderDetailsHtml(info);
+          const container = document.querySelector('.details-panel [data-tab-content="profile"]');
+          if (container) container.innerHTML = html;
+          switchDetailsTab('profile');
+        }
+      }
+
+      function resolveLeftKey(itemKey) {
+        let baseEntry = null;
+        for (const entry of availableData) {
+          const baseKey = `left-${entry.type}-${entry.id}`;
+          if (itemKey.startsWith(baseKey)) { baseEntry = { entry, baseKey }; break; }
+        }
+        if (!baseEntry) return { kind: 'unknown', data: null, source: 'left', name: '' };
+
+        const { entry, baseKey } = baseEntry;
+        const tail = itemKey.slice(baseKey.length);
+        if (!tail) {
+          return { kind: entry.type, data: entry.data, source: 'left', name: entry.name };
+        }
+        const tokens = tail.split('-').filter(Boolean);
+        let packages = entry.children || [];
+        let elements = null;
+        let current = null;
+        let kind = null;
+        for (let i = 0; i < tokens.length; i += 2) {
+          const t = tokens[i];
+          const idx = parseInt(tokens[i + 1], 10);
+          if (t === 'pkg') {
+            current = packages && packages[idx];
+            kind = 'package';
+            packages = (current && current.children) || [];
+            elements = (current && current.elements) || [];
+          } else if (t === 'elem') {
+            current = elements && elements[idx];
+            kind = 'element';
+            elements = null;
+          }
+        }
+        return { kind, data: current, source: 'left', name: entry.name };
+      }
+
+      function resolveRightKey(itemKey) {
+        const prefix = 'profile';
+        if (!itemKey.startsWith(prefix)) return { kind: 'unknown', data: null, source: 'right', name: profileData.name };
+        const tail = itemKey.slice(prefix.length);
+        const tokens = tail.split('-').filter(Boolean);
+        let packages = profileData.items || [];
+        let elements = null;
+        let current = null;
+        let kind = null;
+        for (let i = 0; i < tokens.length; i += 2) {
+          const t = tokens[i];
+          const idx = parseInt(tokens[i + 1], 10);
+          if (t === 'pkg') {
+            current = packages && packages[idx];
+            kind = 'package';
+            packages = (current && current.children) || [];
+            elements = (current && current.elements) || [];
+          } else if (t === 'elem') {
+            current = elements && elements[idx];
+            kind = 'element';
+            elements = null;
+          }
+        }
+        return { kind, data: current, source: 'right', name: profileData.name };
+      }
+
+      function esc(v) {
+        if (v === undefined || v === null) return '';
+        const d = document.createElement('div');
+        d.textContent = String(v);
+        return d.innerHTML;
+      }
+
+      function renderDetailsHtml(info) {
+        if (!info || !info.data) {
+          return '<div class="text-muted" style="padding:10px 0;">Нет данных для отображения.</div>';
+        }
+        const d = info.data;
+        const typeLabel = info.kind === 'element' ? 'Класс' : (info.kind === 'package' ? 'Пакет' : (info.kind === 'model' ? 'Модель' : (info.kind === 'profile' ? 'Профиль' : 'Объект')));
+        const header = `
+          <div class="mb-10" style="font-weight:600;">${esc(typeLabel)}: ${esc(d.name || info.name || '')}</div>
+        `;
+
+        if (info.kind === 'model' || info.kind === 'profile') {
+          const metaRows = [
+            ['Название', d.name],
+            ['Описание', d.description || d.description_ru || ''],
+            ['Версия', d.version || '']
+          ].filter(r => r[1] !== '' && r[1] !== undefined && r[1] !== null);
+          return header + table(metaRows);
+        }
+
+        if (info.kind === 'package') {
+          const rows = [
+            ['Название', d.name],
+            ['Тип', d.type || 'Package'],
+            ['Описание', d.description || d.description_ru || '']
+          ].filter(r => r[1] !== '' && r[1] !== undefined && r[1] !== null);
+          return header + table(rows);
+        }
+
+        if (info.kind === 'element') {
+          const attrs = Array.isArray(d.attributes) ? d.attributes : [];
+          const links = Array.isArray(d.links) ? d.links : [];
+          const basicRows = [
+            ['Название', d.name],
+            ['Тип', d.type || 'Class'],
+            ['Абстрактный', d.isAbstract ? 'Да' : 'Нет'],
+            ['Описание', d.description || d.description_ru || '']
+          ].filter(r => r[1] !== '' && r[1] !== undefined && r[1] !== null);
+
+          let html = header + table(basicRows);
+
+          if (attrs.length) {
+            const rows = attrs.map(a => [
+              a.name || '-',
+              a.type || a.dataType || '-',
+              a.multiplicity || '',
+              a.description || a.details || ''
+            ]);
+            html += sectionTitle('Атрибуты') + tableWithHead(['Имя','Тип','Кратность','Описание'], rows);
+          } else {
+            html += sectionTitle('Атрибуты') + '<div class="text-muted">Нет атрибутов</div>';
+          }
+
+          if (links.length) {
+            const rows = links.map(l => [
+              l.name || '-',
+              l.relation_kind || '-',
+              l.multiplicity || '',
+              l.description || l.details || ''
+            ]);
+            html += sectionTitle('Связи') + tableWithHead(['Имя','Вид связи','Кратность','Описание'], rows);
+          } else {
+            html += sectionTitle('Связи') + '<div class="text-muted">Нет связей</div>';
+          }
+
+          return html;
+        }
+
+        return header + '<div class="text-muted">Неизвестный тип объекта</div>';
+      }
+
+      function sectionTitle(t) {
+        return `<h4 style="margin:12px 0 6px 0;">${esc(t)}</h4>`;
+      }
+
+      function table(rows) {
+        if (!rows || !rows.length) return '';
+        const trs = rows.map(r => `<tr><td style="font-weight:600; width:180px;">${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join('');
+        return `<table class="table" style="margin-top:6px;">${trs}</table>`;
+      }
+
+      function tableWithHead(head, rows) {
+        const thead = `<tr>${head.map(h => `<th style="text-align:left; padding:4px 6px;">${esc(h)}</th>`).join('')}</tr>`;
+        const tbody = rows.map(r => `<tr>${r.map(c => `<td style="padding:4px 6px;">${esc(c)}</td>`).join('')}</tr>`).join('');
+        return `<table class="table" style="margin-top:6px; border-collapse:collapse; width:100%;">${thead}${tbody}</table>`;
+      }
+
+      
+    </script>
+  </body>
+</html>
