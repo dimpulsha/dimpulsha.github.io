@@ -124,6 +124,16 @@ async function loadSampleData() {
     console.error("❌ Error loading profile-test.json:", error);
   }
 
+   let profile58651_test = [];
+
+  try {
+    const response = await fetch("./models-data/profile-test2.json");
+    profile58651_test = await response.json();
+    console.log("✅ profile-test2.json loaded successfully");
+  } catch (error) {
+    console.error("❌ Error loading profile-test2.json:", error);
+  }
+
 
   const sampleProjects = [
     {
@@ -168,7 +178,7 @@ async function loadSampleData() {
       profiles: [
         {
           id: 4,
-          name: "GOST-58651.2",
+          name: "GOST-XXXXX.2",
           description: "Базисный профиль информационной модели",
           baseModel: "GOSTExtension",
           baseModelId: 3,
@@ -188,14 +198,14 @@ async function loadSampleData() {
         },
         {
           id: 5,
-          name: "GOST-58651.3",
-          description: "Профиль модели ЛЭП 110-750 кВ",
+          name: "Проект ГОСТ-XXXXX.Х",
+          description: "Профиль модели ЛЭП",
           baseModel: "GOSTExtension",
           baseModelId: 3,
           version: "1.1",
           classes: 32,
           attributes: 178,
-          rootPackages: []
+          rootPackages: profile58651_test
         },
       ],
     },
@@ -364,6 +374,15 @@ function openModal(modalId) {
 
 function closeModal(modalId) {
   document.getElementById(modalId).classList.remove("active");
+  
+  // Clear diagram modal input fields
+  if (modalId === 'new-diagram-modal') {
+    const nameInput = document.getElementById('diagram-name');
+    const errorDiv = document.getElementById('diagram-name-error');
+    if (nameInput) nameInput.value = '';
+    if (errorDiv) errorDiv.style.display = 'none';
+    // Don't clear context here - it will be overwritten on next open
+  }
 }
 
 function updateCurrentProject() {

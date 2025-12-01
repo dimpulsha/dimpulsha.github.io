@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Nautilus.CIM - Редактор профиля</title>
     <link rel="stylesheet" href="styles.css" />
+    <!-- Joint.js library for diagram editor -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/jointjs/3.7.1/joint.min.css"
+    />
+    <!-- jQuery должен загружаться первым -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jointjs/3.7.1/joint.min.js"></script>
     <style>
       body,
       html {
@@ -122,8 +132,12 @@
         color: #000;
         font-weight: 600;
       }
-      .tab-content { display: none; }
-      .tab-content.active { display: block; }
+      .tab-content {
+        display: none;
+      }
+      .tab-content.active {
+        display: block;
+      }
 
       .transfer-options {
         margin-bottom: 15px;
@@ -202,6 +216,258 @@
         background-color: #d1e7fd;
       }
 
+      /* Editor Mode Styles */
+      .editor-content-area.standart-mode #diagram-editor {
+        display: none;
+      }
+
+      .editor-content-area.standart-mode #editor-mode-details-panel {
+        display: none;
+      }
+
+      .editor-content-area.editor-mode .details-panel {
+        display: none;
+      }
+
+      .editor-content-area.editor-mode .editor-wrapper {
+        height: 66.666%;
+      }
+
+      .editor-content-area.editor-mode #editor-mode-details-panel {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        height: 33.333%;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background: #fff;
+        overflow: auto;
+        padding: 15px;
+        margin-top: 10px;
+      }
+
+      .editor-content-area.editor-mode #diagram-editor {
+        display: block;
+        flex: 1;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background: #f9f9f9;
+        overflow: hidden;
+        position: relative;
+      }
+
+      #diagram-editor .diagram-canvas {
+        width: 100%;
+        height: 100%;
+        background: #ffffff;
+        background-image: linear-gradient(
+            0deg,
+            transparent 24%,
+            rgba(0, 0, 0, 0.05) 25%,
+            rgba(0, 0, 0, 0.05) 26%,
+            transparent 27%,
+            transparent 74%,
+            rgba(0, 0, 0, 0.05) 75%,
+            rgba(0, 0, 0, 0.05) 76%,
+            transparent 77%,
+            transparent
+          ),
+          linear-gradient(
+            90deg,
+            transparent 24%,
+            rgba(0, 0, 0, 0.05) 25%,
+            rgba(0, 0, 0, 0.05) 26%,
+            transparent 27%,
+            transparent 74%,
+            rgba(0, 0, 0, 0.05) 75%,
+            rgba(0, 0, 0, 0.05) 76%,
+            transparent 77%,
+            transparent
+          );
+        background-size: 20px 20px;
+      }
+
+      .diagram-toolbar {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 10;
+        background: white;
+        padding: 8px;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        display: flex;
+        gap: 8px;
+      }
+
+      .diagram-tool-btn {
+        padding: 6px 12px;
+        border: 1px solid #ddd;
+        background: white;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 12px;
+        transition: all 0.2s;
+      }
+
+      .diagram-tool-btn:hover {
+        background: #f5f5f5;
+        border-color: #4a90e2;
+      }
+
+      .diagram-tool-btn.active {
+        background: #4a90e2;
+        color: white;
+        border-color: #4a90e2;
+      }
+
+      .tree-item-label {
+        cursor: grab;
+      }
+
+      .tree-item-label.dragging {
+        opacity: 0.5;
+        cursor: grabbing;
+      }
+
+      #diagram-editor.drag-over {
+        background: #e3f2fd;
+      }
+
+      /* Editor mode details panel tabs */
+      #editor-mode-details-panel .tabs {
+        display: flex;
+        gap: 8px;
+        border-bottom: 1px solid #e5e5e5;
+        margin-bottom: 12px;
+      }
+
+      #editor-mode-details-panel .tab {
+        padding: 6px 12px;
+        font-size: 13px;
+        color: #444;
+        cursor: pointer;
+        border: 1px solid transparent;
+        border-bottom: none;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        background: transparent;
+      }
+
+      #editor-mode-details-panel .tab.active {
+        background: #f5f5f5;
+        border-color: #e5e5e5;
+        color: #000;
+        font-weight: 600;
+      }
+
+      #editor-mode-details-panel .tab-content {
+        display: none;
+      }
+
+      #editor-mode-details-panel .tab-content.active {
+        display: block;
+      }
+
+      .attribute-item, .link-item {
+        display: flex;
+        align-items: flex-start;
+        padding: 8px;
+        margin-bottom: 6px;
+        border: 1px solid #e5e5e5;
+        border-radius: 4px;
+        background: #fafafa;
+      }
+
+      .attribute-item:hover, .link-item:hover {
+        background: #f0f0f0;
+      }
+
+      .attribute-checkbox, .link-checkbox {
+        margin-right: 10px;
+        margin-top: 2px;
+      }
+
+      .attribute-details, .link-details {
+        flex: 1;
+      }
+
+      .attribute-name, .link-name {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 3px;
+      }
+
+      .attribute-type, .link-type {
+        color: #666;
+        font-size: 12px;
+        margin-bottom: 3px;
+      }
+
+      .attribute-description, .link-description {
+        color: #888;
+        font-size: 12px;
+        font-style: italic;
+      }
+
+      /* Table-like layout for attributes */
+      .attributes-table {
+        /* border: 1px solid #ddd; */
+        /* border-radius: 4px; */
+        overflow: hidden;
+        margin-top: 10px;
+      }
+
+      .attributes-table-header {
+        display: grid;
+        grid-template-columns: 40px 1fr 1fr 100px 2fr;
+        background: transparent;
+        border-bottom: 1px solid #ddd;
+        font-weight: 600;
+        font-size: 13px;
+      }
+
+      .attributes-table-header > div {
+        padding: 6px 10px;
+      }
+
+      .attributes-table-row {
+        display: grid;
+        grid-template-columns: 40px 1fr 1fr 100px 2fr;
+        border-bottom: 1px solid #e5e5e5;
+        background: #fff;
+        align-items: start;
+      }
+
+      .attributes-table-row:hover {
+        background: #f9f9f9;
+      }
+
+      .attributes-table-row:last-child {
+        border-bottom: none;
+      }
+
+      .attributes-table-cell {
+        padding: 6px 10px;
+        font-size: 13px;
+        word-wrap: break-word;
+      }
+
+      .attributes-table-cell-checkbox {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px 10px;
+      }
+
+      .attributes-table-empty {
+        padding: 20px;
+        text-align: center;
+        color: #888;
+        font-style: italic;
+        border-top: 1px solid #e5e5e5;
+      }
+
       .search-box {
         margin-bottom: 10px;
       }
@@ -232,6 +498,24 @@
 
         /* margin-top: 5px; */
       }
+#editor-mode-profile-object {
+  padding-left: 10px;
+   border-left: 1px solid #ddd;
+}
+
+.attributes-table-row.already-in-profile {
+  background-color: #e8f5e9 !important;
+}
+
+.attributes-table-row.already-in-profile:hover {
+  background-color: #c8e6c9 !important;
+}
+
+.attributes-table-row.already-in-profile input[type="checkbox"] {
+  cursor: not-allowed;
+}
+
+
     </style>
   </head>
   <body>
@@ -248,6 +532,13 @@
           <div class="toolbar-actions">
             <button
               class="btn btn-secondary"
+              id="toggle-mode-btn"
+              onclick="setEditorMode()"
+            >
+              📐 Режим диаграммы
+            </button>
+            <button
+              class="btn btn-secondary"
               onclick="window.location.href='project-details.html'"
             >
               ← Назад
@@ -258,27 +549,28 @@
           </div>
         </div>
 
-        <div class="editor-content-area">
-          <div class="editor-container">
-            <!-- LEFT PANEL: Available Models and Profiles -->
-            <div class="editor-panel">
-              <div class="editor-panel-header">Модели и профили проекта</div>
-              <div class="editor-panel-content">
-                <div class="search-box">
-                  <input
-                    type="text"
-                    class="search-input"
-                    placeholder="Поиск..."
-                    id="left-search"
-                    oninput="filterLeftTree()"
-                  />
+        <div class="editor-content-area standart-mode">
+          <div class="editor-wrapper editor-content-area">
+            <div class="editor-container">
+              <!-- LEFT PANEL: Available Models and Profiles -->
+              <div class="editor-panel">
+                <div class="editor-panel-header">Модели и профили проекта</div>
+                <div class="editor-panel-content">
+                  <div class="search-box">
+                    <input
+                      type="text"
+                      class="search-input"
+                      placeholder="Поиск..."
+                      id="left-search"
+                      oninput="filterLeftTree()"
+                    />
+                  </div>
+                  <div id="available-tree">
+                    <!-- Tree will be rendered here -->
+                  </div>
                 </div>
-                <div id="available-tree">
-                  <!-- Tree will be rendered here -->
-                </div>
-              </div>
-              <div class="editor-panel-actions">
-                <!-- <div class="transfer-options">
+                <div class="editor-panel-actions">
+                  <!-- <div class="transfer-options">
                                 <h4>Опции переноса</h4>
                                 <div class="option-checkbox">
                                     <input type="checkbox" id="option-selected-only" checked>
@@ -301,90 +593,157 @@
                                     <label for="option-include-associations">Включить классы, связанные через ассоциацию</label>
                                 </div>
                             </div> -->
-                <button
-                  class="btn btn-primary"
-                  onclick="transferToProfile()"
-                  style="width: 100%"
-                >
-                  → Перенести в профиль
-                </button>
-
-                <button
-                  class="btn btn-primary"
-                  onclick="transferToProfile()"
-                  style="width: 100%"
-                >
-                  ✕ Снять выделение
-                </button>
-              </div>
-            </div>
-
-            <!-- RIGHT PANEL: Profile Being Edited -->
-            <div class="editor-panel">
-              <div class="editor-panel-header">
-                <span id="profile-header-name">Новый профиль</span>
-              </div>
-              <div class="editor-panel-content">
-                <div class="search-box">
-                  <input
-                    type="text"
-                    class="search-input"
-                    placeholder="Поиск..."
-                    id="right-search"
-                    oninput="filterRightTree()"
-                  />
-                </div>
-                <div id="profile-tree">
-                  <div
-                    class="text-center text-muted"
-                    style="padding: 40px 20px"
+                  <button
+                    class="btn btn-primary"
+                    onclick="transferToProfile()"
+                    style="width: 100%"
                   >
-                    Профиль пуст. Выберите элементы слева и перенесите их в
-                    профиль.
-                  </div>
+                    → Перенести в профиль
+                  </button>
+
+                  <button
+                    class="btn btn-secondary"
+                    onclick="transferToProfile()"
+                    style="width: 100%"
+                  >
+                    ✕ Снять выделение
+                  </button>
                 </div>
               </div>
-              <div class="editor-panel-actions">
-                <button
-                  class="btn btn-secondary"
-                  onclick="removeFromProfile()"
-                  style="width: 100%"
-                >
-                  ✕ Исключить выделенное
-                </button>
 
-                <button
-                  class="btn btn-primary"
-                  onclick="transferToProfile()"
-                  style="width: 100%"
-                >
-                  ✕ Снять выделение
-                </button>
+              <div id="diagram-editor" class="hidden"></div>
+
+              <!-- RIGHT PANEL: Profile Being Edited -->
+              <div class="editor-panel">
+                <div class="editor-panel-header">
+                  <span id="profile-header-name">Новый профиль</span>
+                </div>
+                <div class="editor-panel-content">
+                  <div class="search-box">
+                    <input
+                      type="text"
+                      class="search-input"
+                      placeholder="Поиск..."
+                      id="right-search"
+                      oninput="filterRightTree()"
+                    />
+                  </div>
+                  <div id="profile-tree">
+                    <div
+                      class="text-center text-muted"
+                      style="padding: 40px 20px"
+                    >
+                      Профиль пуст. Выберите элементы слева и перенесите их в
+                      профиль.
+                    </div>
+                  </div>
+                </div>
+                <div class="editor-panel-actions">
+                  <button
+                    class="btn btn-primary"
+                    onclick="removeFromProfile()"
+                    style="width: 100%"
+                  >
+                    ✕ Исключить из профиля
+                  </button>
+
+                  <button
+                    class="btn btn-secondary"
+                    onclick="transferToProfile()"
+                    style="width: 100%"
+                  >
+                    ✕ Снять выделение
+                  </button>
+                </div>
+              </div>
+              <div class="details-panel">
+                <div class="details-panel-content">
+                  <div class="tabs" id="details-tabs">
+                    <div
+                      class="tab active"
+                      data-tab="model"
+                      onclick="switchDetailsTab('model')"
+                    >
+                      Информация об объекте модели
+                    </div>
+                    <div
+                      class="tab"
+                      data-tab="profile"
+                      onclick="switchDetailsTab('profile')"
+                    >
+                      Информация об объекте профиля
+                    </div>
+                    <!-- <div class="tab" data-tab="misc" onclick="switchDetailsTab('misc')">разное</div> -->
+                  </div>
+
+                  <div class="tab-content active" data-tab-content="model">
+                    <div class="text-muted" style="padding: 10px 0">
+                      Здесь будет отображаться информация об объекте модели.
+                    </div>
+                  </div>
+
+                  <div class="tab-content" data-tab-content="profile">
+                    <div class="text-muted" style="padding: 10px 0">
+                      Здесь будет отображаться информация об объекте профиля.
+                    </div>
+                  </div>
+
+                  <!-- <div class="tab-content" data-tab-content="misc">
+                    <div class="text-muted" style="padding: 10px 0">
+                      Прочие сведения и служебная информация.
+                    </div>
+                  </div> -->
+                </div>
               </div>
             </div>
-            <div class="details-panel">
-              <div class="details-panel-content">
-                <div class="tabs" id="details-tabs">
-                  <div class="tab active" data-tab="model" onclick="switchDetailsTab('model')">информация из модели</div>
-                  <div class="tab" data-tab="profile" onclick="switchDetailsTab('profile')">информация из профиля</div>
-                  <div class="tab" data-tab="misc" onclick="switchDetailsTab('misc')">разное</div>
+            <div id="editor-mode-details-panel" class="hidden">
+              <div id="editor-mode-model-object">
+                <div class="tabs" id="editor-details-tabs">
+                  <div class="tab active" data-tab="object-info">Описание</div>
+                  <div class="tab" data-tab="object-attributes">Атрибуты</div>
+                  <div class="tab" data-tab="object-links">Связи</div>
                 </div>
-
-                <div class="tab-content active" data-tab-content="model">
-                  <div class="text-muted" style="padding: 10px 0;">
-                    Здесь будет отображаться информация из выбранной модели.
+                <div class="tab-content active">
+                  <div class="text-muted" style="padding: 10px 0">
+                    Здесь будет отображаться информация об описании объекта
+                    модели.
                   </div>
                 </div>
-
-                <div class="tab-content" data-tab-content="profile">
-                  <div class="text-muted" style="padding: 10px 0;">
-                    Здесь будет отображаться информация из выбранного профиля.
+                <div class="tab-content">
+                  <div class="text-muted" style="padding: 10px 0">
+                    Здесь будет отображаться информация об аттрибутах объекта
+                    модели.
                   </div>
                 </div>
-
-                <div class="tab-content" data-tab-content="misc">
-                  <div class="text-muted" style="padding: 10px 0;">
-                    Прочие сведения и служебная информация.
+                <div class="tab-content">
+                  <div class="text-muted" style="padding: 10px 0">
+                    Здесь будет отображаться информация о связях объекта модели.
+                  </div>
+                </div>
+              </div>
+              
+              <div id="editor-mode-profile-object">
+                <div class="tabs" id="editor-details-tabs">
+                  <div class="tab active" data-tab="object-info">Описание</div>
+                  <div class="tab" data-tab="object-attributes">Атрибуты</div>
+                  <div class="tab" data-tab="object-links">Связи</div>
+                </div>
+                <div class="tab-content active">
+                  <div class="text-muted" style="padding: 10px 0">
+                    Здесь будет отображаться информация об описании объекта
+                    профиля.
+                  </div>
+                </div>
+                <div class="tab-content">
+                  <div class="text-muted" style="padding: 10px 0">
+                    Здесь будет отображаться информация об аттрибутах объекта
+                    профиля.
+                  </div>
+                </div>
+                <div class="tab-content">
+                  <div class="text-muted" style="padding: 10px 0">
+                    Здесь будет отображаться информация о связях объекта
+                    профиля.
                   </div>
                 </div>
               </div>
@@ -505,7 +864,7 @@
                             onchange="toggleLeftItem('${itemKey}'); event.stopPropagation();"
                             onclick="event.stopPropagation();"
                         >
-                        <span class="tree-item-label">
+                        <span class="tree-item-label" draggable="true" ondragstart="handleDragStart(event, '${itemKey}')">
                             ${icon} ${item.name} (${
             item.type === "model" ? "Model" : "Profile"
           })
@@ -577,7 +936,7 @@
                             }('${itemKey}'); event.stopPropagation();"
                             onclick="event.stopPropagation();"
                         >
-                        <span class="tree-item-label">
+                        <span class="tree-item-label" draggable="true" ondragstart="handleDragStart(event, '${itemKey}')">
                             📦 ${item.name || "Package"}
                         </span>
                     </div>
@@ -622,7 +981,7 @@
                                         }('${elemKey}'); event.stopPropagation();"
                                         onclick="event.stopPropagation();"
                                     >
-                                    <span class="tree-item-label">
+                                    <span class="tree-item-label" draggable="true" ondragstart="handleDragStart(event, '${elemKey}')">
                                         📄 ${elem.name || "Class"}
                                     </span>
                                 </div>
@@ -699,18 +1058,415 @@
         renderProfileTree();
       }
 
+      function syncLeftTreeWithRightItem(rightItemKey) {
+        const rightInfo = resolveRightKey(rightItemKey);
+        if (!rightInfo || !rightInfo.data) return;
+
+        // Find corresponding item in left tree
+        const matchingLeftKey = findMatchingLeftItem(rightInfo);
+        
+        if (matchingLeftKey) {
+          // Expand all parent items
+          expandPathToLeftItem(matchingLeftKey);
+          
+          // Set as active
+          activeLeftItem = matchingLeftKey;
+          
+          // Re-render trees
+          renderAvailableTree();
+          
+          // Update model panel
+          renderEditorModeDetailsPanel();
+        } else {
+          // Object not found in left tree - clear active item
+          activeLeftItem = null;
+          renderAvailableTree();
+          
+          // Show "not found" message in left panel
+          const modelObjectPanel = document.getElementById('editor-mode-model-object');
+          if (modelObjectPanel) {
+            const data = rightInfo.data;
+            const isElement = rightInfo.kind === 'element';
+            const attrs = isElement ? (data.attributes || []) : [];
+            const links = isElement ? (data.links || []).filter(l => {
+              return !(l.relation_kind === 'Generalization' && l.role === 'parent');
+            }) : [];
+            
+            let html = `
+              <div class="tabs">
+                <div class="tab active" onclick="switchEditorTab('description')">Описание</div>
+                ${isElement ? `<div class="tab" onclick="switchEditorTab('attributes')">Атрибуты</div>` : ''}
+                ${isElement ? `<div class="tab" onclick="switchEditorTab('links')">Связи</div>` : ''}
+              </div>
+
+              <div class="tab-content active" data-tab="description">
+                <p style="color: #888; font-style: italic; padding: 10px 0;">
+                  Соответствующий объект не найден в доступных моделях.
+                </p>
+              </div>
+            `;
+
+            if (isElement) {
+              html += `
+              <div class="tab-content" data-tab="attributes">
+                <h4 style="margin-top: 0;">Атрибуты</h4>
+                <p style="color: #888; font-style: italic;">
+                  Соответствующий объект не найден в доступных моделях.
+                </p>
+              </div>
+              `;
+
+              html += `
+              <div class="tab-content" data-tab="links">
+                <h4 style="margin-top: 0;">Связи</h4>
+                <p style="color: #888; font-style: italic;">
+                  Соответствующий объект не найден в доступных моделях.
+                </p>
+              </div>
+              `;
+            }
+
+            modelObjectPanel.innerHTML = html;
+          }
+        }
+      }
+
+      function syncProfileTreeWithLeftItem(leftItemKey) {
+        const leftInfo = resolveLeftKey(leftItemKey);
+        if (!leftInfo || !leftInfo.data) return;
+
+        // Find corresponding item in profile tree
+        const matchingProfileKey = findMatchingProfileItem(leftInfo);
+        
+        if (matchingProfileKey) {
+          // Expand all parent items
+          expandPathToItem(matchingProfileKey);
+          
+          // Set as active
+          activeRightItem = matchingProfileKey;
+          
+          // Re-render trees
+          renderProfileTree();
+          
+          // Update profile panel
+          renderEditorModeProfilePanel();
+        } else {
+          // Object not found in profile - clear active item
+          activeRightItem = null;
+          renderProfileTree();
+          
+          // Show "not in profile" message in right panel
+          const profileObjectPanel = document.getElementById('editor-mode-profile-object');
+          if (profileObjectPanel) {
+            const data = leftInfo.data;
+            const isElement = leftInfo.kind === 'element';
+            const attrs = isElement ? (data.attributes || []) : [];
+            const links = isElement ? (data.links || []).filter(l => {
+              return !(l.relation_kind === 'Generalization' && l.role === 'parent');
+            }) : [];
+            
+            let html = `
+              <div class="tabs">
+                <div class="tab active" onclick="switchProfileTab('description')">Описание</div>
+                ${isElement ? `<div class="tab" onclick="switchProfileTab('attributes')">Атрибуты</div>` : ''}
+                ${isElement ? `<div class="tab" onclick="switchProfileTab('links')">Связи</div>` : ''}
+              </div>
+
+              <div class="tab-content active" data-tab="description">
+                <p style="color: #888; font-style: italic; padding: 10px 0;">
+                  Данный объект не найден в текущем профиле. 
+                  Вы можете добавить его, используя кнопку "→ Перенести в профиль".
+                </p>
+              </div>
+            `;
+
+            if (isElement) {
+              html += `
+              <div class="tab-content" data-tab="attributes">
+                <h4 style="margin-top: 0;">Атрибуты</h4>
+                <p style="color: #888; font-style: italic;">
+                  Объект отсутствует в профиле. Перенесите объект в профиль, чтобы работать с его атрибутами.
+                </p>
+              </div>
+              `;
+
+              html += `
+              <div class="tab-content" data-tab="links">
+                <h4 style="margin-top: 0;">Связи</h4>
+                <p style="color: #888; font-style: italic;">
+                  Объект отсутствует в профиле. Перенесите объект в профиль, чтобы работать с его связями.
+                </p>
+              </div>
+              `;
+            }
+
+            profileObjectPanel.innerHTML = html;
+          }
+        }
+      }
+
+      function findMatchingLeftItem(rightInfo) {
+        const rightData = rightInfo.data;
+        if (!rightData) return null;
+
+        // Strategy 1: Match by model ID and object ID
+        if (rightData.id) {
+          const match1 = searchLeftTreeByModelAndObjectId(rightInfo.name, rightData.id);
+          if (match1) return match1;
+        }
+
+        // Strategy 2: Match by object ID only
+        if (rightData.id) {
+          const match2 = searchLeftTreeByObjectId(rightData.id);
+          if (match2) return match2;
+        }
+
+        // Strategy 3: Match by name
+        if (rightData.name) {
+          const match3 = searchLeftTreeByName(rightData.name, rightInfo.kind);
+          if (match3) return match3;
+        }
+
+        return null;
+      }
+
+      function findMatchingProfileItem(leftInfo) {
+        const leftData = leftInfo.data;
+        if (!leftData) return null;
+
+        // Strategy 1: Match by model ID and object ID
+        if (leftData.id) {
+          const match1 = searchProfileTreeByModelAndObjectId(leftInfo.name, leftData.id);
+          if (match1) return match1;
+        }
+
+        // Strategy 2: Match by object ID only
+        if (leftData.id) {
+          const match2 = searchProfileTreeByObjectId(leftData.id);
+          if (match2) return match2;
+        }
+
+        // Strategy 3: Match by name
+        if (leftData.name) {
+          const match3 = searchProfileTreeByName(leftData.name, leftInfo.kind);
+          if (match3) return match3;
+        }
+
+        return null;
+      }
+
+      function searchLeftTreeByModelAndObjectId(modelName, objectId) {
+        // Search in availableData (models and profiles)
+        for (let i = 0; i < availableData.length; i++) {
+          const baseEntry = availableData[i];
+          const baseKey = `left-${baseEntry.type}-${baseEntry.id}`;
+          
+          // Check if this is the matching model/profile
+          if (baseEntry.name === modelName || baseEntry.id === objectId) {
+            // Search within this model/profile
+            const result = searchInLeftItems(baseEntry.children || [], baseKey, (item) => {
+              return item.id === objectId;
+            });
+            if (result) return result;
+          }
+        }
+        return null;
+      }
+
+      function searchLeftTreeByObjectId(objectId) {
+        // Search in all availableData
+        for (let i = 0; i < availableData.length; i++) {
+          const baseEntry = availableData[i];
+          const baseKey = `left-${baseEntry.type}-${baseEntry.id}`;
+          
+          const result = searchInLeftItems(baseEntry.children || [], baseKey, (item) => {
+            return item.id === objectId;
+          });
+          if (result) return result;
+        }
+        return null;
+      }
+
+      function searchLeftTreeByName(name, kind) {
+        // Search in all availableData
+        for (let i = 0; i < availableData.length; i++) {
+          const baseEntry = availableData[i];
+          const baseKey = `left-${baseEntry.type}-${baseEntry.id}`;
+          
+          const result = searchInLeftItems(baseEntry.children || [], baseKey, (item) => {
+            return item.name === name;
+          });
+          if (result) return result;
+        }
+        return null;
+      }
+
+      function searchInLeftItems(items, parentKey, matcher) {
+        if (!items || !Array.isArray(items)) return null;
+
+        for (let pkgIdx = 0; pkgIdx < items.length; pkgIdx++) {
+          const pkg = items[pkgIdx];
+          const pkgKey = `${parentKey}-pkg-${pkgIdx}`;
+
+          // Check if this package matches
+          if (matcher(pkg)) {
+            return pkgKey;
+          }
+
+          // Check elements in this package
+          if (pkg.elements && Array.isArray(pkg.elements)) {
+            for (let elemIdx = 0; elemIdx < pkg.elements.length; elemIdx++) {
+              const elem = pkg.elements[elemIdx];
+              const elemKey = `${pkgKey}-elem-${elemIdx}`;
+
+              if (matcher(elem)) {
+                return elemKey;
+              }
+            }
+          }
+
+          // Recursively search in child packages
+          if (pkg.children && Array.isArray(pkg.children)) {
+            const childMatch = searchInLeftItems(pkg.children, pkgKey, matcher);
+            if (childMatch) return childMatch;
+          }
+        }
+
+        return null;
+      }
+
+      function expandPathToLeftItem(itemKey) {
+        // Parse the path and expand all parent items
+        const parts = itemKey.split('-');
+        
+        // First part should be like 'left-model-123' or 'left-profile-456'
+        let currentPath = '';
+        let i = 0;
+        
+        // Build base path (left-{type}-{id})
+        while (i < parts.length && parts[i] !== 'pkg' && parts[i] !== 'elem') {
+          if (currentPath) currentPath += '-';
+          currentPath += parts[i];
+          i++;
+        }
+        
+        // Expand base item
+        expandedLeftItems.add(currentPath);
+        
+        // Now expand packages
+        for (; i < parts.length; i++) {
+          if (parts[i] === 'pkg' && i + 1 < parts.length) {
+            currentPath += `-pkg-${parts[i + 1]}`;
+            expandedLeftItems.add(currentPath);
+            i++; // Skip the index part
+          } else if (parts[i] === 'elem') {
+            // Don't need to expand elements
+            break;
+          }
+        }
+      }
+
+      function searchProfileTreeByModelAndObjectId(modelName, objectId) {
+        return searchInProfileItems(profileData.items, 'profile', (item) => {
+          return item.id === objectId;
+        });
+      }
+
+      function searchProfileTreeByObjectId(objectId) {
+        return searchInProfileItems(profileData.items, 'profile', (item) => {
+          return item.id === objectId;
+        });
+      }
+
+      function searchProfileTreeByName(name, kind) {
+        return searchInProfileItems(profileData.items, 'profile', (item) => {
+          return item.name === name;
+        });
+      }
+
+      function searchInProfileItems(items, parentKey, matcher) {
+        if (!items || !Array.isArray(items)) return null;
+
+        for (let pkgIdx = 0; pkgIdx < items.length; pkgIdx++) {
+          const pkg = items[pkgIdx];
+          const pkgKey = `${parentKey}-pkg-${pkgIdx}`;
+
+          // Check if this package matches
+          if (matcher(pkg)) {
+            return pkgKey;
+          }
+
+          // Check elements in this package
+          if (pkg.elements && Array.isArray(pkg.elements)) {
+            for (let elemIdx = 0; elemIdx < pkg.elements.length; elemIdx++) {
+              const elem = pkg.elements[elemIdx];
+              const elemKey = `${pkgKey}-elem-${elemIdx}`;
+
+              if (matcher(elem)) {
+                return elemKey;
+              }
+            }
+          }
+
+          // Recursively search in child packages
+          if (pkg.children && Array.isArray(pkg.children)) {
+            const childMatch = searchInProfileItems(pkg.children, pkgKey, matcher);
+            if (childMatch) return childMatch;
+          }
+        }
+
+        return null;
+      }
+
+      function expandPathToItem(itemKey) {
+        // Parse the path and expand all parent items
+        const parts = itemKey.split('-');
+        let currentPath = 'profile';
+
+        for (let i = 0; i < parts.length; i++) {
+          if (parts[i] === 'pkg' && i + 1 < parts.length) {
+            currentPath += `-pkg-${parts[i + 1]}`;
+            expandedRightItems.add(currentPath);
+            i++; // Skip the index part
+          } else if (parts[i] === 'elem') {
+            // Don't need to expand elements
+            break;
+          }
+        }
+      }
+
       function setActiveLeftItem(itemKey, event) {
         if (event) event.stopPropagation();
         activeLeftItem = itemKey;
         renderAvailableTree();
-        updateDetailsPanel('left');
+        updateDetailsPanel("left");
+        
+        // Update editor mode details panel if in editor mode
+        const contentArea = document.querySelector('.editor-content-area');
+        if (contentArea && contentArea.classList.contains('editor-mode')) {
+          // Synchronize with profile tree FIRST
+          syncProfileTreeWithLeftItem(itemKey);
+          
+          // Then render editor mode details panel (after activeRightItem is set)
+          renderEditorModeDetailsPanel();
+        }
       }
 
       function setActiveRightItem(itemKey, event) {
         if (event) event.stopPropagation();
         activeRightItem = itemKey;
         renderProfileTree();
-        updateDetailsPanel('right');
+        updateDetailsPanel("right");
+        
+        // Update editor mode profile panel if in editor mode
+        const contentArea = document.querySelector('.editor-content-area');
+        if (contentArea && contentArea.classList.contains('editor-mode')) {
+          // Synchronize with left tree FIRST
+          syncLeftTreeWithRightItem(itemKey);
+          
+          // Then render editor mode profile panel (after activeLeftItem is set)
+          renderEditorModeProfilePanel();
+        }
       }
 
       function transferToProfile() {
@@ -721,13 +1477,13 @@
 
         let transferredCount = 0;
 
-        selectedLeftItems.forEach(itemKey => {
+        selectedLeftItems.forEach((itemKey) => {
           const info = resolveLeftKey(itemKey);
           if (!info || !info.data) return;
 
           // Parse the path to understand package hierarchy
           const pathInfo = parseItemPath(itemKey, info);
-          
+
           // Transfer the item
           if (transferItem(pathInfo, info)) {
             transferredCount++;
@@ -737,14 +1493,14 @@
         if (transferredCount > 0) {
           // Save to MemoryStore
           saveProfileToMemoryStore();
-          
+
           // Clear selections
           selectedLeftItems.clear();
-          
+
           // Re-render both trees
           renderAvailableTree();
           renderProfileTree();
-          
+
           alert(`Успешно перенесено элементов: ${transferredCount}`);
         } else {
           alert("Не удалось перенести элементы");
@@ -754,28 +1510,34 @@
       function parseItemPath(itemKey, info) {
         // Extract package path from itemKey
         // itemKey format: left-{type}-{id}[-pkg-{idx}]*[-elem-{idx}]
-        const baseEntry = availableData.find(e => itemKey.startsWith(`left-${e.type}-${e.id}`));
+        const baseEntry = availableData.find((e) =>
+          itemKey.startsWith(`left-${e.type}-${e.id}`)
+        );
         if (!baseEntry) return null;
 
         const baseKey = `left-${baseEntry.type}-${baseEntry.id}`;
         const tail = itemKey.slice(baseKey.length);
-        
+
         const packagePath = [];
         let currentPackages = baseEntry.children || [];
-        
+
         if (tail) {
-          const tokens = tail.split('-').filter(Boolean);
+          const tokens = tail.split("-").filter(Boolean);
           for (let i = 0; i < tokens.length; i += 2) {
             const t = tokens[i];
             const idx = parseInt(tokens[i + 1], 10);
-            
-            if (t === 'pkg') {
+
+            if (t === "pkg") {
               const pkg = currentPackages[idx];
               if (pkg) {
-                packagePath.push({ name: pkg.name, type: pkg.type, originalData: pkg });
+                packagePath.push({
+                  name: pkg.name,
+                  type: pkg.type,
+                  originalData: pkg,
+                });
                 currentPackages = pkg.children || [];
               }
-            } else if (t === 'elem') {
+            } else if (t === "elem") {
               // Element is inside the last package
               break;
             }
@@ -785,7 +1547,7 @@
         return {
           packagePath,
           itemKind: info.kind,
-          itemData: info.data
+          itemData: info.data,
         };
       }
 
@@ -797,27 +1559,29 @@
 
         // Navigate/create package structure in profile
         let targetPackages = profileData.items;
-        
+
         for (const pkgInfo of pathInfo.packagePath) {
           // Find or create package at this level
-          let existingPkg = targetPackages.find(p => p.name === pkgInfo.name && p.type === pkgInfo.type);
-          
+          let existingPkg = targetPackages.find(
+            (p) => p.name === pkgInfo.name && p.type === pkgInfo.type
+          );
+
           if (!existingPkg) {
             // Create new package
             existingPkg = {
               id: generateId(),
               name: pkgInfo.name,
               type: pkgInfo.type,
-              description: pkgInfo.originalData.description || '',
-              description_ru: pkgInfo.originalData.description_ru || '',
+              description: pkgInfo.originalData.description || "",
+              description_ru: pkgInfo.originalData.description_ru || "",
               children: [],
-              elements: []
+              elements: [],
             };
             targetPackages.push(existingPkg);
           }
-          
+
           // Navigate deeper
-          if (info.kind === 'element') {
+          if (info.kind === "element") {
             // If transferring an element, it goes into elements array
             targetPackages = existingPkg.elements;
           } else {
@@ -827,17 +1591,21 @@
         }
 
         // Add the copied item to target location
-        if (info.kind === 'package') {
+        if (info.kind === "package") {
           // Check if package already exists
-          const exists = targetPackages.some(p => p.name === copiedData.name && p.type === copiedData.type);
+          const exists = targetPackages.some(
+            (p) => p.name === copiedData.name && p.type === copiedData.type
+          );
           if (!exists) {
             copiedData.id = generateId();
             targetPackages.push(copiedData);
             return true;
           }
-        } else if (info.kind === 'element') {
+        } else if (info.kind === "element") {
           // Check if element already exists
-          const exists = targetPackages.some(e => e.name === copiedData.name && e.type === copiedData.type);
+          const exists = targetPackages.some(
+            (e) => e.name === copiedData.name && e.type === copiedData.type
+          );
           if (!exists) {
             copiedData.id = generateId();
             targetPackages.push(copiedData);
@@ -849,9 +1617,9 @@
       }
 
       function deepCopy(obj) {
-        if (obj === null || typeof obj !== 'object') return obj;
-        if (Array.isArray(obj)) return obj.map(item => deepCopy(item));
-        
+        if (obj === null || typeof obj !== "object") return obj;
+        if (Array.isArray(obj)) return obj.map((item) => deepCopy(item));
+
         const copy = {};
         for (const key in obj) {
           if (obj.hasOwnProperty(key)) {
@@ -873,11 +1641,11 @@
         if (!project) return;
 
         // Find the profile in the project
-        const profile = project.profiles.find(p => p.id === profileData.id);
+        const profile = project.profiles.find((p) => p.id === profileData.id);
         if (profile) {
           // Update rootPackages with current profileData.items
           profile.rootPackages = profileData.items;
-          console.log('✅ Profile saved to MemoryStore:', profile.name);
+          console.log("✅ Profile saved to MemoryStore:", profile.name);
         }
       }
 
@@ -896,7 +1664,7 @@
           return depthB - depthA; // Sort descending by depth
         });
 
-        sortedItems.forEach(itemKey => {
+        sortedItems.forEach((itemKey) => {
           if (removeItemFromProfile(itemKey)) {
             removedCount++;
           }
@@ -905,20 +1673,23 @@
         if (removedCount > 0) {
           // Save to MemoryStore
           saveProfileToMemoryStore();
-          
+
           // Clear selections
           selectedRightItems.clear();
           activeRightItem = null;
-          
+
           // Re-render profile tree
           renderProfileTree();
-          
+
           // Clear details panel
-          const profileContainer = document.querySelector('.details-panel [data-tab-content="profile"]');
+          const profileContainer = document.querySelector(
+            '.details-panel [data-tab-content="profile"]'
+          );
           if (profileContainer) {
-            profileContainer.innerHTML = '<div class="text-muted" style="padding: 10px 0;">Здесь будет отображаться информация из выбранного профиля.</div>';
+            profileContainer.innerHTML =
+              '<div class="text-muted" style="padding: 10px 0;">Здесь будет отображаться информация из выбранного профиля.</div>';
           }
-          
+
           alert(`Успешно удалено элементов: ${removedCount}`);
         } else {
           alert("Не удалось удалить элементы");
@@ -928,14 +1699,14 @@
       function removeItemFromProfile(itemKey) {
         // Parse itemKey to find the item location
         // itemKey format: profile[-pkg-{idx}]*[-elem-{idx}]
-        const prefix = 'profile';
+        const prefix = "profile";
         if (!itemKey.startsWith(prefix)) return false;
 
         const tail = itemKey.slice(prefix.length);
         if (!tail) return false; // Cannot remove root
 
-        const tokens = tail.split('-').filter(Boolean);
-        
+        const tokens = tail.split("-").filter(Boolean);
+
         // Navigate to parent and get index to remove
         let currentContainer = profileData.items;
         let parentContainer = null;
@@ -945,21 +1716,21 @@
         for (let i = 0; i < tokens.length; i += 2) {
           const t = tokens[i];
           const idx = parseInt(tokens[i + 1], 10);
-          
+
           if (i === tokens.length - 2) {
             // Last token - this is what we want to remove
             indexToRemove = idx;
             parentContainer = currentContainer;
-            isElement = (t === 'elem');
+            isElement = t === "elem";
             break;
           } else {
             // Navigate deeper
-            if (t === 'pkg') {
+            if (t === "pkg") {
               const pkg = currentContainer[idx];
               if (!pkg) return false;
-              
+
               // Check if next token is 'elem' to switch to elements array
-              if (i + 2 < tokens.length && tokens[i + 2] === 'elem') {
+              if (i + 2 < tokens.length && tokens[i + 2] === "elem") {
                 currentContainer = pkg.elements || [];
               } else {
                 currentContainer = pkg.children || [];
@@ -969,7 +1740,11 @@
         }
 
         // Remove the item
-        if (parentContainer && indexToRemove >= 0 && indexToRemove < parentContainer.length) {
+        if (
+          parentContainer &&
+          indexToRemove >= 0 &&
+          indexToRemove < parentContainer.length
+        ) {
           parentContainer.splice(indexToRemove, 1);
           return true;
         }
@@ -996,6 +1771,870 @@
         // 3. Redirecting back to project-details.html
       }
 
+      // Diagram editor globals
+      let diagramGraph = null;
+      let diagramPaper = null;
+      let currentLinkMode = null; // 'generalization' or 'association'
+
+      function setEditorMode() {
+        const contentArea = document.querySelector(".editor-content-area");
+        const toggleBtn = document.getElementById("toggle-mode-btn");
+
+        if (contentArea.classList.contains("standart-mode")) {
+          // Switch to editor mode
+          contentArea.classList.remove("standart-mode");
+          contentArea.classList.add("editor-mode");
+          toggleBtn.textContent = "📋 Стандартный режим";
+
+          // Initialize diagram editor
+          initializeDiagramEditor();
+
+          // Render details panel with tabs
+          renderEditorModeDetailsPanel();
+          renderEditorModeProfilePanel();
+        } else {
+          // Switch back to standard mode
+          contentArea.classList.remove("editor-mode");
+          contentArea.classList.add("standart-mode");
+          toggleBtn.textContent = "📐 Режим диаграммы";
+
+          // Clean up diagram
+          if (diagramPaper) {
+            diagramPaper.remove();
+            diagramPaper = null;
+          }
+          diagramGraph = null;
+          currentLinkMode = null;
+        }
+      }
+
+      function initializeDiagramEditor() {
+        const container = document.getElementById("diagram-editor");
+
+        // Create toolbar and canvas
+        container.innerHTML = `
+          <div class="diagram-toolbar">
+            <button class="diagram-tool-btn" onclick="setLinkMode('generalization')" id="gen-btn" title="Создать связь обобщения">
+              🔺 Обобщение
+            </button>
+            <button class="diagram-tool-btn" onclick="setLinkMode('association')" id="assoc-btn" title="Создать связь ассоциации">
+              ➡️ Ассоциация
+            </button>
+            <button class="diagram-tool-btn" onclick="clearLinkMode()" title="Отменить режим связи">
+              ❌ Отмена
+            </button>
+            <button class="diagram-tool-btn" onclick="clearDiagram()" title="Очистить диаграмму">
+              🗑️ Очистить
+            </button>
+          </div>
+          <div class="diagram-canvas" id="diagram-canvas"></div>
+        `;
+
+        // Initialize JointJS
+        const namespace = joint.shapes;
+        diagramGraph = new joint.dia.Graph({}, { cellNamespace: namespace });
+
+        diagramPaper = new joint.dia.Paper({
+          el: document.getElementById("diagram-canvas"),
+          model: diagramGraph,
+          width: "100%",
+          height: "100%",
+          gridSize: 10,
+          drawGrid: false,
+          background: { color: "transparent" },
+          cellViewNamespace: namespace,
+          defaultLink: new joint.shapes.standard.Link(),
+          linkPinning: false,
+          interactive: { linkMove: false },
+        });
+
+        // Handle element click for both selection and link creation
+        diagramPaper.on("element:pointerclick", function (elementView, evt) {
+          if (currentLinkMode) {
+            // Link creation mode
+            if (!startLinkFrom) {
+              // First click - select source element
+              startLinkFrom = elementView.model;
+
+              // Visual feedback - highlight selected element
+              elementView.model.attr("body/strokeWidth", 4);
+              elementView.model.attr("body/stroke", "#4a90e2");
+
+              console.log(
+                "Выбран исходный элемент:",
+                elementView.model.get("data").name
+              );
+            } else if (startLinkFrom !== elementView.model) {
+              // Second click - create link to target element
+              const sourceElement = startLinkFrom;
+              createLink(sourceElement, elementView.model, currentLinkMode);
+
+              // Reset visual feedback before clearing startLinkFrom
+              sourceElement.attr("body/strokeWidth", 2);
+              sourceElement.attr("body/stroke", "#333");
+
+              startLinkFrom = null;
+            } else {
+              // Clicked same element - cancel
+              startLinkFrom.attr("body/strokeWidth", 2);
+              startLinkFrom.attr("body/stroke", "#333");
+              startLinkFrom = null;
+              console.log("Отменено - кликнули на тот же элемент");
+            }
+          } else {
+            // Normal selection mode - show details
+            showDiagramElementDetails(elementView.model);
+          }
+        });
+
+        // Setup drag and drop
+        setupDragAndDrop();
+      }
+
+      let startLinkFrom = null;
+
+      function setLinkMode(mode) {
+        currentLinkMode = mode;
+        document.getElementById("gen-btn").classList.remove("active");
+        document.getElementById("assoc-btn").classList.remove("active");
+
+        if (mode === "generalization") {
+          document.getElementById("gen-btn").classList.add("active");
+        } else if (mode === "association") {
+          document.getElementById("assoc-btn").classList.add("active");
+        }
+      }
+
+      function clearLinkMode() {
+        currentLinkMode = null;
+
+        // Reset visual feedback if there was a selected element
+        if (startLinkFrom) {
+          startLinkFrom.attr("body/strokeWidth", 2);
+          startLinkFrom.attr("body/stroke", "#333");
+          startLinkFrom = null;
+        }
+
+        document.getElementById("gen-btn").classList.remove("active");
+        document.getElementById("assoc-btn").classList.remove("active");
+      }
+
+      function createLink(source, target, linkType) {
+        let link;
+
+        if (linkType === "generalization") {
+          // Generalization (inheritance) - triangle arrow
+          link = new joint.shapes.standard.Link({
+            source: { id: source.id },
+            target: { id: target.id },
+            attrs: {
+              line: {
+                stroke: "#333",
+                strokeWidth: 2,
+                targetMarker: {
+                  type: "path",
+                  d: "M 10 -5 0 0 10 5 Z",
+                  fill: "white",
+                  stroke: "#333",
+                },
+              },
+            },
+            labels: [
+              {
+                attrs: { text: { text: "◁ Generalization" } },
+              },
+            ],
+          });
+        } else if (linkType === "association") {
+          // Association - simple arrow
+          link = new joint.shapes.standard.Link({
+            source: { id: source.id },
+            target: { id: target.id },
+            attrs: {
+              line: {
+                stroke: "#333",
+                strokeWidth: 2,
+                targetMarker: {
+                  type: "path",
+                  d: "M 10 -5 0 0 10 5 z",
+                },
+              },
+            },
+            labels: [
+              {
+                attrs: { text: { text: "Association ➡" } },
+              },
+            ],
+          });
+        }
+
+        link.addTo(diagramGraph);
+        clearLinkMode();
+      }
+
+      function clearDiagram() {
+        if (confirm("Очистить всю диаграмму?")) {
+          diagramGraph.clear();
+        }
+      }
+
+      function setupDragAndDrop() {
+        const diagramEditor = document.getElementById("diagram-editor");
+
+        // Prevent default drag behavior
+        diagramEditor.addEventListener("dragover", function (e) {
+          e.preventDefault();
+          diagramEditor.classList.add("drag-over");
+        });
+
+        diagramEditor.addEventListener("dragleave", function (e) {
+          diagramEditor.classList.remove("drag-over");
+        });
+
+        diagramEditor.addEventListener("drop", function (e) {
+          e.preventDefault();
+          diagramEditor.classList.remove("drag-over");
+
+          const data = e.dataTransfer.getData("text/plain");
+          if (!data) return;
+
+          try {
+            const itemInfo = JSON.parse(data);
+            if (itemInfo.kind === "element" && itemInfo.data) {
+              const canvas = document.getElementById("diagram-canvas");
+              const rect = canvas.getBoundingClientRect();
+              const x = e.clientX - rect.left;
+              const y = e.clientY - rect.top;
+
+              createClassElement(itemInfo.data, x, y);
+            }
+          } catch (err) {
+            console.error("Drop error:", err);
+          }
+        });
+      }
+
+      function createClassElement(classData, x, y) {
+        const attrs = classData.attributes || [];
+        const links = classData.links || [];
+
+        // Build attributes text
+        const attrText =
+          attrs.length > 0
+            ? attrs
+                .slice(0, 5)
+                .map((a) => `+ ${a.name}: ${a.type || a.dataType || "any"}`)
+                .join("\n")
+            : "(нет атрибутов)";
+
+        // Build methods/links text
+        const linkText =
+          links.length > 0
+            ? links
+                .slice(0, 3)
+                .map((l) => `+ ${l.target_class_role_name || "link"}`)
+                .join("\n")
+            : "(нет связей)";
+
+        const classShape = new joint.shapes.standard.Rectangle({
+          position: { x: x - 75, y: y - 50 },
+          size: { width: 200, height: 120 },
+          attrs: {
+            body: {
+              fill: "#ffffff",
+              stroke: "#333",
+              strokeWidth: 2,
+              rx: 5,
+              ry: 5,
+            },
+            label: {
+              text: `«class»\n${classData.name}\n${"—".repeat(
+                15
+              )}\n${attrText}`,
+              fill: "#333",
+              fontSize: 11,
+              fontFamily: "monospace",
+              textAnchor: "start",
+              textVerticalAnchor: "top",
+              refX: 5,
+              refY: 5,
+            },
+          },
+          data: classData, // Store original data
+        });
+
+        classShape.addTo(diagramGraph);
+      }
+
+      function showDiagramElementDetails(element) {
+        const classData = element.get("data");
+        if (!classData) return;
+
+        const detailsPanel = document.getElementById(
+          "editor-mode-details-panel"
+        );
+        const attrs = classData.attributes || [];
+        const links = classData.links || [];
+
+        let html = `
+          <h4 style="margin-top: 0;">Класс: ${classData.name}</h4>
+          <p><strong>Тип:</strong> ${classData.type || "Class"}</p>
+          <p><strong>Абстрактный:</strong> ${
+            classData.isAbstract ? "Да" : "Нет"
+          }</p>
+          <p><strong>Описание:</strong> ${
+            classData.description || classData.description_ru || "Нет описания"
+          }</p>
+          
+          <h5 style="margin-top: 15px; margin-bottom: 5px;">Атрибуты (${
+            attrs.length
+          }):</h5>
+        `;
+
+        if (attrs.length > 0) {
+          html += '<ul style="margin: 0; padding-left: 20px;">';
+          attrs.forEach((a) => {
+            html += `<li><strong>${a.name}</strong>: ${
+              a.type || a.dataType || "any"
+            } ${a.multiplicity ? `[${a.multiplicity}]` : ""}</li>`;
+          });
+          html += "</ul>";
+        } else {
+          html += '<p class="text-muted">Нет атрибутов</p>';
+        }
+
+        html += `<h5 style="margin-top: 15px; margin-bottom: 5px;">Связи (${links.length}):</h5>`;
+
+        if (links.length > 0) {
+          html += '<ul style="margin: 0; padding-left: 20px;">';
+          links.forEach((l) => {
+            html += `<li><strong>${
+              l.target_class_role_name || "link"
+            }</strong> → ${l.target_class_name} (${l.relation_kind})</li>`;
+          });
+          html += "</ul>";
+        } else {
+          html += '<p class="text-muted">Нет связей</p>';
+        }
+
+        detailsPanel.innerHTML = html;
+      }
+
+      // Editor mode details panel state
+      let selectedAttributes = new Set();
+      let selectedLinks = new Set();
+      let selectedProfileAttributes = new Set();
+      let selectedProfileLinks = new Set();
+
+      // Helper function to check if a link exists in profile
+      function linkExistsInProfile(modelLink, profileLinks) {
+        if (!profileLinks || !Array.isArray(profileLinks)) return false;
+        
+        return profileLinks.some(profileLink => {
+          const roleMatch = (modelLink.target_class_role_name || '') === (profileLink.target_class_role_name || '');
+          const kindMatch = (modelLink.relation_kind || '') === (profileLink.relation_kind || '');
+          const classMatch = (modelLink.target_class_name || '') === (profileLink.target_class_name || '');
+          
+          return roleMatch && kindMatch && classMatch;
+        });
+      }
+
+      // Helper function to check if an attribute exists in profile
+      function attributeExistsInProfile(modelAttr, profileAttrs) {
+        if (!profileAttrs || !Array.isArray(profileAttrs)) return false;
+        
+        return profileAttrs.some(profileAttr => {
+          const nameMatch = (modelAttr.name || '') === (profileAttr.name || '');
+          const typeMatch = (modelAttr.type || modelAttr.dataType || '') === (profileAttr.type || profileAttr.dataType || '');
+          
+          return nameMatch && typeMatch;
+        });
+      }
+
+      function renderEditorModeDetailsPanel() {
+        const modelObjectPanel = document.getElementById('editor-mode-model-object');
+        if (!modelObjectPanel) return;
+
+        if (!activeLeftItem) {
+          modelObjectPanel.innerHTML = `
+            <h4 style="margin-top: 0;">Объект модели</h4>
+            <div class="text-muted" style="padding: 10px 0;">Выберите объект в дереве моделей для просмотра деталей</div>
+          `;
+          return;
+        }
+
+        const info = resolveLeftKey(activeLeftItem);
+        if (!info || !info.data) {
+          modelObjectPanel.innerHTML = `
+            <h4 style="margin-top: 0;">Объект модели</h4>
+            <div class="text-muted" style="padding: 10px 0;">Нет данных для отображения</div>
+          `;
+          return;
+        }
+
+        const data = info.data;
+        const isElement = info.kind === 'element';
+
+        if (!isElement) {
+          modelObjectPanel.innerHTML = `
+            <h4 style="margin-top: 0;">${info.kind === 'package' ? 'Пакет' : info.kind === 'model' ? 'Модель' : 'Объект'}: ${esc(data.name)}</h4>
+            <p style="padding: 10px 0;">${esc(data.description || data.description_ru || 'Нет описания')}</p>
+          `;
+          return;
+        }
+
+        // Check if object exists in profile
+        const objectExistsInProfile = activeRightItem !== null;
+
+        // Render tabs for element (class)
+        const attrs = data.attributes || [];
+        const links = data.links || [];
+        
+        // Filter out parent Generalization links
+        const filteredLinks = links.filter(l => {
+          return !(l.relation_kind === 'Generalization' && l.role === 'parent');
+        });
+
+        let html = `
+          <div class="tabs">
+            <div class="tab active" onclick="switchEditorTab('description')">Описание</div>
+            <div class="tab" onclick="switchEditorTab('attributes')">Атрибуты (${attrs.length})</div>
+            <div class="tab" onclick="switchEditorTab('links')">Связи (${filteredLinks.length})</div>
+          </div>
+
+          <div class="tab-content active" data-tab="description">
+            <h4 style="margin-top: 0;">Класс: ${esc(data.name)}</h4>
+            <p><strong>Тип:</strong> ${esc(data.type || 'Class')}</p>
+            <p><strong>Абстрактный:</strong> ${data.isAbstract ? 'Да' : 'Нет'}</p>
+            <p><strong>Описание:</strong> ${esc(data.description || data.description_ru || 'Нет описания')}</p>
+            ${!objectExistsInProfile ? `
+            <button class="btn btn-primary" onclick="transferToProfile()" style="margin-top: 10px; width: 100%;">
+              → Перенести в профиль
+            </button>
+            ` : ''}
+          </div>
+
+          <div class="tab-content" data-tab="attributes">
+            <h4 style="margin-top: 0;">Атрибуты</h4>
+            <div class="attributes-table">
+              <div class="attributes-table-header">
+                <div></div>
+                <div>Имя</div>
+                <div>Тип</div>
+                <div>Кратность</div>
+                <div>Описание</div>
+              </div>
+        `;
+
+        // Get profile attributes if object exists in profile
+        let profileAttrs = [];
+        if (objectExistsInProfile && activeRightItem) {
+          const profileInfo = resolveRightKey(activeRightItem);
+          if (profileInfo && profileInfo.data) {
+            profileAttrs = profileInfo.data.attributes || [];
+          }
+        }
+
+        if (attrs.length > 0) {
+          attrs.forEach((attr, idx) => {
+            const attrKey = `${activeLeftItem}-attr-${idx}`;
+            const isChecked = selectedAttributes.has(attrKey);
+            const alreadyInProfile = attributeExistsInProfile(attr, profileAttrs);
+            const rowClass = alreadyInProfile ? 'attributes-table-row already-in-profile' : 'attributes-table-row';
+            const disabledAttr = alreadyInProfile ? 'disabled' : '';
+            
+            html += `
+              <div class="${rowClass}">
+                <div class="attributes-table-cell-checkbox">
+                  <input type="checkbox" id="${attrKey}" ${isChecked ? 'checked' : ''} ${disabledAttr}
+                    onchange="toggleAttributeSelection('${attrKey}')">
+                </div>
+                <div class="attributes-table-cell">${esc(attr.name)}</div>
+                <div class="attributes-table-cell">${esc(attr.type || attr.dataType || '-')}</div>
+                <div class="attributes-table-cell">${esc(attr.multiplicity || '-')}</div>
+                <div class="attributes-table-cell">${esc(attr.description || attr.description_ru || '')}</div>
+              </div>
+            `;
+          });
+          html += `
+            </div>
+            ${objectExistsInProfile ? `
+            <button class="btn btn-primary" onclick="transferSelectedAttributes()" style="margin-top: 10px; width: 100%;">
+              → Перенести в профиль
+            </button>
+            ` : ''}
+          `;
+        } else {
+          html += `
+              <div class="attributes-table-empty">Нет атрибутов</div>
+            </div>
+          `;
+        }
+
+        html += '</div><div class="tab-content" data-tab="links"><h4 style="margin-top: 0;">Связи</h4>';
+
+        html += `
+          <div class="attributes-table">
+            <div class="attributes-table-header">
+              <div></div>
+              <div>Роль</div>
+              <div>Тип связи</div>
+              <div>Класс</div>
+              <div>Описание</div>
+            </div>
+        `;
+
+        // Get profile links if object exists in profile
+        let profileLinks = [];
+        if (objectExistsInProfile && activeRightItem) {
+          const profileInfo = resolveRightKey(activeRightItem);
+          if (profileInfo && profileInfo.data) {
+            const allProfileLinks = profileInfo.data.links || [];
+            // Filter out parent Generalization links from profile too
+            profileLinks = allProfileLinks.filter(l => {
+              return !(l.relation_kind === 'Generalization' && l.role === 'parent');
+            });
+          }
+        }
+
+        if (filteredLinks.length > 0) {
+          filteredLinks.forEach((link, idx) => {
+            const linkKey = `${activeLeftItem}-link-${idx}`;
+            const isChecked = selectedLinks.has(linkKey);
+            const alreadyInProfile = linkExistsInProfile(link, profileLinks);
+            const rowClass = alreadyInProfile ? 'attributes-table-row already-in-profile' : 'attributes-table-row';
+            const disabledAttr = alreadyInProfile ? 'disabled' : '';
+            
+            html += `
+              <div class="${rowClass}">
+                <div class="attributes-table-cell-checkbox">
+                  <input type="checkbox" id="${linkKey}" ${isChecked ? 'checked' : ''} ${disabledAttr}
+                    onchange="toggleLinkSelection('${linkKey}')">
+                </div>
+                <div class="attributes-table-cell">${esc(link.target_class_role_name || '-')}</div>
+                <div class="attributes-table-cell">${esc(link.relation_kind || '-')}</div>
+                <div class="attributes-table-cell">${esc(link.target_class_name || '-')}</div>
+                <div class="attributes-table-cell">${esc(link.description || link.target_description || '')}</div>
+              </div>
+            `;
+          });
+          html += `
+            </div>
+            ${objectExistsInProfile ? `
+            <button class="btn btn-primary" onclick="transferSelectedLinks()" style="margin-top: 10px; width: 100%;">
+              → Перенести в профиль
+            </button>
+            ` : ''}
+          `;
+        } else {
+          html += `
+              <div class="attributes-table-empty">Нет связей для отображения</div>
+            </div>
+          `;
+        }
+        html += '</div>';
+        modelObjectPanel.innerHTML = html;
+      }
+
+      function renderEditorModeProfilePanel() {
+        const profileObjectPanel = document.getElementById('editor-mode-profile-object');
+        if (!profileObjectPanel) return;
+
+        if (!activeRightItem) {
+          profileObjectPanel.innerHTML = `
+            <h4 style="margin-top: 0;">Объект профиля</h4>
+            <div class="text-muted" style="padding: 10px 0;">Выберите объект в дереве профиля для просмотра деталей</div>
+          `;
+          return;
+        }
+
+        const info = resolveRightKey(activeRightItem);
+        if (!info || !info.data) {
+          profileObjectPanel.innerHTML = `
+            <h4 style="margin-top: 0;">Объект профиля</h4>
+            <div class="text-muted" style="padding: 10px 0;">Нет данных для отображения</div>
+          `;
+          return;
+        }
+
+        const data = info.data;
+        const isElement = info.kind === 'element';
+
+        if (!isElement) {
+          profileObjectPanel.innerHTML = `
+            <h4 style="margin-top: 0;">${info.kind === 'package' ? 'Пакет' : 'Объект'}: ${esc(data.name)}</h4>
+            <p style="padding: 10px 0;">${esc(data.description || data.description_ru || 'Нет описания')}</p>
+          `;
+          return;
+        }
+
+        // Render tabs for element (class)
+        const attrs = data.attributes || [];
+        const links = data.links || [];
+        
+        // Filter out parent Generalization links
+        const filteredLinks = links.filter(l => {
+          return !(l.relation_kind === 'Generalization' && l.role === 'parent');
+        });
+
+        let html = `
+          <div class="tabs">
+            <div class="tab active" onclick="switchProfileTab('description')">Описание</div>
+            <div class="tab" onclick="switchProfileTab('attributes')">Атрибуты (${attrs.length})</div>
+            <div class="tab" onclick="switchProfileTab('links')">Связи (${filteredLinks.length})</div>
+          </div>
+
+          <div class="tab-content active" data-tab="description">
+            <h4 style="margin-top: 0;">Класс: ${esc(data.name)}</h4>
+            <p><strong>Тип:</strong> ${esc(data.type || 'Class')}</p>
+            <p><strong>Абстрактный:</strong> ${data.isAbstract ? 'Да' : 'Нет'}</p>
+            <p><strong>Описание:</strong> ${esc(data.description || data.description_ru || 'Нет описания')}</p>
+          </div>
+
+          <div class="tab-content" data-tab="attributes">
+            <h4 style="margin-top: 0;">Атрибуты</h4>
+            <div class="attributes-table">
+              <div class="attributes-table-header">
+                <div></div>
+                <div>Имя</div>
+                <div>Тип</div>
+                <div>Кратность</div>
+                <div>Описание</div>
+              </div>
+        `;
+
+        if (attrs.length > 0) {
+          attrs.forEach((attr, idx) => {
+            const attrKey = `${activeRightItem}-attr-${idx}`;
+            const isChecked = selectedProfileAttributes.has(attrKey);
+            html += `
+              <div class="attributes-table-row">
+                <div class="attributes-table-cell-checkbox">
+                  <input type="checkbox" id="${attrKey}" ${isChecked ? 'checked' : ''}
+                    onchange="toggleProfileAttributeSelection('${attrKey}')">
+                </div>
+                <div class="attributes-table-cell">${esc(attr.name || '-')}</div>
+                <div class="attributes-table-cell">${esc(attr.type || attr.dataType || '-')}</div>
+                <div class="attributes-table-cell">${esc(attr.multiplicity || '')}</div>
+                <div class="attributes-table-cell">${esc(attr.description || attr.details || '')}</div>
+              </div>
+            `;
+          });
+          html += `
+            </div>
+            <button class="btn btn-primary" onclick="excludeSelectedAttributes()" style="margin-top: 10px; width: 100%;">
+              ✖ Исключить из профиля
+            </button>
+          `;
+        } else {
+          html += `
+              <div class="attributes-table-empty">Нет атрибутов</div>
+            </div>
+          `;
+        }
+
+        html += '</div><div class="tab-content" data-tab="links"><h4 style="margin-top: 0;">Связи</h4>';
+
+        html += `
+          <div class="attributes-table">
+            <div class="attributes-table-header">
+              <div></div>
+              <div>Роль</div>
+              <div>Тип связи</div>
+              <div>Класс</div>
+              <div>Описание</div>
+            </div>
+        `;
+
+        if (filteredLinks.length > 0) {
+          filteredLinks.forEach((link, idx) => {
+            const linkKey = `${activeRightItem}-link-${idx}`;
+            const isChecked = selectedProfileLinks.has(linkKey);
+            html += `
+              <div class="attributes-table-row">
+                <div class="attributes-table-cell-checkbox">
+                  <input type="checkbox" id="${linkKey}" ${isChecked ? 'checked' : ''}
+                    onchange="toggleProfileLinkSelection('${linkKey}')">
+                </div>
+                <div class="attributes-table-cell">${esc(link.target_class_role_name || '-')}</div>
+                <div class="attributes-table-cell">${esc(link.relation_kind || '-')}</div>
+                <div class="attributes-table-cell">${esc(link.target_class_name || '-')}</div>
+                <div class="attributes-table-cell">${esc(link.description || link.target_description || '')}</div>
+              </div>
+            `;
+          });
+          html += `
+            </div>
+            <button class="btn btn-primary" onclick="excludeSelectedLinks()" style="margin-top: 10px; width: 100%;">
+              ✖ Исключить из профиля
+            </button>
+          `;
+        } else {
+          html += `
+              <div class="attributes-table-empty">Нет связей для отображения</div>
+            </div>
+          `;
+        }
+
+        html += '</div>';
+        profileObjectPanel.innerHTML = html;
+      }
+
+      function switchProfileTab(tabName) {
+        const tabs = document.querySelectorAll('#editor-mode-profile-object .tab');
+        const contents = document.querySelectorAll('#editor-mode-profile-object .tab-content');
+
+        tabs.forEach(tab => {
+          if (tab.getAttribute('onclick').includes(tabName)) {
+            tab.classList.add('active');
+          } else {
+            tab.classList.remove('active');
+          }
+        });
+
+        contents.forEach(content => {
+          if (content.getAttribute('data-tab') === tabName) {
+            content.classList.add('active');
+          } else {
+            content.classList.remove('active');
+          }
+        });
+      }
+
+      function toggleProfileAttributeSelection(attrKey) {
+        const checkbox = document.getElementById(attrKey);
+        if (checkbox && checkbox.checked) {
+          selectedProfileAttributes.add(attrKey);
+        } else {
+          selectedProfileAttributes.delete(attrKey);
+        }
+      }
+
+      function toggleProfileLinkSelection(linkKey) {
+        const checkbox = document.getElementById(linkKey);
+        if (checkbox && checkbox.checked) {
+          selectedProfileLinks.add(linkKey);
+        } else {
+          selectedProfileLinks.delete(linkKey);
+        }
+      }
+
+      function excludeSelectedAttributes() {
+        if (selectedProfileAttributes.size === 0) {
+          alert('Выберите атрибуты для исключения');
+          return;
+        }
+
+        // TODO: Implement attribute exclusion logic
+        alert(`Выбрано атрибутов для исключения: ${selectedProfileAttributes.size}\n\nФункциональность исключения будет реализована позже`);
+        
+        // Clear selection after exclusion
+        selectedProfileAttributes.clear();
+        renderEditorModeProfilePanel();
+      }
+
+      function excludeSelectedLinks() {
+        if (selectedProfileLinks.size === 0) {
+          alert('Выберите связи для исключения');
+          return;
+        }
+
+        // TODO: Implement link exclusion logic
+        alert(`Выбрано связей для исключения: ${selectedProfileLinks.size}\n\nФункциональность исключения будет реализована позже`);
+        
+        // Clear selection after exclusion
+        selectedProfileLinks.clear();
+        renderEditorModeProfilePanel();
+      }
+
+      function switchEditorTab(tabName) {
+        const tabs = document.querySelectorAll('#editor-mode-model-object .tab');
+        const contents = document.querySelectorAll('#editor-mode-model-object .tab-content');
+
+        tabs.forEach(tab => {
+          if (tab.getAttribute('onclick').includes(tabName)) {
+            tab.classList.add('active');
+          } else {
+            tab.classList.remove('active');
+          }
+        });
+
+        contents.forEach(content => {
+          if (content.getAttribute('data-tab') === tabName) {
+            content.classList.add('active');
+          } else {
+            content.classList.remove('active');
+          }
+        });
+      }
+
+      function toggleAttributeSelection(attrKey) {
+        const checkbox = document.getElementById(attrKey);
+        if (checkbox && checkbox.checked) {
+          selectedAttributes.add(attrKey);
+        } else {
+          selectedAttributes.delete(attrKey);
+        }
+      }
+
+      function toggleLinkSelection(linkKey) {
+        const checkbox = document.getElementById(linkKey);
+        if (checkbox && checkbox.checked) {
+          selectedLinks.add(linkKey);
+        } else {
+          selectedLinks.delete(linkKey);
+        }
+      }
+
+      function transferSelectedAttributes() {
+        if (selectedAttributes.size === 0) {
+          alert('Выберите атрибуты для переноса');
+          return;
+        }
+
+        // TODO: Implement attribute transfer logic
+        alert(`Выбрано атрибутов: ${selectedAttributes.size}\n\nФункциональность переноса будет реализована позже`);
+        
+        // Clear selection after transfer
+        selectedAttributes.clear();
+        renderEditorModeDetailsPanel();
+      }
+
+      function transferSelectedLinks() {
+        if (selectedLinks.size === 0) {
+          alert('Выберите связи для переноса');
+          return;
+        }
+
+        // TODO: Implement link transfer logic
+        alert(`Выбрано связей: ${selectedLinks.size}\n\nФункциональность переноса будет реализована позже`);
+        
+        // Clear selection after transfer
+        selectedLinks.clear();
+        renderEditorModeDetailsPanel();
+      }
+
+      function handleDragStart(event, itemKey) {
+        event.stopPropagation();
+
+        // Determine if this is from left or right tree
+        let info;
+        if (itemKey.startsWith("left-")) {
+          info = resolveLeftKey(itemKey);
+        } else if (itemKey.startsWith("profile")) {
+          info = resolveRightKey(itemKey);
+        }
+
+        if (info && info.kind === "element" && info.data) {
+          // Only allow dragging class elements
+          event.dataTransfer.setData("text/plain", JSON.stringify(info));
+          event.dataTransfer.effectAllowed = "copy";
+          event.target.classList.add("dragging");
+        } else {
+          event.preventDefault();
+        }
+      }
+
       function filterLeftTree() {
         // Placeholder for filter logic
         console.log("Filter left tree");
@@ -1008,53 +2647,70 @@
 
       // Переключение вкладок в панели деталей
       function switchDetailsTab(tabKey) {
-        const tabsContainer = document.getElementById('details-tabs');
+        const tabsContainer = document.getElementById("details-tabs");
         if (!tabsContainer) return;
 
-        const tabs = tabsContainer.querySelectorAll('.tab');
-        const contents = document.querySelectorAll('.details-panel .tab-content');
+        const tabs = tabsContainer.querySelectorAll(".tab");
+        const contents = document.querySelectorAll(
+          ".details-panel .tab-content"
+        );
 
-        tabs.forEach(t => {
-          if (t.getAttribute('data-tab') === tabKey) t.classList.add('active');
-          else t.classList.remove('active');
+        tabs.forEach((t) => {
+          if (t.getAttribute("data-tab") === tabKey) t.classList.add("active");
+          else t.classList.remove("active");
         });
 
-        contents.forEach(c => {
-          if (c.getAttribute('data-tab-content') === tabKey) c.classList.add('active');
-          else c.classList.remove('active');
+        contents.forEach((c) => {
+          if (c.getAttribute("data-tab-content") === tabKey)
+            c.classList.add("active");
+          else c.classList.remove("active");
         });
       }
 
       function updateDetailsPanel(side) {
-        if (side === 'left' && activeLeftItem) {
+        if (side === "left" && activeLeftItem) {
           const info = resolveLeftKey(activeLeftItem);
           const html = renderDetailsHtml(info);
-          const container = document.querySelector('.details-panel [data-tab-content="model"]');
+          const container = document.querySelector(
+            '.details-panel [data-tab-content="model"]'
+          );
           if (container) container.innerHTML = html;
-          switchDetailsTab('model');
-        } else if (side === 'right' && activeRightItem) {
+          switchDetailsTab("model");
+        } else if (side === "right" && activeRightItem) {
           const info = resolveRightKey(activeRightItem);
           const html = renderDetailsHtml(info);
-          const container = document.querySelector('.details-panel [data-tab-content="profile"]');
+          const container = document.querySelector(
+            '.details-panel [data-tab-content="profile"]'
+          );
           if (container) container.innerHTML = html;
-          switchDetailsTab('profile');
+          switchDetailsTab("profile");
         }
       }
 
+      // выбирает свойства объекта по ключу
       function resolveLeftKey(itemKey) {
         let baseEntry = null;
         for (const entry of availableData) {
           const baseKey = `left-${entry.type}-${entry.id}`;
-          if (itemKey.startsWith(baseKey)) { baseEntry = { entry, baseKey }; break; }
+          if (itemKey.startsWith(baseKey)) {
+            baseEntry = { entry, baseKey };
+            break;
+          }
         }
-        if (!baseEntry) return { kind: 'unknown', data: null, source: 'left', name: '' };
+        if (!baseEntry)
+          return { kind: "unknown", data: null, source: "left", name: "" };
 
         const { entry, baseKey } = baseEntry;
         const tail = itemKey.slice(baseKey.length);
         if (!tail) {
-          return { kind: entry.type, data: entry.data, source: 'left', name: entry.name };
+          return {
+            kind: entry.type,
+            data: entry.data,
+            source: "left",
+            name: entry.name,
+          };
         }
-        const tokens = tail.split('-').filter(Boolean);
+        const tokens = tail.split("-").filter(Boolean);
         let packages = entry.children || [];
         let elements = null;
         let current = null;
@@ -1062,25 +2718,31 @@
         for (let i = 0; i < tokens.length; i += 2) {
           const t = tokens[i];
           const idx = parseInt(tokens[i + 1], 10);
-          if (t === 'pkg') {
+          if (t === "pkg") {
             current = packages && packages[idx];
-            kind = 'package';
+            kind = "package";
             packages = (current && current.children) || [];
             elements = (current && current.elements) || [];
-          } else if (t === 'elem') {
+          } else if (t === "elem") {
             current = elements && elements[idx];
-            kind = 'element';
+            kind = "element";
             elements = null;
           }
         }
-        return { kind, data: current, source: 'left', name: entry.name };
+        return { kind, data: current, source: "left", name: entry.name };
       }
 
       function resolveRightKey(itemKey) {
-        const prefix = 'profile';
-        if (!itemKey.startsWith(prefix)) return { kind: 'unknown', data: null, source: 'right', name: profileData.name };
+        const prefix = "profile";
+        if (!itemKey.startsWith(prefix))
+          return {
+            kind: "unknown",
+            data: null,
+            source: "right",
+            name: profileData.name,
+          };
         const tail = itemKey.slice(prefix.length);
-        const tokens = tail.split('-').filter(Boolean);
+        const tokens = tail.split("-").filter(Boolean);
         let packages = profileData.items || [];
         let elements = null;
         let current = null;
@@ -1088,23 +2750,23 @@
         for (let i = 0; i < tokens.length; i += 2) {
           const t = tokens[i];
           const idx = parseInt(tokens[i + 1], 10);
-          if (t === 'pkg') {
+          if (t === "pkg") {
             current = packages && packages[idx];
-            kind = 'package';
+            kind = "package";
             packages = (current && current.children) || [];
             elements = (current && current.elements) || [];
-          } else if (t === 'elem') {
+          } else if (t === "elem") {
             current = elements && elements[idx];
-            kind = 'element';
+            kind = "element";
             elements = null;
           }
         }
-        return { kind, data: current, source: 'right', name: profileData.name };
+        return { kind, data: current, source: "right", name: profileData.name };
       }
 
       function esc(v) {
-        if (v === undefined || v === null) return '';
-        const d = document.createElement('div');
+        if (v === undefined || v === null) return "";
+        const d = document.createElement("div");
         d.textContent = String(v);
         return d.innerHTML;
       }
@@ -1114,63 +2776,89 @@
           return '<div class="text-muted" style="padding:10px 0;">Нет данных для отображения.</div>';
         }
         const d = info.data;
-        const typeLabel = info.kind === 'element' ? 'Класс' : (info.kind === 'package' ? 'Пакет' : (info.kind === 'model' ? 'Модель' : (info.kind === 'profile' ? 'Профиль' : 'Объект')));
+        const typeLabel =
+          info.kind === "element"
+            ? "Класс"
+            : info.kind === "package"
+            ? "Пакет"
+            : info.kind === "model"
+            ? "Модель"
+            : info.kind === "profile"
+            ? "Профиль"
+            : "Объект";
         const header = `
-          <div class="mb-10" style="font-weight:600;">${esc(typeLabel)}: ${esc(d.name || info.name || '')}</div>
+          <div class="mb-10" style="font-weight:600;">${esc(typeLabel)}: ${esc(
+          d.name || info.name || ""
+        )}</div>
         `;
 
-        if (info.kind === 'model' || info.kind === 'profile') {
+        if (info.kind === "model" || info.kind === "profile") {
           const metaRows = [
-            ['Название', d.name],
-            ['Описание', d.description || d.description_ru || ''],
-            ['Версия', d.version || '']
-          ].filter(r => r[1] !== '' && r[1] !== undefined && r[1] !== null);
+            // ['Название', d.name],
+            ["Описание", d.description || d.description_ru || ""],
+            ["Версия", d.version || ""],
+          ];
+          // ].filter(r => r[1] !== '' && r[1] !== undefined && r[1] !== null);
           return header + table(metaRows);
         }
 
-        if (info.kind === 'package') {
+        if (info.kind === "package") {
           const rows = [
-            ['Название', d.name],
-            ['Тип', d.type || 'Package'],
-            ['Описание', d.description || d.description_ru || '']
-          ].filter(r => r[1] !== '' && r[1] !== undefined && r[1] !== null);
+            // ['Название', d.name],
+            // ['Тип', d.type || 'Package'],
+            ["Описание", d.description || d.description_ru || ""],
+          ];
+          // ].filter(r => r[1] !== '' && r[1] !== undefined && r[1] !== null)
           return header + table(rows);
         }
 
-        if (info.kind === 'element') {
+        if (info.kind === "element") {
           const attrs = Array.isArray(d.attributes) ? d.attributes : [];
           const links = Array.isArray(d.links) ? d.links : [];
           const basicRows = [
-            ['Название', d.name],
-            ['Тип', d.type || 'Class'],
-            ['Абстрактный', d.isAbstract ? 'Да' : 'Нет'],
-            ['Описание', d.description || d.description_ru || '']
-          ].filter(r => r[1] !== '' && r[1] !== undefined && r[1] !== null);
+            // ['Название', d.name],
+            // ['Тип', d.type || 'Class'],
+            ["Абстрактный", d.isAbstract ? "Да" : "Нет"],
+            ["Описание", d.description || d.description_ru || ""],
+          ];
+          // ].filter(r => r[1] !== '' && r[1] !== undefined && r[1] !== null);
 
           let html = header + table(basicRows);
 
           if (attrs.length) {
-            const rows = attrs.map(a => [
-              a.name || '-',
-              a.type || a.dataType || '-',
-              a.multiplicity || '',
-              a.description || a.details || ''
+            const rows = attrs.map((a) => [
+              a.name || "-",
+              a.type || a.dataType || "-",
+              a.multiplicity || "",
+              a.description || a.details || "",
             ]);
-            html += sectionTitle('Атрибуты') + tableWithHead(['Имя','Тип','Кратность','Описание'], rows);
+            html +=
+              sectionTitle("Атрибуты") +
+              tableWithHead(["Имя", "Тип", "Кратность", "Описание"], rows);
           } else {
-            html += sectionTitle('Атрибуты') + '<div class="text-muted">Нет атрибутов</div>';
+            html +=
+              sectionTitle("Атрибуты") +
+              '<div class="text-muted">Нет атрибутов</div>';
           }
 
           if (links.length) {
-            const rows = links.map(l => [
-              l.name || '-',
-              l.relation_kind || '-',
-              l.multiplicity || '',
-              l.description || l.details || ''
+            const rows = links.map((l) => [
+              l.target_class_role_name || "-",
+              l.relation_kind || "-",
+              l.target_class_name || "-",
+              l.multiplicity || "",
+              l.description || l.details || "",
             ]);
-            html += sectionTitle('Связи') + tableWithHead(['Имя','Вид связи','Кратность','Описание'], rows);
+            html +=
+              sectionTitle("Связи") +
+              tableWithHead(
+                ["Имя", "Вид связи", "Целевой класс", "Кратность", "Описание"],
+                rows
+              );
           } else {
-            html += sectionTitle('Связи') + '<div class="text-muted">Нет связей</div>';
+            html +=
+              sectionTitle("Связи") +
+              '<div class="text-muted">Нет связей</div>';
           }
 
           return html;
@@ -1180,22 +2868,39 @@
       }
 
       function sectionTitle(t) {
-        return `<h4 style="margin:12px 0 6px 0;">${esc(t)}</h4>`;
+        return `<h4 style="margin:20px 0 6px 0;">${esc(t)}</h4>`;
       }
 
       function table(rows) {
-        if (!rows || !rows.length) return '';
-        const trs = rows.map(r => `<tr><td style="font-weight:600; width:180px;">${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join('');
+        if (!rows || !rows.length) return "";
+        const trs = rows
+          .map(
+            (r) =>
+              `<tr><td style="font-weight:600; width:180px;">${esc(
+                r[0]
+              )}</td><td>${esc(r[1])}</td></tr>`
+          )
+          .join("");
         return `<table class="table" style="margin-top:6px;">${trs}</table>`;
       }
 
       function tableWithHead(head, rows) {
-        const thead = `<tr>${head.map(h => `<th style="text-align:left; padding:4px 6px;">${esc(h)}</th>`).join('')}</tr>`;
-        const tbody = rows.map(r => `<tr>${r.map(c => `<td style="padding:4px 6px;">${esc(c)}</td>`).join('')}</tr>`).join('');
-        return `<table class="table" style="margin-top:6px; border-collapse:collapse; width:100%;">${thead}${tbody}</table>`;
+        const thead = `<tr>${head
+          .map(
+            (h) =>
+              `<th style="text-align:left; padding:4px 6px;">${esc(h)}</th>`
+          )
+          .join("")}</tr>`;
+        const tbody = rows
+          .map(
+            (r) =>
+              `<tr>${r
+                .map((c) => `<td style="padding:4px 6px;">${esc(c)}</td>`)
+                .join("")}</tr>`
+          )
+          .join("");
+        return `  <table class="table" style="margin-top:6px; border-collapse:collapse; width:100%;">${thead}${tbody}</table>`;
       }
-
-      
     </script>
   </body>
 </html>

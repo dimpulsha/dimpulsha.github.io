@@ -1,63 +1,12 @@
 [
   {
-    "id": "B58078A4-9DE0-4CE4-A370-211AB0065A87",
-    "model_item_id": "EAPK_CBA62ACE_C037_412f_A61C_18E969E7B9D1",
-    "model_id": "3",
-    "name": "GOSTRExtension",
-    "type": "Package",
-    "description": null,"description_ru": "",
-    "elementCount": 0,
-    "elements": [],
-    "children": [
-      {
-        "id": "CD24235B-3779-4817-BFA9-AEA7831D10C9",
-        "model_item_id": "EAPK_A53C2BD2_554E_4e43_A7F3_79306B77AB17",
-        "model_id": "3",
-        "name": "AuxiliaryEquipment",
-        "type": "Package",
-        "description": null,"description_ru": "",
-        "elementCount": 1,
-        "elements": [
-          {
-            "id": "44DF70BF-DF5C-489A-B815-AE0D3F082928",
-            "model_item_id": "EAID_9A4F1243_5579_4da3_9DAD_D4CBAB29CC65",
-            "model_id": "3",
-            "name": "BusArrangement",
-            "type": "Class",
-            "description": "Ошиновка.","description_ru": "",
-            "visibility": "public",
-            "isAbstract": false,
-            "attributeCount": 0,
-            "linkCount": 1,
-            "attributes": [],
-            "links": [
-              {
-                "assoc_id": "12FAB876-460A-4848-A723-81731F5D7E4F",
-                "model_item_id": "EAID_DF121D0C_0008_46a4_83EA_EEE5F5990F14",
-                "model_id": "3",
-                "relation_kind": "Generalization",
-                "role": "child",
-                "target_class_id": "EAID_3241CF1E_03C4_4c0e_8DCD_16E1599521E3",
-                "target_class_name": "AuxiliaryEquipment",
-                "target_class_role_name": null,
-                "src_class_role_name": null,
-                "target_description": null,
-                "multiplicity": "1"
-              }
-            ]
-          }
-        ],
-        "children": []
-      }
-    ]
-  },
-  {
     "id": "3E57ACA6-DF0E-43C9-932E-8922AE3B4766",
     "model_item_id": "EAPK_3A110153_F6A3_4221_B366_4739C56265BE",
     "model_id": "3",
     "name": "TC57CIM",
     "type": "Package",
-    "description": "Пакет верхнего уровня для IEC TC57 CIM.","description_ru": "",
+    "description": "Пакет верхнего уровня для IEC TC57 CIM.",
+    "description_ru": "",
     "elementCount": 0,
     "elements": [],
     "children": [
@@ -67,7 +16,8 @@
         "model_id": "3",
         "name": "IEC61970",
         "type": "Package",
-        "description": "Пакет верхнего уровня для IEC 61970.","description_ru": "",
+        "description": "Пакет верхнего уровня для IEC 61970.",
+        "description_ru": "",
         "elementCount": 1,
         "elements": [],
         "children": [
@@ -77,7 +27,8 @@
             "model_id": "3",
             "name": "Base",
             "type": "Package",
-            "description": "Содержание базового CIM, опубликованное как IEC 61970-301.","description_ru": "",
+            "description": "Содержание базового CIM, опубликованное как IEC 61970-301.",
+            "description_ru": "",
             "elementCount": 0,
             "elements": [],
             "children": [
@@ -87,7 +38,8 @@
                 "model_id": "3",
                 "name": "Core",
                 "type": "Package",
-                "description": "Содержит основные объекты PowerSystemResource и ConductingEquipment, общие для всех приложений, а также общие коллекции этих объектов. Не для всех приложений требуются все основные объекты.  Этот пакет не зависит ни от какого другого пакета, кроме пакета домена, но большинство других пакетов имеют ассоциации и обобщения, которые зависят от него.","description_ru": "",
+                "description": "Содержит основные объекты PowerSystemResource и ConductingEquipment, общие для всех приложений, а также общие коллекции этих объектов. Не для всех приложений требуются все основные объекты.  Этот пакет не зависит ни от какого другого пакета, кроме пакета домена, но большинство других пакетов имеют ассоциации и обобщения, которые зависят от него.",
+                "description_ru": "",
                 "elementCount": 24,
                 "elements": [
                   {
@@ -96,7 +48,8 @@
                     "model_id": "3",
                     "name": " PowerSystemResource",
                     "type": "Class",
-                    "description": "Обобщенный объект энергосистемы.","description_ru": "",
+                    "description": "Обобщенный объект энергосистемы.",
+                    "description_ru": "",
                     "visibility": "public",
                     "isAbstract": true,
                     "attributeCount": 0,
@@ -319,7 +272,8 @@
                     "model_id": "3",
                     "name": "ACDCTerminal",
                     "type": "Class",
-                    "description": "Полюс постоянного и переменного тока.","description_ru": "",
+                    "description": "Полюс постоянного и переменного тока.",
+                    "description_ru": "",
                     "visibility": "public",
                     "isAbstract": true,
                     "attributeCount": 1,
@@ -331,7 +285,8 @@
                         "model_item_id": "EAID_072872B9_5944_4de2_9CA9_AA9811B248DA",
                         "model_id": "3",
                         "type": "Integer",
-                        "description": "Порядковый номер полюса электропроводящего оборудования","description_ru": "",
+                        "description": "Порядковый номер полюса электропроводящего оборудования",
+                        "description_ru": "",
                         "multiplicity": "1",
                         "visibility": "public"
                       }
@@ -410,7 +365,8 @@
                     "model_id": "3",
                     "name": "Bay",
                     "type": "Class",
-                    "description": "Ячейка распределительного устройства.","description_ru": "",
+                    "description": "Ячейка распределительного устройства.",
+                    "description_ru": "",
                     "visibility": "public",
                     "isAbstract": false,
                     "attributeCount": 2,
@@ -422,7 +378,8 @@
                         "model_item_id": "EAID_5B522A2A_CBB6_488f_ACD2_CE8DD85D7C5C",
                         "model_id": "3",
                         "type": "BreakerConfiguration",
-                        "description": "Конфигурация соединения выключателей.","description_ru": "",
+                        "description": "Конфигурация соединения выключателей.",
+                        "description_ru": "",
                         "multiplicity": "0..1",
                         "visibility": "public"
                       },
@@ -432,7 +389,8 @@
                         "model_item_id": "EAID_495496FC_4B49_42da_9C46_81385E5400C2",
                         "model_id": "3",
                         "type": "BusbarConfiguration",
-                        "description": "Конфигурация шин присоединения.","description_ru": "",
+                        "description": "Конфигурация шин присоединения.",
+                        "description_ru": "",
                         "multiplicity": "0..1",
                         "visibility": "public"
                       }
@@ -472,7 +430,8 @@
                     "model_id": "3",
                     "name": "ConductingEquipment",
                     "type": "Class",
-                    "description": "Электропроводящее оборудование.","description_ru": "",
+                    "description": "Электропроводящее оборудование.",
+                    "description_ru": "",
                     "visibility": "public",
                     "isAbstract": true,
                     "attributeCount": 1,
@@ -484,7 +443,8 @@
                         "model_item_id": "EAID_4C7C89A6_0E84_4013_82D8_5F4F4EB7C4A9",
                         "model_id": "3",
                         "type": "Boolean",
-                        "description": "Трехфазное исполнение оборудования.","description_ru": "",
+                        "description": "Трехфазное исполнение оборудования.",
+                        "description_ru": "",
                         "multiplicity": "0..1",
                         "visibility": "public"
                       }
@@ -667,7 +627,8 @@
                     "model_id": "3",
                     "name": "ConnectivityNode",
                     "type": "Class",
-                    "description": "Соединительный узел.","description_ru": "",
+                    "description": "Соединительный узел.",
+                    "description_ru": "",
                     "visibility": "public",
                     "isAbstract": false,
                     "attributeCount": 0,
@@ -734,7 +695,8 @@
                     "model_id": "3",
                     "name": "ConnectivityNodeContainer",
                     "type": "Class",
-                    "description": "Контейнер соединительных узлов.","description_ru": "",
+                    "description": "Контейнер соединительных узлов.",
+                    "description_ru": "",
                     "visibility": "public",
                     "isAbstract": true,
                     "attributeCount": 0,
@@ -788,7 +750,8 @@
                     "model_id": "3",
                     "name": "Equipment",
                     "type": "Class",
-                    "description": "Оборудование.","description_ru": "",
+                    "description": "Оборудование.",
+                    "description_ru": "",
                     "visibility": "public",
                     "isAbstract": true,
                     "attributeCount": 1,
@@ -800,7 +763,8 @@
                         "model_item_id": "EAID_C69C0E05_5BE2_40dd_8D8A_9B748A24B721",
                         "model_id": "3",
                         "type": "Boolean",
-                        "description": "Если присвоено значение &#171;Истина&#187;, оборудование находится в работе.","description_ru": "",
+                        "description": "Если присвоено значение &#171;Истина&#187;, оборудование находится в работе.",
+                        "description_ru": "",
                         "multiplicity": "1",
                         "visibility": "public"
                       }
@@ -1035,7 +999,8 @@
                     "model_id": "3",
                     "name": "EquipmentContainer",
                     "type": "Class",
-                    "description": "Контейнер оборудования.","description_ru": "",
+                    "description": "Контейнер оборудования.",
+                    "description_ru": "",
                     "visibility": "public",
                     "isAbstract": true,
                     "attributeCount": 0,
@@ -1284,7 +1249,8 @@
                     "model_id": "3",
                     "name": "IdentifiedObject",
                     "type": "Class",
-                    "description": "Идентифицирующий  класс – обеспечивает идентификацию и набор наименований для наследуемых классов.","description_ru": "",
+                    "description": "Идентифицирующий  класс – обеспечивает идентификацию и набор наименований для наследуемых классов.",
+                    "description_ru": "",
                     "visibility": "public",
                     "isAbstract": true,
                     "attributeCount": 4,
@@ -1296,7 +1262,8 @@
                         "model_item_id": "EAID_C9E4C6E3_C6A3_41bd_8DFF_15C5C74A5D1D",
                         "model_id": "3",
                         "type": "String",
-                        "description": "Дополнительное наименование идентифицируемого объекта.","description_ru": "",
+                        "description": "Дополнительное наименование идентифицируемого объекта.",
+                        "description_ru": "",
                         "multiplicity": "0..1",
                         "visibility": "public"
                       },
@@ -1306,7 +1273,8 @@
                         "model_item_id": "EAID_8620B859_38E1_4d47_A501_8BB171EE4D44",
                         "model_id": "3",
                         "type": "String",
-                        "description": "Описание объекта информационной модели.","description_ru": "",
+                        "description": "Описание объекта информационной модели.",
+                        "description_ru": "",
                         "multiplicity": "0..1",
                         "visibility": "public"
                       },
@@ -1316,7 +1284,8 @@
                         "model_item_id": "EAID_323F503C_A681_4181_9183_1E420D4A68F9",
                         "model_id": "3",
                         "type": "UUID",
-                        "description": "Глобальный уникальный идентификатор объекта информационной модели.","description_ru": "",
+                        "description": "Глобальный уникальный идентификатор объекта информационной модели.",
+                        "description_ru": "",
                         "multiplicity": "0..1",
                         "visibility": "public"
                       },
@@ -1326,7 +1295,8 @@
                         "model_item_id": "EAID_D4A7A0F9_74F7_4479_A881_1929EA4CF14A",
                         "model_id": "3",
                         "type": "String",
-                        "description": "Наименование объекта информационной модели.","description_ru": "",
+                        "description": "Наименование объекта информационной модели.",
+                        "description_ru": "",
                         "multiplicity": "0..1",
                         "visibility": "public"
                       }
@@ -2198,7 +2168,8 @@
                     "model_id": "3",
                     "name": "Name",
                     "type": "Class",
-                    "description": "Типизированное дополнительное наименование.","description_ru": "",
+                    "description": "Типизированное дополнительное наименование.",
+                    "description_ru": "",
                     "visibility": "public",
                     "isAbstract": false,
                     "attributeCount": 1,
@@ -2210,7 +2181,8 @@
                         "model_item_id": "EAID_7B777FB6_8D2E_42de_AF78_8438D7B64AF3",
                         "model_id": "3",
                         "type": "String",
-                        "description": "Типизированное дополнительное наименование объекта информационной модели.","description_ru": "",
+                        "description": "Типизированное дополнительное наименование объекта информационной модели.",
+                        "description_ru": "",
                         "multiplicity": "1",
                         "visibility": "public"
                       }
@@ -2250,7 +2222,8 @@
                     "model_id": "3",
                     "name": "NameType",
                     "type": "Class",
-                    "description": "Тип наименования.","description_ru": "",
+                    "description": "Тип наименования.",
+                    "description_ru": "",
                     "visibility": "public",
                     "isAbstract": false,
                     "attributeCount": 2,
@@ -2262,7 +2235,8 @@
                         "model_item_id": "EAID_36CB07DC_9CC1_46c3_8083_5D852EB8478F",
                         "model_id": "3",
                         "type": "String",
-                        "description": "Описатель типа наименования.","description_ru": "",
+                        "description": "Описатель типа наименования.",
+                        "description_ru": "",
                         "multiplicity": "0..1",
                         "visibility": "public"
                       },
@@ -2272,7 +2246,8 @@
                         "model_item_id": "EAID_8FBBB7E1_F5DE_478e_8FED_E1264CF725EC",
                         "model_id": "3",
                         "type": "String",
-                        "description": "Тип наименования.","description_ru": "",
+                        "description": "Тип наименования.",
+                        "description_ru": "",
                         "multiplicity": "1",
                         "visibility": "public"
                       }
@@ -2299,7 +2274,8 @@
                     "model_id": "3",
                     "name": "PSRType",
                     "type": "Class",
-                    "description": "Тип объекта энергосистемы.","description_ru": "",
+                    "description": "Тип объекта энергосистемы.",
+                    "description_ru": "",
                     "visibility": "public",
                     "isAbstract": false,
                     "attributeCount": 0,
@@ -2340,7 +2316,8 @@
                     "model_id": "3",
                     "name": "Terminal",
                     "type": "Class",
-                    "description": "Полюс электропроводящего оборудования.","description_ru": "",
+                    "description": "Полюс электропроводящего оборудования.",
+                    "description_ru": "",
                     "visibility": "public",
                     "isAbstract": false,
                     "attributeCount": 1,
@@ -2352,7 +2329,8 @@
                         "model_item_id": "EAID_E8342278_89AC_4a2c_8E62_2FC6375A431C",
                         "model_id": "3",
                         "type": "PhaseCode",
-                        "description": "Код фазы терминала.","description_ru": "",
+                        "description": "Код фазы терминала.",
+                        "description_ru": "",
                         "multiplicity": "0..1",
                         "visibility": "public"
                       }
@@ -2496,1254 +2474,8 @@
                     "model_id": "3",
                     "name": "PhaseCode",
                     "type": "Enumeration",
-                    "description": null,"description_ru": "",
-                    "visibility": "public",
-                    "isAbstract": false,
-                    "attributeCount": 0,
-                    "linkCount": 0,
-                    "attributes": [],
-                    "links": []
-                  }
-                ],
-                "children": []
-              },
-              {
-                "id": "3041CDB5-0A3D-45DC-8960-5CBDB2058504",
-                "model_item_id": "EAPK_38D068F1_7EB3_431f_AC75_50C618E48644",
-                "model_id": "3",
-                "name": "Wires",
-                "type": "Package",
-                "description": "Расширение к пакету Core и Topology, которое моделирует информацию об электрических характеристиках сетей передачи и распределения.","description_ru": "",
-                "elementCount": 70,
-                "elements": [
-                  {
-                    "id": "C1B30DA6-7909-4F54-A103-B6D48789F533",
-                    "model_item_id": "EAID_DB1BE59A_9417_4a12_9A53_17007675EEA5",
-                    "model_id": "3",
-                    "name": "ACLineSegment",
-                    "type": "Class",
-                    "description": "Участок линии переменного тока.","description_ru": "",
-                    "visibility": "public",
-                    "isAbstract": false,
-                    "attributeCount": 8,
-                    "linkCount": 4,
-                    "attributes": [
-                      {
-                        "name": "b0ch",
-                        "id": "978FA99B-FA8C-42FD-A219-57DD4BD87591",
-                        "model_item_id": "EAID_C356DDB7_659F_479b_8D40_C4DEADAF67DC",
-                        "model_id": "3",
-                        "type": "Susceptance",
-                        "description": "Реактивная проводимость на землю нулевой последовательности, См.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      },
-                      {
-                        "name": "bch",
-                        "id": "F3F89A4D-45AA-4B35-8AAF-8E9F8050B0D1",
-                        "model_item_id": "EAID_3DDA23CA_68C9_4f79_B5B1_4688FB442CFB",
-                        "model_id": "3",
-                        "type": "Susceptance",
-                        "description": "Реактивная проводимость на землю прямой последовательности, См.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      },
-                      {
-                        "name": "g0ch",
-                        "id": "5D95C44E-2720-42C8-A150-5012A1D882F0",
-                        "model_item_id": "EAID_A0D0AAE3_7581_4203_BAF8_C78B58A8A941",
-                        "model_id": "3",
-                        "type": "Conductance",
-                        "description": "Активная проводимость на землю нулевой последовательности, См.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      },
-                      {
-                        "name": "gch",
-                        "id": "8A6CE93D-8B4A-4833-8D4C-E2EB7EF1844A",
-                        "model_item_id": "EAID_BFFF40E6_FFC3_43eb_B712_4CFBC5930562",
-                        "model_id": "3",
-                        "type": "Conductance",
-                        "description": "Активная проводимость на землю прямой последовательности, См.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      },
-                      {
-                        "name": "r",
-                        "id": "4CD81818-CE30-466E-B229-D57BBF6F318D",
-                        "model_item_id": "EAID_E2C4C068_2724_4cc4_827B_C4A13EBDC065",
-                        "model_id": "3",
-                        "type": "Resistance",
-                        "description": "Активное сопротивление прямой последовательности, Ом.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      },
-                      {
-                        "name": "r0",
-                        "id": "ACDE964C-24D7-4AF0-AC8C-5DE148D9B12E",
-                        "model_item_id": "EAID_1E947F70_73CD_4d11_8651_E8AF1FF319A2",
-                        "model_id": "3",
-                        "type": "Resistance",
-                        "description": "Активное сопротивление нулевой последовательности, Ом.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      },
-                      {
-                        "name": "x",
-                        "id": "A9B4BB56-BE7E-4D39-ADCA-90559A7FCDA3",
-                        "model_item_id": "EAID_73066707_CFEA_4576_914E_869D2E68E799",
-                        "model_id": "3",
-                        "type": "Reactance",
-                        "description": "Реактивное сопротивление прямой последовательности, Ом.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      },
-                      {
-                        "name": "x0",
-                        "id": "CA7C8F93-F31A-4944-8BE3-F3DBF8A52584",
-                        "model_item_id": "EAID_09086BFE_8DBC_4e3e_AD00_B7ACF3FE5282",
-                        "model_id": "3",
-                        "type": "Reactance",
-                        "description": "Реактивное сопротивление нулевой последовательности, Ом.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      }
-                    ],
-                    "links": [
-                      {
-                        "assoc_id": "A20F9EF2-2B85-47A4-8FD4-6513B282C9E6",
-                        "model_item_id": "EAID_F48E9924_E3D5_4346_9592_2EA06A43D01E",
-                        "model_id": "3",
-                        "relation_kind": "Generalization",
-                        "role": "child",
-                        "target_class_id": "EAID_83CEE48A_D9B5_4e8e_B638_B9EC10E64CFD",
-                        "target_class_name": "Conductor",
-                        "target_class_role_name": null,
-                        "src_class_role_name": null,
-                        "target_description": null,
-                        "multiplicity": "1"
-                      },
-                      {
-                        "assoc_id": "BADB3C02-E182-41A2-9483-D6766B13BA4E",
-                        "model_item_id": "EAID_72DC4CC5_D689_4a6e_BDDA_A8A57335A2AA",
-                        "model_id": "3",
-                        "relation_kind": "Association",
-                        "role": "unspecified",
-                        "target_class_id": "EAID_6EEDE91F_AF99_49f7_9009_B98D33FE1C02",
-                        "target_class_name": "ACLineSeriesSection",
-                        "target_class_role_name": "ACLineSeriesSections",
-                        "src_class_role_name": "ACLineSegment",
-                        "target_description": "Сегменты участка линии переменного тока.",
-                        "multiplicity": "0..*"
-                      },
-                      {
-                        "assoc_id": "4EFD6837-C009-4282-A653-232D35132820",
-                        "model_item_id": "EAID_79AFE40F_EF83_430a_8C6C_6805845870AA",
-                        "model_id": "3",
-                        "relation_kind": "Association",
-                        "role": "unspecified",
-                        "target_class_id": "EAID_816F25E3_E985_41a8_9ECF_CAB3A6D9F943",
-                        "target_class_name": "PerLengthImpedance",
-                        "target_class_role_name": "PerLengthImpedance",
-                        "src_class_role_name": "ACLineSegments",
-                        "target_description": "Удельные параметры участка линии переменного тока.",
-                        "multiplicity": "0..1"
-                      },
-                      {
-                        "assoc_id": "FE366B71-B51D-4C2B-BCEB-9BE14A104651",
-                        "model_item_id": "EAID_7AA850F3_77FD_4b93_AF1E_483B66C66A7F",
-                        "model_id": "3",
-                        "relation_kind": "Association",
-                        "role": "unspecified",
-                        "target_class_id": "EAID_E3CD7975_020D_4f10_8E77_E7DF88BB018C",
-                        "target_class_name": "ACLineSegmentPhase",
-                        "target_class_role_name": "ACLineSegmentPhases",
-                        "src_class_role_name": "ACLineSegment",
-                        "target_description": "Фаза участка линии переменного тока.",
-                        "multiplicity": "0..*"
-                      }
-                    ]
-                  },
-                  {
-                    "id": "5F4D4077-0BE5-4EAF-B540-76713CBF9CBC",
-                    "model_item_id": "EAID_06BB91E2_8681_45ac_931D_0C04B0C10905",
-                    "model_id": "3",
-                    "name": "BusbarSection",
-                    "type": "Class",
-                    "description": "Секция шин.","description_ru": "",
-                    "visibility": "public",
-                    "isAbstract": false,
-                    "attributeCount": 1,
-                    "linkCount": 1,
-                    "attributes": [
-                      {
-                        "name": "ipMax",
-                        "id": "9E922847-B66B-4086-8821-E4C1AA7FD828",
-                        "model_item_id": "EAID_C085BD89_9E3A_4ca4_9563_720BB99DC7F1",
-                        "model_id": "3",
-                        "type": "CurrentFlow",
-                        "description": "Максимально допустимый пиковый ток короткого замыкания, А.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      }
-                    ],
-                    "links": [
-                      {
-                        "assoc_id": "210FF1FB-34D5-454E-BAD9-27D40F19CD11",
-                        "model_item_id": "EAID_25E2BC06_4B25_4910_A201_4690D0899F51",
-                        "model_id": "3",
-                        "relation_kind": "Generalization",
-                        "role": "child",
-                        "target_class_id": "EAID_734F8748_6121_4685_B1B9_56D15D8AF2AC",
-                        "target_class_name": "Connector",
-                        "target_class_role_name": null,
-                        "src_class_role_name": null,
-                        "target_description": null,
-                        "multiplicity": "1"
-                      }
-                    ]
-                  },
-                  {
-                    "id": "8F0D83A9-1D5E-4607-AFA1-65419CA08926",
-                    "model_item_id": "EAID_83CEE48A_D9B5_4e8e_B638_B9EC10E64CFD",
-                    "model_id": "3",
-                    "name": "Conductor",
-                    "type": "Class",
-                    "description": "Проводник.","description_ru": "",
-                    "visibility": "public",
-                    "isAbstract": true,
-                    "attributeCount": 1,
-                    "linkCount": 2,
-                    "attributes": [
-                      {
-                        "name": "length",
-                        "id": "DDEB65A0-911B-46F9-9891-A76DB4D784BF",
-                        "model_item_id": "EAID_C01DF39F_047B_4f3f_90AF_84103EB9A484",
-                        "model_id": "3",
-                        "type": "Length",
-                        "description": "Длина проводника, м.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      }
-                    ],
-                    "links": [
-                      {
-                        "assoc_id": "AAFF56BE-848A-444F-B1DE-963C6BBCB28A",
-                        "model_item_id": "EAID_2D10869E_FB78_4556_9506_BC353C12784B",
-                        "model_id": "3",
-                        "relation_kind": "Generalization",
-                        "role": "child",
-                        "target_class_id": "EAID_EB534BB1_4810_421d_8CAB_CC1D40CA4015",
-                        "target_class_name": "ConductingEquipment",
-                        "target_class_role_name": null,
-                        "src_class_role_name": null,
-                        "target_description": null,
-                        "multiplicity": "1"
-                      },
-                      {
-                        "assoc_id": "47C468EE-982C-432B-8065-0FB3E855F67B",
-                        "model_item_id": "EAID_F48E9924_E3D5_4346_9592_2EA06A43D01E",
-                        "model_id": "3",
-                        "relation_kind": "Generalization",
-                        "role": "parent",
-                        "target_class_id": "EAID_DB1BE59A_9417_4a12_9A53_17007675EEA5",
-                        "target_class_name": "ACLineSegment",
-                        "target_class_role_name": null,
-                        "src_class_role_name": null,
-                        "target_description": null,
-                        "multiplicity": "1"
-                      }
-                    ]
-                  },
-                  {
-                    "id": "6BABA06A-5840-49A9-82E3-02B41FE0210D",
-                    "model_item_id": "EAID_4CA7CA9A_AA00_485d_B7AF_7E9C1431C2BC",
-                    "model_id": "3",
-                    "name": "Line",
-                    "type": "Class",
-                    "description": "ЛЭП.","description_ru": "",
-                    "visibility": "public",
-                    "isAbstract": false,
-                    "attributeCount": 0,
-                    "linkCount": 3,
-                    "attributes": [],
-                    "links": [
-                      {
-                        "assoc_id": "F68DB1DE-4850-404C-B85C-1584B72C36E4",
-                        "model_item_id": "EAID_1BF62C66_9ABC_4fc6_8658_0CFF1B99F1A6",
-                        "model_id": "3",
-                        "relation_kind": "Generalization",
-                        "role": "child",
-                        "target_class_id": "EAID_ABB9B11C_E9F2_4890_A8DF_235EE5DF89EA",
-                        "target_class_name": "EquipmentContainer",
-                        "target_class_role_name": null,
-                        "src_class_role_name": null,
-                        "target_description": null,
-                        "multiplicity": "1"
-                      },
-                      {
-                        "assoc_id": "FFF77B63-50AA-4DA4-A2FF-2F5D0F629C31",
-                        "model_item_id": "EAID_F9AF6495_9624_4c95_A410_BEB9158C06AF",
-                        "model_id": "3",
-                        "relation_kind": "Association",
-                        "role": "unspecified",
-                        "target_class_id": "EAID_D9571317_0EF5_4b47_A8FC_4FE283541DD3",
-                        "target_class_name": "FiberOpticLine",
-                        "target_class_role_name": "FiberOptikLineLinks",
-                        "src_class_role_name": "LineLinks",
-                        "target_description": null,
-                        "multiplicity": "0..*"
-                      },
-                      {
-                        "assoc_id": "1DDCAB11-DCBF-43E5-ADEE-2A9211FCF924",
-                        "model_item_id": "EAID_F970EF5C_CA72_41ec_A302_5D11C27DA96B",
-                        "model_id": "3",
-                        "relation_kind": "Association",
-                        "role": "unspecified",
-                        "target_class_id": "EAID_BCBBA501_B5C8_46ec_B213_4814693DCFC8",
-                        "target_class_name": "SubGeographicalRegion",
-                        "target_class_role_name": "Region",
-                        "src_class_role_name": "Lines",
-                        "target_description": "Субъекты Российской Федерации, по территории которых проходит ЛЭП.",
-                        "multiplicity": "0..*"
-                      }
-                    ]
-                  },
-                  {
-                    "id": "7D8B56BC-1FB3-43EF-92C6-B6F405DE8850",
-                    "model_item_id": "EAID_EF97223D_5392_4c88_AF9F_26256A9E4377",
-                    "model_id": "3",
-                    "name": "PowerTransformer",
-                    "type": "Class",
-                    "description": "Силовой трансформатор.","description_ru": "",
-                    "visibility": "public",
-                    "isAbstract": false,
-                    "attributeCount": 1,
-                    "linkCount": 4,
-                    "attributes": [
-                      {
-                        "name": "vectorGroup",
-                        "id": "16FDAC6C-8B48-4065-9807-070DA85902C8",
-                        "model_item_id": "EAID_8DB4C088_829A_4f92_B5BE_47F4B8E35AE8",
-                        "model_id": "3",
-                        "type": "String",
-                        "description": "Группа соединения обмоток.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      }
-                    ],
-                    "links": [
-                      {
-                        "assoc_id": "067F4692-B595-4914-93C7-8E45CC63A8DB",
-                        "model_item_id": "EAID_02DCBCD8_74EF_4136_8810_60BA7419D48F",
-                        "model_id": "3",
-                        "relation_kind": "Generalization",
-                        "role": "child",
-                        "target_class_id": "EAID_EB534BB1_4810_421d_8CAB_CC1D40CA4015",
-                        "target_class_name": "ConductingEquipment",
-                        "target_class_role_name": null,
-                        "src_class_role_name": null,
-                        "target_description": null,
-                        "multiplicity": "1"
-                      },
-                      {
-                        "assoc_id": "71FABF4C-2788-49E6-ADD9-B36323783729",
-                        "model_item_id": "EAID_3EF8C8BE_B73B_4e0d_8111_EBDDC7C0FA35",
-                        "model_id": "3",
-                        "relation_kind": "Association",
-                        "role": "unspecified",
-                        "target_class_id": "EAID_9AE572C9_D4B5_4e76_9C50_57DFF2B04DAC",
-                        "target_class_name": "StabilizingWinding",
-                        "target_class_role_name": "StabilizingWindings",
-                        "src_class_role_name": "PowerTransformer",
-                        "target_description": "Компенсационные обмотки трансформатора.",
-                        "multiplicity": "0..*"
-                      },
-                      {
-                        "assoc_id": "6CAB0F5F-22DF-4F6F-9361-CDDE94A5687D",
-                        "model_item_id": "EAID_2C50087E_9CF5_45d4_8334_C643E60D7030",
-                        "model_id": "3",
-                        "relation_kind": "Association",
-                        "role": "unspecified",
-                        "target_class_id": "EAID_822A1490_2AED_4d0d_9F79_AF5FF03F528F",
-                        "target_class_name": "PowerTransformerEnd",
-                        "target_class_role_name": "PowerTransformerEnd",
-                        "src_class_role_name": "PowerTransformer",
-                        "target_description": "Электрическиe выводы силового трансформатора.",
-                        "multiplicity": "0..*"
-                      },
-                      {
-                        "assoc_id": "350F2145-59E8-46CE-9136-9C36948A672C",
-                        "model_item_id": "EAID_83323B42_99D8_4f3d_9B6C_FBBAA295CB0D",
-                        "model_id": "3",
-                        "relation_kind": "Association",
-                        "role": "unspecified",
-                        "target_class_id": "EAID_861148AD_C6AF_4ea3_9B20_642DA7738661",
-                        "target_class_name": "TransformerTank",
-                        "target_class_role_name": "TransformerTanks",
-                        "src_class_role_name": "PowerTransformer",
-                        "target_description": "Корпуса силового трансформатора.",
-                        "multiplicity": "0..*"
-                      }
-                    ]
-                  },
-                  {
-                    "id": "F3E412DA-DD02-425C-9A1C-0532DED97429",
-                    "model_item_id": "EAID_822A1490_2AED_4d0d_9F79_AF5FF03F528F",
-                    "model_id": "3",
-                    "name": "PowerTransformerEnd",
-                    "type": "Class",
-                    "description": "Электрический вывод силового трансформатора.","description_ru": "",
-                    "visibility": "public",
-                    "isAbstract": false,
-                    "attributeCount": 12,
-                    "linkCount": 3,
-                    "attributes": [
-                      {
-                        "name": "b",
-                        "id": "C0C5550B-2AFC-492D-94D0-6B6905C66C0D",
-                        "model_item_id": "EAID_915314B2_5F44_4e48_B15F_491126AF6C8F",
-                        "model_id": "3",
-                        "type": "Susceptance",
-                        "description": "Реактивная проводимость  См.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      },
-                      {
-                        "name": "b0",
-                        "id": "FD4B9C36-2B9B-4C1C-ABAE-261199F668AA",
-                        "model_item_id": "EAID_B37177AA_8797_4959_8C01_F5CC11740D1A",
-                        "model_id": "3",
-                        "type": "Susceptance",
-                        "description": "Реактивная проводимость нулевой последовательности шунта намагничивания, приведенная к номинальному напряжению вывода с наивысшим напряжением, См.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      },
-                      {
-                        "name": "g",
-                        "id": "8A9DB09B-00AF-4E26-9D76-970303A2F07C",
-                        "model_item_id": "EAID_217F8A1D_1632_47fc_93FD_15F9737A7745",
-                        "model_id": "3",
-                        "type": "Conduct",
-                        "description": "Активная проводимость прямой последовательности шунта намагничивания, приведенная к номинальному напряжению вывода с наивысшим напряжением, См.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      },
-                      {
-                        "name": "g0",
-                        "id": "02C809A0-4B84-4C6F-AF68-2C2E8A0462E8",
-                        "model_item_id": "EAID_CC9E04D7_9463_49fb_9B34_E49A917ABBBF",
-                        "model_id": "3",
-                        "type": "Conduct",
-                        "description": "Активная проводимость нулевой последовательности шунта намагничивания, приведенная к номинальному напряжению вывода с наивысшим напряжением, См.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      },
-                      {
-                        "name": "r",
-                        "id": "7FB998E4-7E74-49D2-9562-4D65BB5B482A",
-                        "model_item_id": "EAID_72B4BEF6_F744_42e1_8CCC_4CB6E54877F8",
-                        "model_id": "3",
-                        "type": "Resistance",
-                        "description": "Активное сопротивление прямой последовательности, Ом.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      },
-                      {
-                        "name": "r0",
-                        "id": "B060D497-3685-4B37-9925-755C0F32A61E",
-                        "model_item_id": "EAID_110EC86E_FFA9_41c8_980C_1465CFD5E2AC",
-                        "model_id": "3",
-                        "type": "Resistance",
-                        "description": "Активное сопротивление, Ом.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      },
-                      {
-                        "name": "ratedS",
-                        "id": "53CE93B3-CEF0-41E0-AB31-2FEE2332B79C",
-                        "model_item_id": "EAID_9E8B3E2A_1B56_4287_9B58_F7762BE4DE85",
-                        "model_id": "3",
-                        "type": "ApparentPower",
-                        "description": "Номинальная полная мощность, МВА.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      },
-                      {
-                        "name": "ratedU",
-                        "id": "76E9904D-F687-4B91-A9E9-386B6C36E3B5",
-                        "model_item_id": "EAID_CB977B23_8165_4726_96B6_C04E27354F05",
-                        "model_id": "3",
-                        "type": "Voltage",
-                        "description": "Номинальное напряжение вывода трансформатора, кВ.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      },
-                      {
-                        "name": "x",
-                        "id": "BD131746-641F-4448-986A-94A496D3142A",
-                        "model_item_id": "EAID_32E01F73_CEC8_4c32_AD74_F1343E5FC3E0",
-                        "model_id": "3",
-                        "type": "Reactance",
-                        "description": "Реактивное сопротивление прямой последовательности, Ом.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      },
-                      {
-                        "name": "x0",
-                        "id": "E3325AE3-1E8C-4DCF-A610-2E041A5E7D45",
-                        "model_item_id": "EAID_18E3834E_4F58_41bb_A097_F37170ADD91C",
-                        "model_id": "3",
-                        "type": "Reactance",
-                        "description": "Реактивное сопротивление нулевой последовательности, Ом.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      }
-                    ],
-                    "links": [
-                      {
-                        "assoc_id": "1D47801B-D76F-4365-A97F-72BE58727C2D",
-                        "model_item_id": "EAID_5E16DC33_56E1_4ae1_9652_2158E14ADC25",
-                        "model_id": "3",
-                        "relation_kind": "Generalization",
-                        "role": "child",
-                        "target_class_id": "EAID_8C09CC0E_835B_4120_BF44_93D1EAC112DA",
-                        "target_class_name": "TransformerEnd",
-                        "target_class_role_name": null,
-                        "src_class_role_name": null,
-                        "target_description": null,
-                        "multiplicity": "1"
-                      },
-                      {
-                        "assoc_id": "55D035A5-AB76-4A66-B8B6-85F64B9E55CA",
-                        "model_item_id": "EAID_2C50087E_9CF5_45d4_8334_C643E60D7030",
-                        "model_id": "3",
-                        "relation_kind": "Association",
-                        "role": "unspecified",
-                        "target_class_id": "EAID_EF97223D_5392_4c88_AF9F_26256A9E4377",
-                        "target_class_name": "PowerTransformer",
-                        "target_class_role_name": "PowerTransformerBase",
-                        "src_class_role_name": "PowerTransformerEnd",
-                        "target_description": "Силовой трансформатор, к которому относится вывод.",
-                        "multiplicity": "0..1"
-                      },
-                      {
-                        "assoc_id": "E17369E3-1D63-42BC-8433-C28AB4C1373C",
-                        "model_item_id": "EAID_22593CCE_EE8E_4d57_A84B_3264BBDC49DF",
-                        "model_id": "3",
-                        "relation_kind": "Association",
-                        "role": "unspecified",
-                        "target_class_id": "EAID_66E5E135_D23C_4084_B069_C3D80242A489",
-                        "target_class_name": "TransformerEndInfo",
-                        "target_class_role_name": "TransformerEndInfo",
-                        "src_class_role_name": "PowerTransformerEnd",
-                        "target_description": "Технические параметры вывода трансформатора.",
-                        "multiplicity": "0..1"
-                      }
-                    ]
-                  },
-                  {
-                    "id": "2E9FD3A4-F474-4257-82A7-510431505926",
-                    "model_item_id": "EAID_6E0E2D31_81B3_4a59_AF99_CA794F0B0E02",
-                    "model_id": "3",
-                    "name": "Switch",
-                    "type": "Class",
-                    "description": "Коммутационный аппарат.","description_ru": "",
-                    "visibility": "public",
-                    "isAbstract": true,
-                    "attributeCount": 3,
-                    "linkCount": 6,
-                    "attributes": [
-                      {
-                        "name": "differenceInTransitTime",
-                        "id": "3B15C082-5299-4BEC-AB9F-60DD6E7435D0",
-                        "model_item_id": "EAID_DFB50A2A_1144_42d9_A15F_7E3E3A375A6A",
-                        "model_id": "3",
-                        "type": "Seconds",
-                        "description": "Разновременность замыкания контактов полюсов выключателя (только для выключателей с типом привода &#171;пофазный&#187;), с.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      },
-                      {
-                        "name": "normalOpen",
-                        "id": "8D3DB741-C3F2-457C-8AC8-79975F13DDDD",
-                        "model_item_id": "EAID_E1521A0F_C487_4434_81C9_171C115557BF",
-                        "model_id": "3",
-                        "type": "Boolean",
-                        "description": "Если присвоено значение &#171;Истина&#187;, нормальное состояние &#171;Отключено&#187;.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      },
-                      {
-                        "name": "ratedCurrent",
-                        "id": "63F864B8-FA70-4768-8CED-B86B51FD09DE",
-                        "model_item_id": "EAID_B8FC920D_0A00_4e12_85CB_2FCE09E10F12",
-                        "model_id": "3",
-                        "type": "CurrentFlow",
-                        "description": "Номинальный ток, А.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      }
-                    ],
-                    "links": [
-                      {
-                        "assoc_id": "429888C4-0769-4522-9A89-A7E5F9F37D9C",
-                        "model_item_id": "EAID_01CB6E8C_58AD_432c_A012_050DE7F46548",
-                        "model_id": "3",
-                        "relation_kind": "Generalization",
-                        "role": "child",
-                        "target_class_id": "EAID_EB534BB1_4810_421d_8CAB_CC1D40CA4015",
-                        "target_class_name": "ConductingEquipment",
-                        "target_class_role_name": null,
-                        "src_class_role_name": null,
-                        "target_description": null,
-                        "multiplicity": "1"
-                      },
-                      {
-                        "assoc_id": "04D4409C-BB47-4283-BF1C-09C9C7A98045",
-                        "model_item_id": "EAID_2668692F_CEAB_4977_A9D9_6254550B3628",
-                        "model_id": "3",
-                        "relation_kind": "Generalization",
-                        "role": "parent",
-                        "target_class_id": "EAID_E2C26882_A57C_41f8_9054_DBE3C2C7AE82",
-                        "target_class_name": "ProtectedSwitch",
-                        "target_class_role_name": null,
-                        "src_class_role_name": null,
-                        "target_description": null,
-                        "multiplicity": "1"
-                      },
-                      {
-                        "assoc_id": "60B7A505-270F-42E8-80C4-B84533098259",
-                        "model_item_id": "EAID_44552885_2150_4c39_BBF1_BA7A6476212E",
-                        "model_id": "3",
-                        "relation_kind": "Generalization",
-                        "role": "parent",
-                        "target_class_id": "EAID_785012C6_C580_4908_AA92_ED820723346D",
-                        "target_class_name": "Fuse",
-                        "target_class_role_name": null,
-                        "src_class_role_name": null,
-                        "target_description": null,
-                        "multiplicity": "1"
-                      },
-                      {
-                        "assoc_id": "A0052D2F-2129-4CE0-B9DD-FE26C424EF16",
-                        "model_item_id": "EAID_47146786_0D22_4c92_B8A2_3FA04FDD0DD2",
-                        "model_id": "3",
-                        "relation_kind": "Generalization",
-                        "role": "parent",
-                        "target_class_id": "EAID_014372E3_B9BA_4721_B841_AF6D983A39EE",
-                        "target_class_name": "Disconnector",
-                        "target_class_role_name": null,
-                        "src_class_role_name": null,
-                        "target_description": null,
-                        "multiplicity": "1"
-                      },
-                      {
-                        "assoc_id": "31301230-5388-42F3-A779-F56555F79C11",
-                        "model_item_id": "EAID_763645F7_301D_47e1_B7DA_1C1132550F5D",
-                        "model_id": "3",
-                        "relation_kind": "Generalization",
-                        "role": "parent",
-                        "target_class_id": "EAID_D3BB55EC_85DD_457e_828E_919DA3556A44",
-                        "target_class_name": "Jumper",
-                        "target_class_role_name": null,
-                        "src_class_role_name": null,
-                        "target_description": null,
-                        "multiplicity": "1"
-                      },
-                      {
-                        "assoc_id": "D00601CD-5C10-4897-AC4B-44D830A56578",
-                        "model_item_id": "EAID_D699E012_11EF_4aa7_8C7B_CA80F0B7601C",
-                        "model_id": "3",
-                        "relation_kind": "Generalization",
-                        "role": "parent",
-                        "target_class_id": "EAID_C6F7365A_1C30_4a4b_90EE_C9C5E0F447D1",
-                        "target_class_name": "GroundDisconnector",
-                        "target_class_role_name": null,
-                        "src_class_role_name": null,
-                        "target_description": null,
-                        "multiplicity": "1"
-                      }
-                    ]
-                  },
-                  {
-                    "id": "E07F0D35-4FDF-4F09-B18F-C32BB9109081",
-                    "model_item_id": "EAID_8C09CC0E_835B_4120_BF44_93D1EAC112DA",
-                    "model_id": "3",
-                    "name": "TransformerEnd",
-                    "type": "Class",
-                    "description": "Электрический вывод трансформатора.","description_ru": "",
-                    "visibility": "public",
-                    "isAbstract": true,
-                    "attributeCount": 4,
-                    "linkCount": 10,
-                    "attributes": [
-                      {
-                        "name": "endNumber",
-                        "id": "29F16E05-1529-45FD-990B-6ED982124EAB",
-                        "model_item_id": "EAID_72982928_989E_4c49_B38A_E5997F636307",
-                        "model_id": "3",
-                        "type": "Integer",
-                        "description": "Номер вывода трансформатора.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      },
-                      {
-                        "name": "grounded",
-                        "id": "2F9F5572-44DB-428A-BDD8-22DF110C27C9",
-                        "model_item_id": "EAID_78262230_DC62_4b3d_A022_1A07FE4BA9FE",
-                        "model_id": "3",
-                        "type": "Boolean",
-                        "description": "Нейтраль глухо заземлена (если присвоено значение &#171;Истина&#187;).","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      },
-                      {
-                        "name": "rground",
-                        "id": "24E15174-B721-459A-845E-0F1BEF15775D",
-                        "model_item_id": "EAID_951C3ADA_E4EC_4d9b_BA3E_D58A829FACDF",
-                        "model_id": "3",
-                        "type": "Resistance",
-                        "description": "Активное сопротивление заземления нейтрали, Ом.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      },
-                      {
-                        "name": "xground",
-                        "id": "1EA2309D-0973-41C4-99ED-EA1359610FF6",
-                        "model_item_id": "EAID_636CE9E9_C33E_4a26_AD26_1BD090C62B9D",
-                        "model_id": "3",
-                        "type": "Reactance",
-                        "description": "Реактивное сопротивление заземления нейтрали, Ом.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      }
-                    ],
-                    "links": [
-                      {
-                        "assoc_id": "E4ECBABB-5AC6-4AE8-99DF-ADE7E00D8718",
-                        "model_item_id": "EAID_96B0ABE4_0CD2_451c_B788_0CCB869811F1",
-                        "model_id": "3",
-                        "relation_kind": "Generalization",
-                        "role": "child",
-                        "target_class_id": "EAID_69526261_F2D9_4f06_86B3_638695E07849",
-                        "target_class_name": "IdentifiedObject",
-                        "target_class_role_name": null,
-                        "src_class_role_name": null,
-                        "target_description": null,
-                        "multiplicity": "1"
-                      },
-                      {
-                        "assoc_id": "34F0E8DF-5B37-406A-A551-3FFAF8E9B90F",
-                        "model_item_id": "EAID_EB209A92_4EE6_4b61_BCEF_9A6D1E63ABEA",
-                        "model_id": "3",
-                        "relation_kind": "Association",
-                        "role": "unspecified",
-                        "target_class_id": "EAID_A40E5870_2CE1_4630_B472_C63241F9603D",
-                        "target_class_name": "BaseVoltage",
-                        "target_class_role_name": "BaseVoltage",
-                        "src_class_role_name": "TransformerEnds",
-                        "target_description": "Стандартное номинальное напряжение вывода трансформатора.",
-                        "multiplicity": "0..1"
-                      },
-                      {
-                        "assoc_id": "F8427CD3-51C6-465B-B658-E70920CA8A66",
-                        "model_item_id": "EAID_518838A0_8FEC_444b_AD67_CE7F21461F17",
-                        "model_id": "3",
-                        "relation_kind": "Association",
-                        "role": "unspecified",
-                        "target_class_id": "EAID_41429F07_2146_43df_8E7E_CD57103ACADE",
-                        "target_class_name": "Terminal",
-                        "target_class_role_name": "Terminal",
-                        "src_class_role_name": "TransformerEnd",
-                        "target_description": "Полюс силового трансформатора, к которому подключены его выводы.",
-                        "multiplicity": "0..1"
-                      },
-                      {
-                        "assoc_id": "19C4E624-9636-4657-8E47-B73B71088B28",
-                        "model_item_id": "EAID_412B34E5_B181_40fb_9975_5C4AF59D08EF",
-                        "model_id": "3",
-                        "relation_kind": "Association",
-                        "role": "unspecified",
-                        "target_class_id": "EAID_AA5698E1_51A6_42ad_B04A_B0269D8C1B3F",
-                        "target_class_name": "PhaseTapChanger",
-                        "target_class_role_name": "PhaseTapChanger",
-                        "src_class_role_name": "TransformerEnd",
-                        "target_description": "Фазосдвигающий переключатель регулировочных ответвлений обмотки трансформатора.",
-                        "multiplicity": "0..1"
-                      },
-                      {
-                        "assoc_id": "70FDB671-B1C8-4DBA-972D-412A46A83AC9",
-                        "model_item_id": "EAID_D43C5ED2_91CF_4954_A41A_05DBB003770B",
-                        "model_id": "3",
-                        "relation_kind": "Association",
-                        "role": "unspecified",
-                        "target_class_id": "EAID_DF6E83FA_C52F_46c1_AAA8_6E6B224E5A45",
-                        "target_class_name": "RatioTapChanger",
-                        "target_class_role_name": "RatioTapChanger",
-                        "src_class_role_name": "TransformerEnd",
-                        "target_description": "Переключатель регулировочных ответвлений трансформатора.",
-                        "multiplicity": "0..1"
-                      },
-                      {
-                        "assoc_id": "1839A50F-6E65-4EFF-82C7-68BD634E2BE4",
-                        "model_item_id": "EAID_4E275367_4430_48a4_B1F4_B065D8534ABC",
-                        "model_id": "3",
-                        "relation_kind": "Association",
-                        "role": "unspecified",
-                        "target_class_id": "EAID_442E4C25_7696_4907_AA17_6915CA3A959F",
-                        "target_class_name": "TransformerCoreAdmittance",
-                        "target_class_role_name": "CoreAdmittance",
-                        "src_class_role_name": "TransformerEnd",
-                        "target_description": "Электрические параметры магнитопровода трансформатора связанные с выводом трансформатора.",
-                        "multiplicity": "0..1"
-                      },
-                      {
-                        "assoc_id": "9BED9ABF-A2E7-4EB1-A904-F537CA0F980A",
-                        "model_item_id": "EAID_1DC573F3_6F36_4623_8146_A8C3A10C2487",
-                        "model_id": "3",
-                        "relation_kind": "Association",
-                        "role": "unspecified",
-                        "target_class_id": "EAID_4C6E9D3A_040E_4175_BEBB_39CAFCFAA87E",
-                        "target_class_name": "TransformerMeshImpedance",
-                        "target_class_role_name": "ToMeshImpedance",
-                        "src_class_role_name": "ToTransformerEnd",
-                        "target_description": "Все взаимные сопротивления между текущим\nвыводом «из» и другими выводами «в».",
-                        "multiplicity": "0..*"
-                      },
-                      {
-                        "assoc_id": "4E00F193-CB5F-489F-84CE-D43667758B3D",
-                        "model_item_id": "EAID_85022897_6638_4b0c_B332_4DE36088F4EA",
-                        "model_id": "3",
-                        "relation_kind": "Association",
-                        "role": "unspecified",
-                        "target_class_id": "EAID_41FEB50E_C7CF_4ba4_9AAB_A9922D03B5F8",
-                        "target_class_name": "TransformerStarImpedance",
-                        "target_class_role_name": "StarImpedance",
-                        "src_class_role_name": "TransformerEnd",
-                        "target_description": "Электрические параметры трансформатора по модели звезда, связанные с выводом трансформатора.",
-                        "multiplicity": "0..1"
-                      },
-                      {
-                        "assoc_id": "7EFCADFA-F94C-435B-81E3-7D9293BB9325",
-                        "model_item_id": "EAID_8DE2D5EF_3345_43b8_9827_F91ECE66655C",
-                        "model_id": "3",
-                        "relation_kind": "Association",
-                        "role": "unspecified",
-                        "target_class_id": "EAID_4C6E9D3A_040E_4175_BEBB_39CAFCFAA87E",
-                        "target_class_name": "TransformerMeshImpedance",
-                        "target_class_role_name": "FromMeshImpedance",
-                        "src_class_role_name": "FromTransformerEnd",
-                        "target_description": "Все взаимные сопротивления между текущим\nвыводом «в» и другими выводами «из».",
-                        "multiplicity": "0..*"
-                      },
-                      {
-                        "assoc_id": "268DC041-8A7F-4D5A-8800-D1E9D9D26583",
-                        "model_item_id": "EAID_5E16DC33_56E1_4ae1_9652_2158E14ADC25",
-                        "model_id": "3",
-                        "relation_kind": "Generalization",
-                        "role": "parent",
-                        "target_class_id": "EAID_822A1490_2AED_4d0d_9F79_AF5FF03F528F",
-                        "target_class_name": "PowerTransformerEnd",
-                        "target_class_role_name": null,
-                        "src_class_role_name": null,
-                        "target_description": null,
-                        "multiplicity": "1"
-                      }
-                    ]
-                  },
-                  {
-                    "id": "31AC69C0-22AF-40AD-95D3-5842758D9CEE",
-                    "model_item_id": "EAID_EA42F0FF_F073_44c6_8456_8A2A7CFC189C",
-                    "model_id": "3",
-                    "name": "AsynchronousMachineKind",
-                    "type": "Enumeration",
-                    "description": "Режимы работы, в которых асинхронная машина способна работать.","description_ru": "",
-                    "visibility": "public",
-                    "isAbstract": false,
-                    "attributeCount": 0,
-                    "linkCount": 0,
-                    "attributes": [],
-                    "links": []
-                  },
-                  {
-                    "id": "48EE5485-C889-4BCC-A217-058D49B53BD9",
-                    "model_item_id": "EAID_7593BF76_FBB2_48e8_AC25_2D7338BC3D8A",
-                    "model_id": "3",
-                    "name": "CoolantType",
-                    "type": "Enumeration",
-                    "description": "Тип охлаждающего агента.","description_ru": "",
-                    "visibility": "public",
-                    "isAbstract": false,
-                    "attributeCount": 0,
-                    "linkCount": 0,
-                    "attributes": [],
-                    "links": []
-                  },
-                  {
-                    "id": "2450A010-E5E7-42A3-8127-F5FD7C5E5592",
-                    "model_item_id": "EAID_5D9073A9_8BB4_4bd3_92EA_49EF0ADD57F3",
-                    "model_id": "3",
-                    "name": "PetersenCoilModeKind",
-                    "type": "Enumeration",
-                    "description": "Режим управления катушкой Петерсона или\nдугогасящим реактором.","description_ru": "",
-                    "visibility": "public",
-                    "isAbstract": false,
-                    "attributeCount": 0,
-                    "linkCount": 0,
-                    "attributes": [],
-                    "links": []
-                  },
-                  {
-                    "id": "3ECD8881-622A-42FD-9C96-00E1D129D355",
-                    "model_item_id": "EAID_5E499453_E8DC_4467_92BA_88788E6E45A0",
-                    "model_id": "3",
-                    "name": "PhaseShuntConnectionKind",
-                    "type": "Enumeration",
-                    "description": "Конфигурация соединения фаз для оборудования и устройств, обладающих одним полюсом (например, нагрузка или батарея статических конденсаторов).","description_ru": "",
-                    "visibility": "public",
-                    "isAbstract": false,
-                    "attributeCount": 0,
-                    "linkCount": 0,
-                    "attributes": [],
-                    "links": []
-                  },
-                  {
-                    "id": "F0AF6F7F-57EA-4130-8FCF-D11742E8BFE6",
-                    "model_item_id": "EAID_CFAE12A6_F54E_4731_A478_794A5479A884",
-                    "model_id": "3",
-                    "name": "RegulatingControlModeKind",
-                    "type": "Enumeration",
-                    "description": "Типы регулирования.","description_ru": "",
-                    "visibility": "public",
-                    "isAbstract": false,
-                    "attributeCount": 0,
-                    "linkCount": 0,
-                    "attributes": [],
-                    "links": []
-                  },
-                  {
-                    "id": "81B63560-1F68-4AF2-A087-6CFA2F551A97",
-                    "model_item_id": "EAID_C5B42BF0_5037_4145_A0D1_270B5D2A5C13",
-                    "model_id": "3",
-                    "name": "SinglePhaseKind",
-                    "type": "Enumeration",
-                    "description": "Обозначение фаз.","description_ru": "",
-                    "visibility": "public",
-                    "isAbstract": false,
-                    "attributeCount": 0,
-                    "linkCount": 0,
-                    "attributes": [],
-                    "links": []
-                  },
-                  {
-                    "id": "482227C9-F03F-4E73-B6E1-F4B96315CCA7",
-                    "model_item_id": "EAID_86FC3EA1_61B5_4881_A904_447F43FE48E1",
-                    "model_id": "3",
-                    "name": "SynchronousMachineKind",
-                    "type": "Enumeration",
-                    "description": "Режимы работы, в которых синхронная машина способна работать.","description_ru": "",
-                    "visibility": "public",
-                    "isAbstract": false,
-                    "attributeCount": 0,
-                    "linkCount": 0,
-                    "attributes": [],
-                    "links": []
-                  },
-                  {
-                    "id": "5C0E68B5-F8BD-402F-B072-B2AA0EF8F38A",
-                    "model_item_id": "EAID_4DF08262_913B_471a_9E00_5154CB32A7FF",
-                    "model_id": "3",
-                    "name": "SynchronousMachineOperatingMode",
-                    "type": "Enumeration",
-                    "description": "Режим работы синхронной машины.","description_ru": "",
-                    "visibility": "public",
-                    "isAbstract": false,
-                    "attributeCount": 0,
-                    "linkCount": 0,
-                    "attributes": [],
-                    "links": []
-                  },
-                  {
-                    "id": "94E6308A-80B4-4127-A22B-68AEAA00E41A",
-                    "model_item_id": "EAID_893D85E1_3E9A_4789_BFBD_666456E9AAC4",
-                    "model_id": "3",
-                    "name": "WindingConnection",
-                    "type": "Enumeration",
-                    "description": "Способ соединения обмоток трансформатора.","description_ru": "",
-                    "visibility": "public",
-                    "isAbstract": false,
-                    "attributeCount": 0,
-                    "linkCount": 0,
-                    "attributes": [],
-                    "links": []
-                  }
-                ],
-                "children": []
-              },
-              {
-                "id": "FCC4197D-FF6B-43D4-AA66-43FA31C2E099",
-                "model_item_id": "EAPK_65E5A898_AC32_4995_988C_019914A0B486",
-                "model_id": "3",
-                "name": "AuxiliaryEquipment",
-                "type": "Package",
-                "description": "Содержит оборудование, которое не является обычным проводящим оборудованием, таким как датчики, локаторы неисправностей и устройства защиты от перенапряжения.  Эти устройства не определяют топологические соединения, несущие мощность, как проводящее оборудование, но связаны с клеммами другого проводящего оборудования.","description_ru": "",
-                "elementCount": 7,
-                "elements": [
-                  {
-                    "id": "589A6C7B-C89D-426F-9C45-F5F30BAA4BC3",
-                    "model_item_id": "EAID_3241CF1E_03C4_4c0e_8DCD_16E1599521E3",
-                    "model_id": "3",
-                    "name": "AuxiliaryEquipment",
-                    "type": "Class",
-                    "description": "Вспомогательное оборудование.","description_ru": "",
-                    "visibility": "public",
-                    "isAbstract": true,
-                    "attributeCount": 0,
-                    "linkCount": 6,
-                    "attributes": [],
-                    "links": [
-                      {
-                        "assoc_id": "56BCE8C4-30DE-4C42-B57A-68E027FC426B",
-                        "model_item_id": "EAID_E7838824_8516_4c3c_B0B0_BE32B0D85E32",
-                        "model_id": "3",
-                        "relation_kind": "Generalization",
-                        "role": "child",
-                        "target_class_id": "EAID_B0D067B5_E753_4031_B99B_C972759B988B",
-                        "target_class_name": "Equipment",
-                        "target_class_role_name": null,
-                        "src_class_role_name": null,
-                        "target_description": null,
-                        "multiplicity": "1"
-                      },
-                      {
-                        "assoc_id": "5E64ABF4-B926-40F5-9FC8-E6F2C45FB8B6",
-                        "model_item_id": "EAID_69B8BC47_F4BD_4a78_A07A_055735EBC045",
-                        "model_id": "3",
-                        "relation_kind": "Association",
-                        "role": "unspecified",
-                        "target_class_id": "EAID_41429F07_2146_43df_8E7E_CD57103ACADE",
-                        "target_class_name": "Terminal",
-                        "target_class_role_name": "Terminal",
-                        "src_class_role_name": "AuxiliaryEquipment",
-                        "target_description": "Полюс вспомогательного оборудования.",
-                        "multiplicity": "1"
-                      },
-                      {
-                        "assoc_id": "9351076F-1458-4BAF-9B3A-C183D1F47008",
-                        "model_item_id": "EAID_35BDE4A3_C700_405a_AB59_E84D8B3E08A2",
-                        "model_id": "3",
-                        "relation_kind": "Generalization",
-                        "role": "parent",
-                        "target_class_id": "EAID_52236892_A0D0_4288_8F0D_1515B612DF59",
-                        "target_class_name": "Sensor",
-                        "target_class_role_name": null,
-                        "src_class_role_name": null,
-                        "target_description": null,
-                        "multiplicity": "1"
-                      },
-                      {
-                        "assoc_id": "141E032D-7E4B-4E3F-9C02-B0F8741BBE34",
-                        "model_item_id": "EAID_C1772FD3_A1C4_4830_8ADF_996C734604B6",
-                        "model_id": "3",
-                        "relation_kind": "Generalization",
-                        "role": "parent",
-                        "target_class_id": "EAID_B450004D_A854_4405_8965_D7F2587BEDA2",
-                        "target_class_name": "SurgeArrester",
-                        "target_class_role_name": null,
-                        "src_class_role_name": null,
-                        "target_description": null,
-                        "multiplicity": "1"
-                      },
-                      {
-                        "assoc_id": "5B7D50F9-19E3-4E68-93DB-E90F075387B1",
-                        "model_item_id": "EAID_C3559C91_3C91_4e2a_B86C_88B27D3BA2AA",
-                        "model_id": "3",
-                        "relation_kind": "Generalization",
-                        "role": "parent",
-                        "target_class_id": "EAID_BCB91C46_E60C_4f3a_8FB9_BA5338B61EA8",
-                        "target_class_name": "WaveTrap",
-                        "target_class_role_name": null,
-                        "src_class_role_name": null,
-                        "target_description": null,
-                        "multiplicity": "1"
-                      },
-                      {
-                        "assoc_id": "7B588E2E-A4C8-4BE4-B755-23724DBA5FCE",
-                        "model_item_id": "EAID_DF121D0C_0008_46a4_83EA_EEE5F5990F14",
-                        "model_id": "3",
-                        "relation_kind": "Generalization",
-                        "role": "parent",
-                        "target_class_id": "EAID_9A4F1243_5579_4da3_9DAD_D4CBAB29CC65",
-                        "target_class_name": "BusArrangement",
-                        "target_class_role_name": null,
-                        "src_class_role_name": null,
-                        "target_description": null,
-                        "multiplicity": "1"
-                      }
-                    ]
-                  },
-                  {
-                    "id": "BE620BB2-74D9-4F31-B172-09990BFF36B1",
-                    "model_item_id": "EAID_773B8ED9_5102_4923_963B_82C9D1C844E0",
-                    "model_id": "3",
-                    "name": "CurrentTransformer",
-                    "type": "Class",
-                    "description": "Трансформатор тока.","description_ru": "",
-                    "visibility": "public",
-                    "isAbstract": false,
-                    "attributeCount": 4,
-                    "linkCount": 2,
-                    "attributes": [
-                      {
-                        "name": "accuracyClass",
-                        "id": "FEBC5095-9230-490E-9FB3-B8963A134724",
-                        "model_item_id": "EAID_B41E18BF_9F5E_4949_A773_C24B0C921040",
-                        "model_id": "3",
-                        "type": "String",
-                        "description": "Класс точности.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      },
-                      {
-                        "name": "isEmbeded",
-                        "id": "9A2E8D9A-44A9-46B7-AAF1-42F51C0EB780",
-                        "model_item_id": "EAID_F745E95D_3FBC_4a7b_BBC1_1EDE5DF72C74",
-                        "model_id": "3",
-                        "type": "Boolean",
-                        "description": "Трансформатор тока встроенный (если присвоено значение &#171;Истина&#187;).","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      },
-                      {
-                        "name": "ratedCurrent",
-                        "id": "2E80E561-E37F-4FB2-BC7A-727569A1C62E",
-                        "model_item_id": "EAID_3F7E1AB2_35D3_439c_9951_39EA89F5165A",
-                        "model_id": "3",
-                        "type": "CurrentFlow",
-                        "description": "Номинальный ток, А.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      },
-                      {
-                        "name": "ratedSecondaryCurrent",
-                        "id": "B720B29A-EE31-4E26-9B8A-80DD74457766",
-                        "model_item_id": "EAID_324B581D_9923_4760_8264_33116151183B",
-                        "model_id": "3",
-                        "type": "CurrentFlow",
-                        "description": "Номинальный вторичный ток, А.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      }
-                    ],
-                    "links": [
-                      {
-                        "assoc_id": "07AE3F62-E89A-45AC-B18C-0CFA4FFC7355",
-                        "model_item_id": "EAID_BA685597_446F_4c0d_A145_B2CA8D621B51",
-                        "model_id": "3",
-                        "relation_kind": "Generalization",
-                        "role": "child",
-                        "target_class_id": "EAID_52236892_A0D0_4288_8F0D_1515B612DF59",
-                        "target_class_name": "Sensor",
-                        "target_class_role_name": null,
-                        "src_class_role_name": null,
-                        "target_description": null,
-                        "multiplicity": "1"
-                      },
-                      {
-                        "assoc_id": "AF84C74B-07B9-491F-BD12-D906C279AF98",
-                        "model_item_id": "EAID_BD7EB12E_B947_4b60_A9F6_72F14C5DE4EB",
-                        "model_id": "3",
-                        "relation_kind": "Association",
-                        "role": "unspecified",
-                        "target_class_id": "EAID_112D5CA4_66A6_460f_81C5_4B0FD8229345",
-                        "target_class_name": "CurrentTransformerWinding",
-                        "target_class_role_name": "Windings",
-                        "src_class_role_name": "Transformer",
-                        "target_description": "Обмотки трансформатора тока.",
-                        "multiplicity": "0..*"
-                      }
-                    ]
-                  },
-                  {
-                    "id": "3EBE24EB-A572-4038-BCD3-73BEE6609811",
-                    "model_item_id": "EAID_F91EEDCD_CC09_41c0_8C56_98B23E0955F4",
-                    "model_id": "3",
-                    "name": "PotentialTransformer",
-                    "type": "Class",
-                    "description": "Трансформатор напряжения.","description_ru": "",
-                    "visibility": "public",
-                    "isAbstract": false,
-                    "attributeCount": 3,
-                    "linkCount": 2,
-                    "attributes": [
-                      {
-                        "name": "accuracyClass",
-                        "id": "553BC2DD-5C9E-464E-9F05-A0A1AD6336EC",
-                        "model_item_id": "EAID_C2724D8B_1C2D_4405_A440_3E3181B6D604",
-                        "model_id": "3",
-                        "type": "String",
-                        "description": "Класс точности.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      },
-                      {
-                        "name": "nominalVoltage",
-                        "id": "B63217D2-94A6-4B72-B75C-F7C11F52CF20",
-                        "model_item_id": "EAID_735000C9_F7BE_44d0_95A0_982B927A389B",
-                        "model_id": "3",
-                        "type": "Voltage",
-                        "description": "Номинальное напряжение, кВ.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      },
-                      {
-                        "name": "type",
-                        "id": "17B68F42-BEDE-4DA6-8FEC-5465B0802B82",
-                        "model_item_id": "EAID_34425F9B_A5C2_4256_8F03_5811611449EA",
-                        "model_id": "3",
-                        "type": "PotentialTransformerKind",
-                        "description": "Конструктивный тип.","description_ru": "",
-                        "multiplicity": "0..1",
-                        "visibility": "public"
-                      }
-                    ],
-                    "links": [
-                      {
-                        "assoc_id": "E64C9DF3-C397-4D18-8419-45AD326725E5",
-                        "model_item_id": "EAID_32092158_21A7_4ca6_AE95_0AE81393006C",
-                        "model_id": "3",
-                        "relation_kind": "Generalization",
-                        "role": "child",
-                        "target_class_id": "EAID_52236892_A0D0_4288_8F0D_1515B612DF59",
-                        "target_class_name": "Sensor",
-                        "target_class_role_name": null,
-                        "src_class_role_name": null,
-                        "target_description": null,
-                        "multiplicity": "1"
-                      },
-                      {
-                        "assoc_id": "8AC9BBD3-2661-4FBD-AE08-48E1D9213929",
-                        "model_item_id": "EAID_A997CC37_031F_472a_B6FF_D1062D43BF7E",
-                        "model_id": "3",
-                        "relation_kind": "Association",
-                        "role": "unspecified",
-                        "target_class_id": "EAID_21235772_7F51_4468_B23D_D8E26C6196A4",
-                        "target_class_name": "PotentialTransformerWinding",
-                        "target_class_role_name": "Windings",
-                        "src_class_role_name": "Transformer",
-                        "target_description": "Обмотки трансформатора напряжения.",
-                        "multiplicity": "0..*"
-                      }
-                    ]
-                  },
-                  {
-                    "id": "F36E3E08-4959-41EC-B4E5-26F79D976346",
-                    "model_item_id": "EAID_E8A33914_7BC4_4956_B590_0376CE2AE796",
-                    "model_id": "3",
-                    "name": "PotentialTransformerKind",
-                    "type": "Enumeration",
-                    "description": "Конструкция трансформатора напряжения.","description_ru": "",
+                    "description": null,
+                    "description_ru": "",
                     "visibility": "public",
                     "isAbstract": false,
                     "attributeCount": 0,
@@ -3755,784 +2487,6 @@
                 "children": []
               }
             ]
-          }
-        ]
-      },
-      {
-        "id": "841082D2-F7F7-425D-8087-99DE223C6766",
-        "model_item_id": "EAPK_A395E6F1_5B32_439a_8A27_2670237584E0",
-        "model_id": "3",
-        "name": "IEC61968",
-        "type": "Package",
-        "description": "Пакет верхнего уровня для IEC 61968.","description_ru": "",
-        "elementCount": 1,
-        "elements": [],
-        "children": [
-          {
-            "id": "C7EB81C2-E611-4C0E-8868-04EC7DA0ADDB",
-            "model_item_id": "EAPK_9B1FE3BD_046D_4260_82C3_EDBBA5920DFB",
-            "model_id": "3",
-            "name": "Common",
-            "type": "Package",
-            "description": "Этот пакет содержит информационные классы, которые поддерживают управление распространением в целом.","description_ru": "",
-            "elementCount": 17,
-            "elements": [
-              {
-                "id": "720E807A-1803-4A75-97D4-4538F4D48F2F",
-                "model_item_id": "EAID_8944C4B7_E959_4519_8DF5_2DA742A0FB89",
-                "model_id": "3",
-                "name": "ElectronicAddress",
-                "type": "Class",
-                "description": "Электронный адрес.","description_ru": "",
-                "visibility": "public",
-                "isAbstract": false,
-                "attributeCount": 8,
-                "linkCount": 0,
-                "attributes": [
-                  {
-                    "name": "email1",
-                    "id": "B5F80C97-0B3D-4AA4-B340-36B3B13963E3",
-                    "model_item_id": "EAID_D4D66165_83E4_48d6_A442_7222BB734B73",
-                    "model_id": "3",
-                    "type": "String",
-                    "description": "Почтовый адрес 1.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "email2",
-                    "id": "8A3B4B22-FCC5-44D3-80EF-D06B754FC108",
-                    "model_item_id": "EAID_229F8B1C_4AD6_4175_BB8E_D518BF5C2D17",
-                    "model_id": "3",
-                    "type": "String",
-                    "description": "Почтовый адрес 2.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "lan",
-                    "id": "4C5746D8-F488-4733-857E-D9E5DD51E3AB",
-                    "model_item_id": "EAID_3732C2FA_1763_4096_BDDD_A7FC888375F7",
-                    "model_id": "3",
-                    "type": "String",
-                    "description": "Адрес сети.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "mac",
-                    "id": "28253331-AB6B-48CB-8DD4-57316FB7E514",
-                    "model_item_id": "EAID_E87648C0_0DDE_4648_85FA_DACC8615C520",
-                    "model_id": "3",
-                    "type": "String",
-                    "description": "MAC (Media Access Control) адрес.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "password",
-                    "id": "076CD5AE-B437-422E-BCE9-347364054782",
-                    "model_item_id": "EAID_E34E9711_B35E_42c9_A50A_1958A0118535",
-                    "model_id": "3",
-                    "type": "String",
-                    "description": "Пароль.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "radio",
-                    "id": "B3792D6F-D42E-406D-BA5D-CF811485B9C1",
-                    "model_item_id": "EAID_9CC3B7FD_C1AE_40ab_B46E_D544A688ECA9",
-                    "model_id": "3",
-                    "type": "String",
-                    "description": "Радио адрес.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "userID",
-                    "id": "6EF1BC0F-87D2-4B6B-9E18-F107FB9CB54C",
-                    "model_item_id": "EAID_A5D15C65_CD96_4fab_A40E_01E585F3FDF4",
-                    "model_id": "3",
-                    "type": "String",
-                    "description": "Идентификатор.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "web",
-                    "id": "1D3288FE-436D-42CB-B6B8-D53FA9AF9122",
-                    "model_item_id": "EAID_B048CFA1_B302_4c31_8DBF_31B438C88C4F",
-                    "model_id": "3",
-                    "type": "String",
-                    "description": "Интернет адрес.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  }
-                ],
-                "links": []
-              },
-              {
-                "id": "FDC6BEF7-00EC-4530-8220-C286F8DD536E",
-                "model_item_id": "EAID_37A2D189_0FE5_4ce6_9739_9FC17EBD176D",
-                "model_id": "3",
-                "name": "Organisation",
-                "type": "Class",
-                "description": "Организация.","description_ru": "",
-                "visibility": "public",
-                "isAbstract": false,
-                "attributeCount": 5,
-                "linkCount": 6,
-                "attributes": [
-                  {
-                    "name": "electronicAddress",
-                    "id": "2AC4520A-EE1C-421A-8F93-2F00D276FE83",
-                    "model_item_id": "EAID_5C8BAD21_173B_4421_AB09_A7E82A689638",
-                    "model_id": "3",
-                    "type": "ElectronicAddress",
-                    "description": "Электронный адрес.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "phone1",
-                    "id": "4664023F-E805-402C-A0BB-213FA31C230C",
-                    "model_item_id": "EAID_12B06F53_0902_4148_9B3B_D58020F3E1C3",
-                    "model_id": "3",
-                    "type": "TelephoneNumber",
-                    "description": "Номер телефона.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "phone2",
-                    "id": "DDA9A583-77B6-4697-8ED0-AEB8C3AEFE6C",
-                    "model_item_id": "EAID_D1087833_0485_47aa_9578_A96CB8027D20",
-                    "model_id": "3",
-                    "type": "TelephoneNumber",
-                    "description": "Дополнительный номер телефона.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "postalAddress",
-                    "id": "9B19A364-CF21-4D2D-A503-140AFA725FDC",
-                    "model_item_id": "EAID_C4E5441D_2FA5_4d7b_84DF_ADC047CEC333",
-                    "model_id": "3",
-                    "type": "StreetAddress",
-                    "description": "Почтовый адрес, потенциально отличный от streetAddress (например, другой город).","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "streetAddress",
-                    "id": "0CB26E25-A1CF-40E2-9D8E-71E7596A0458",
-                    "model_item_id": "EAID_0BE87704_63F0_4eb9_AEA0_A3CF7AB8C119",
-                    "model_id": "3",
-                    "type": "StreetAddress",
-                    "description": "Адрес улицы.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  }
-                ],
-                "links": [
-                  {
-                    "assoc_id": "A62B9092-71C2-4640-B8B5-FE4CFB910DC9",
-                    "model_item_id": "EAID_0E2693A0_C8B5_45b0_93CE_487980883000",
-                    "model_id": "3",
-                    "relation_kind": "Generalization",
-                    "role": "child",
-                    "target_class_id": "EAID_69526261_F2D9_4f06_86B3_638695E07849",
-                    "target_class_name": "IdentifiedObject",
-                    "target_class_role_name": null,
-                    "src_class_role_name": null,
-                    "target_description": null,
-                    "multiplicity": "1"
-                  },
-                  {
-                    "assoc_id": "9A3C654A-6E16-4D4D-91AC-26BE4C893C65",
-                    "model_item_id": "EAID_F88B8717_15D5_4f6f_87C9_B6C381BD2989",
-                    "model_id": "3",
-                    "relation_kind": "Association",
-                    "role": "unspecified",
-                    "target_class_id": "EAID_8A26D9A4_CC96_4067_A02C_3503B222BC70",
-                    "target_class_name": "OrganisationUnit",
-                    "target_class_role_name": "OrganisationUnits",
-                    "src_class_role_name": "Organisation",
-                    "target_description": null,
-                    "multiplicity": "0..*"
-                  },
-                  {
-                    "assoc_id": "53BA4BCF-DDE7-4F75-9B19-EAE40D304D5C",
-                    "model_item_id": "EAID_2DACD868_A231_43c3_A533_CCBF2E526140",
-                    "model_id": "3",
-                    "relation_kind": "Association",
-                    "role": "unspecified",
-                    "target_class_id": "EAID_C3DE5C00_15CB_418a_9104_DE28F1F576F7",
-                    "target_class_name": "Partner",
-                    "target_class_role_name": "Partner",
-                    "src_class_role_name": "Organisation",
-                    "target_description": null,
-                    "multiplicity": "1"
-                  },
-                  {
-                    "assoc_id": "7DC945B4-00A6-455F-88ED-C905C5998B5C",
-                    "model_item_id": "EAID_CD87874E_A817_4055_A97F_93B43D342ABA",
-                    "model_id": "3",
-                    "relation_kind": "Association",
-                    "role": "unspecified",
-                    "target_class_id": "EAID_37A2D189_0FE5_4ce6_9739_9FC17EBD176D",
-                    "target_class_name": "Organisation",
-                    "target_class_role_name": "ChildOrganisations",
-                    "src_class_role_name": "ParentOrganisation",
-                    "target_description": "Вышестоящая организация, филиал.",
-                    "multiplicity": "0..*"
-                  },
-                  {
-                    "assoc_id": "CD1F4189-B7CE-41C4-97D9-6CA0661D0C8D",
-                    "model_item_id": "EAID_CD87874E_A817_4055_A97F_93B43D342ABA",
-                    "model_id": "3",
-                    "relation_kind": "Association",
-                    "role": "unspecified",
-                    "target_class_id": "EAID_37A2D189_0FE5_4ce6_9739_9FC17EBD176D",
-                    "target_class_name": "Organisation",
-                    "target_class_role_name": "ParentOrganisation",
-                    "src_class_role_name": "ChildOrganisations",
-                    "target_description": "Вышестоящая организация, филиал.",
-                    "multiplicity": "0..1"
-                  },
-                  {
-                    "assoc_id": "21C30D66-E8E7-4D97-8D63-FBAD86F0AFF6",
-                    "model_item_id": "EAID_1D3E27DE_2975_49f4_BA7E_872ED8FD4030",
-                    "model_id": "3",
-                    "relation_kind": "Association",
-                    "role": "unspecified",
-                    "target_class_id": "EAID_77284812_23D2_4ccb_8EEF_0E40C6E21A9D",
-                    "target_class_name": "OrganisationRole",
-                    "target_class_role_name": "Roles",
-                    "src_class_role_name": "Organisation",
-                    "target_description": "Роли, выполняемые организацией.",
-                    "multiplicity": "0..*"
-                  }
-                ]
-              },
-              {
-                "id": "59D54DAC-CC0E-4757-9FE0-C210ABD1D5CD",
-                "model_item_id": "EAID_77284812_23D2_4ccb_8EEF_0E40C6E21A9D",
-                "model_id": "3",
-                "name": "OrganisationRole",
-                "type": "Class",
-                "description": "Типизированная роль организации по отношению к другим объектам информационной модели.","description_ru": "",
-                "visibility": "public",
-                "isAbstract": false,
-                "attributeCount": 0,
-                "linkCount": 12,
-                "attributes": [],
-                "links": [
-                  {
-                    "assoc_id": "36AB6639-AD0B-4B39-BB18-8191C0DAB004",
-                    "model_item_id": "EAID_2DD77258_C00C_43ea_BAA8_F244E0EA5C74",
-                    "model_id": "3",
-                    "relation_kind": "Generalization",
-                    "role": "child",
-                    "target_class_id": "EAID_69526261_F2D9_4f06_86B3_638695E07849",
-                    "target_class_name": "IdentifiedObject",
-                    "target_class_role_name": null,
-                    "src_class_role_name": null,
-                    "target_description": null,
-                    "multiplicity": "1"
-                  },
-                  {
-                    "assoc_id": "3999E69D-CC06-41EF-9F15-08D3C4302CD1",
-                    "model_item_id": "EAID_2AE06D57_793F_4ca4_A355_627DB89D3F98",
-                    "model_id": "3",
-                    "relation_kind": "Association",
-                    "role": "unspecified",
-                    "target_class_id": "EAID_69526261_F2D9_4f06_86B3_638695E07849",
-                    "target_class_name": "IdentifiedObject",
-                    "target_class_role_name": "Objects",
-                    "src_class_role_name": "OrganisationRoles",
-                    "target_description": "Объекты информационной модели, связанные с ролью организации.",
-                    "multiplicity": "0..*"
-                  },
-                  {
-                    "assoc_id": "51A3E100-FF10-4255-A5D4-714659546ECD",
-                    "model_item_id": "EAID_D1DA19C5_D101_4c53_B218_DC07893139F6",
-                    "model_id": "3",
-                    "relation_kind": "Association",
-                    "role": "unspecified",
-                    "target_class_id": "EAID_B4DC42DF_5C14_4d68_AA09_BE7C5DDE713C",
-                    "target_class_name": "ConfigurationEvent",
-                    "target_class_role_name": "ConfigurationEvents",
-                    "src_class_role_name": "ChangedOrganisationRole",
-                    "target_description": "События конфигурирования роли организации.",
-                    "multiplicity": "0..*"
-                  },
-                  {
-                    "assoc_id": "D7556C89-F745-436A-B4B0-428AC233D9FC",
-                    "model_item_id": "EAID_1D3E27DE_2975_49f4_BA7E_872ED8FD4030",
-                    "model_id": "3",
-                    "relation_kind": "Association",
-                    "role": "unspecified",
-                    "target_class_id": "EAID_37A2D189_0FE5_4ce6_9739_9FC17EBD176D",
-                    "target_class_name": "Organisation",
-                    "target_class_role_name": "Organisation",
-                    "src_class_role_name": "Roles",
-                    "target_description": "Организации, имеющие заданную роль.",
-                    "multiplicity": "0..1"
-                  },
-                  {
-                    "assoc_id": "F861A933-F784-4349-97DA-C37813ADEBB1",
-                    "model_item_id": "EAID_0867ECAD_132B_4e40_B9A9_19C61A1F3BD1",
-                    "model_id": "3",
-                    "relation_kind": "Generalization",
-                    "role": "parent",
-                    "target_class_id": "EAID_EDEE1233_0520_4695_AB3C_097C4AD31F53",
-                    "target_class_name": "AssetOrganisationRole",
-                    "target_class_role_name": null,
-                    "src_class_role_name": null,
-                    "target_description": null,
-                    "multiplicity": "1"
-                  },
-                  {
-                    "assoc_id": "D9AA6F60-068D-4881-AD33-3BD08CC01824",
-                    "model_item_id": "EAID_384D1942_CD8F_4a45_97CD_19723E0332E9",
-                    "model_id": "3",
-                    "relation_kind": "Generalization",
-                    "role": "parent",
-                    "target_class_id": "EAID_44A5D512_F2E6_40ab_8A83_2097FAD74BA9",
-                    "target_class_name": "ServiceSupplier",
-                    "target_class_role_name": null,
-                    "src_class_role_name": null,
-                    "target_description": null,
-                    "multiplicity": "1"
-                  },
-                  {
-                    "assoc_id": "0D422501-1BE6-4489-BE63-2B71460A3972",
-                    "model_item_id": "EAID_43787485_5FAA_4915_A16F_DD2DC8C3BD4D",
-                    "model_id": "3",
-                    "relation_kind": "Generalization",
-                    "role": "parent",
-                    "target_class_id": "EAID_35425F4A_7B07_44e6_9E0B_F7411843F257",
-                    "target_class_name": "Manufacturer",
-                    "target_class_role_name": null,
-                    "src_class_role_name": null,
-                    "target_description": null,
-                    "multiplicity": "1"
-                  },
-                  {
-                    "assoc_id": "7BBC0E05-BAA5-4787-A747-57F3D5172C53",
-                    "model_item_id": "EAID_5D1C9DE4_56E8_47ce_91DC_14F15E5A61AD",
-                    "model_id": "3",
-                    "relation_kind": "Generalization",
-                    "role": "parent",
-                    "target_class_id": "EAID_9764B8AF_A465_4993_BC8E_186DCFF172EE",
-                    "target_class_name": "LineOwner",
-                    "target_class_role_name": null,
-                    "src_class_role_name": null,
-                    "target_description": null,
-                    "multiplicity": "1"
-                  },
-                  {
-                    "assoc_id": "D0B7EFDD-F8E1-4981-BD3F-99832FD5DE19",
-                    "model_item_id": "EAID_991D442C_4CA9_4f00_9AA6_03DBD2009FD6",
-                    "model_id": "3",
-                    "relation_kind": "Generalization",
-                    "role": "parent",
-                    "target_class_id": "EAID_E4274EB6_4A6F_465b_9ED5_26404811CD56",
-                    "target_class_name": "FOServiceCustomer",
-                    "target_class_role_name": null,
-                    "src_class_role_name": null,
-                    "target_description": null,
-                    "multiplicity": "1"
-                  },
-                  {
-                    "assoc_id": "BE9E7F35-CCFF-43F7-B2C9-5A0FE6F9F24F",
-                    "model_item_id": "EAID_E2910E9E_24B6_4a3d_85B8_06BA8ADA56DE",
-                    "model_id": "3",
-                    "relation_kind": "Generalization",
-                    "role": "parent",
-                    "target_class_id": "EAID_A37AC418_ED0C_4c2a_9093_86577661CE1F",
-                    "target_class_name": "Customer",
-                    "target_class_role_name": null,
-                    "src_class_role_name": null,
-                    "target_description": null,
-                    "multiplicity": "1"
-                  },
-                  {
-                    "assoc_id": "27CD828A-EB78-4FC5-9627-965618400E11",
-                    "model_item_id": "EAID_EBA1C17E_3548_4fd9_8652_1204E3A936F3",
-                    "model_id": "3",
-                    "relation_kind": "Generalization",
-                    "role": "parent",
-                    "target_class_id": "EAID_341C482C_729C_494b_8AE2_CA165D6438A3",
-                    "target_class_name": "LineServiceOrganisation",
-                    "target_class_role_name": null,
-                    "src_class_role_name": null,
-                    "target_description": null,
-                    "multiplicity": "1"
-                  },
-                  {
-                    "assoc_id": "B384D503-BF99-4A1D-BB97-A5090281163E",
-                    "model_item_id": "EAID_FF26A632_4387_4213_9DE8_F3670D436041",
-                    "model_id": "3",
-                    "relation_kind": "Generalization",
-                    "role": "parent",
-                    "target_class_id": "EAID_622ACE41_79ED_418f_A181_C22B23475BE4",
-                    "target_class_name": "EmergencyRecoveryOrganisation",
-                    "target_class_role_name": null,
-                    "src_class_role_name": null,
-                    "target_description": null,
-                    "multiplicity": "1"
-                  }
-                ]
-              },
-              {
-                "id": "21B9D6E1-934D-43D2-8E8D-AB53695B69BC",
-                "model_item_id": "EAID_827C0BA4_63F7_43da_B652_3732D13EA9B6",
-                "model_id": "3",
-                "name": "Status",
-                "type": "Class",
-                "description": "Информация о текущем состоянии, имеющая отношение к сущности.","description_ru": "",
-                "visibility": "public",
-                "isAbstract": false,
-                "attributeCount": 4,
-                "linkCount": 0,
-                "attributes": [
-                  {
-                    "name": "dateTime",
-                    "id": "229F2FDD-7768-408B-9D55-ABA2144B99D7",
-                    "model_item_id": "EAID_1D08B402_E1D8_4675_A81C_A328C2AB581B",
-                    "model_id": "3",
-                    "type": "DateTime",
-                    "description": "Дата и время, для которых применяется значение статуса.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "reason",
-                    "id": "9A8A3555-B1E9-488E-9A56-9F1D55C904EA",
-                    "model_item_id": "EAID_224CE5E5_5889_4b10_9FD8_0BC50AD05522",
-                    "model_id": "3",
-                    "type": "String",
-                    "description": "Код причины или объяснение того, почему объект перешел в текущее значение состояния.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "remark",
-                    "id": "7308FBE8-91C8-419A-B496-7AE190440DAD",
-                    "model_item_id": "EAID_F4194815_1031_4b4d_BCCB_CFB56769E658",
-                    "model_id": "3",
-                    "type": "String",
-                    "description": "Соответствующая информация, касающаяся текущего значения, в виде текста свободной формы.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "value",
-                    "id": "F4665785-71AC-4EDC-97B3-671007A156A4",
-                    "model_item_id": "EAID_F1E04D9D_7E0F_4e33_ADB7_D271703784AB",
-                    "model_id": "3",
-                    "type": "String",
-                    "description": "Значение статуса.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  }
-                ],
-                "links": []
-              },
-              {
-                "id": "4AF8988B-410C-4FB8-8D1A-E57F2CC596E8",
-                "model_item_id": "EAID_EEFB7DE9_976B_4836_9986_AF42F05F092C",
-                "model_id": "3",
-                "name": "StreetAddress",
-                "type": "Class",
-                "description": "Почтовый адрес.","description_ru": "",
-                "visibility": "public",
-                "isAbstract": false,
-                "attributeCount": 3,
-                "linkCount": 0,
-                "attributes": [
-                  {
-                    "name": "postalCode",
-                    "id": "7FF9A3B8-72AA-49C4-AA2A-F133AA9A53A2",
-                    "model_item_id": "EAID_A6F6A192_8017_4620_8AD7_ADE854038115",
-                    "model_id": "3",
-                    "type": "String",
-                    "description": "Почтовый индекс.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "streetDetail",
-                    "id": "E74CB91E-EC8A-4AFB-AF46-EF28633A0865",
-                    "model_item_id": "EAID_AD5F2125_7F6C_42e3_8309_F4577E59859C",
-                    "model_id": "3",
-                    "type": "StreetDetail",
-                    "description": "Адрес в населенном пункте или городе.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "townDetail",
-                    "id": "6C0C02D5-FD13-4885-8F1D-A82DBFAD690D",
-                    "model_item_id": "EAID_4491F28A_FE81_4566_B2A6_D28125A275D4",
-                    "model_id": "3",
-                    "type": "TownDetail",
-                    "description": "Расположение города и район.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  }
-                ],
-                "links": []
-              },
-              {
-                "id": "F5B1E3FC-05BC-40E7-8FF1-6B4C514650AE",
-                "model_item_id": "EAID_CC5854A9_A3AF_4754_8391_87503B425866",
-                "model_id": "3",
-                "name": "StreetDetail",
-                "type": "Class",
-                "description": "Адрес в населенном пункте или городе.","description_ru": "",
-                "visibility": "public",
-                "isAbstract": false,
-                "attributeCount": 6,
-                "linkCount": 0,
-                "attributes": [
-                  {
-                    "name": "buildingName",
-                    "id": "9C0F0F09-A665-4C0D-8508-CBD21F9AA46F",
-                    "model_item_id": "EAID_F0545432_DD53_4e08_8AE8_A2943F7204B7",
-                    "model_id": "3",
-                    "type": "String",
-                    "description": "Название строения.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "floorIdentification",
-                    "id": "22F0E589-1292-4992-843B-56F096CBE026",
-                    "model_item_id": "EAID_B1DE1086_AC83_433e_AEFD_D855D9B169DC",
-                    "model_id": "3",
-                    "type": "String",
-                    "description": "Цифровое или символьное обозначение этажа.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "name",
-                    "id": "72321A29-F58F-4539-97F8-1586867502A4",
-                    "model_item_id": "EAID_B820F7EA_49B7_40c8_8C44_3C957847B33C",
-                    "model_id": "3",
-                    "type": "String",
-                    "description": "Название улицы.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "number",
-                    "id": "8296C84E-0894-41BF-8897-44610157E4E9",
-                    "model_item_id": "EAID_73AF9CDA_CACE_40ce_BFBF_1FCF6A8FA1A4",
-                    "model_id": "3",
-                    "type": "String",
-                    "description": "Номер строения или другое обозначение расположения, связанное с улицей.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "suiteNumber",
-                    "id": "08DEFCE9-E21B-41B7-BE80-BB3A86DE5C1B",
-                    "model_item_id": "EAID_C48F5A38_8674_4c08_B221_7263CFBDEEA6",
-                    "model_id": "3",
-                    "type": "String",
-                    "description": "Номер офиса.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "type",
-                    "id": "C1AF0877-095D-4ED8-A830-30BE3717701B",
-                    "model_item_id": "EAID_DF0BEFFE_D942_4528_863A_63861E89ACA0",
-                    "model_id": "3",
-                    "type": "String",
-                    "description": "Тип улицы (бульвар, проспект и т.п.).","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  }
-                ],
-                "links": []
-              },
-              {
-                "id": "D74B8670-1E12-494D-935C-44D81757A79B",
-                "model_item_id": "EAID_24A6F986_F544_4853_AF87_09C9010C2BA2",
-                "model_id": "3",
-                "name": "TelephoneNumber",
-                "type": "Class",
-                "description": "Телефонный номер.","description_ru": "",
-                "visibility": "public",
-                "isAbstract": false,
-                "attributeCount": 4,
-                "linkCount": 0,
-                "attributes": [
-                  {
-                    "name": "cityCode",
-                    "id": "6E57B96C-496E-4BCD-973E-01101B52600F",
-                    "model_item_id": "EAID_812B7C91_2525_4b52_BAE9_436D3C18CF0D",
-                    "model_id": "3",
-                    "type": "String",
-                    "description": "Код города.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "countryCode",
-                    "id": "28BF4687-CC63-4532-8E4D-1A3D68BF85D9",
-                    "model_item_id": "EAID_128363F7_F2D7_4e93_BAED_4ED78F115FDE",
-                    "model_id": "3",
-                    "type": "String",
-                    "description": "Код страны.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "extension",
-                    "id": "93BDA1E8-61BD-432D-879F-AFB92CD37062",
-                    "model_item_id": "EAID_A7F4248C_3239_4395_9A66_88121813BC16",
-                    "model_id": "3",
-                    "type": "String",
-                    "description": "Дополнительный номер.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "localNumber",
-                    "id": "4BEF9D7C-83A9-4475-9E37-51EA8C41AA7B",
-                    "model_item_id": "EAID_7CC9ADF4_94E5_4f01_954A_6F9BADC129EF",
-                    "model_id": "3",
-                    "type": "String",
-                    "description": "Основная часть телефонного номера.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  }
-                ],
-                "links": []
-              },
-              {
-                "id": "F06D95E9-994C-4A6D-BA21-9843E11BF216",
-                "model_item_id": "EAID_9484EE7B_B65C_49a5_87F9_46BC54CD418C",
-                "model_id": "3",
-                "name": "TownDetail",
-                "type": "Class",
-                "description": "Расположение города и район.","description_ru": "",
-                "visibility": "public",
-                "isAbstract": false,
-                "attributeCount": 4,
-                "linkCount": 0,
-                "attributes": [
-                  {
-                    "name": "country",
-                    "id": "1933E2B4-E4B9-4263-AE1B-582B7D190A4A",
-                    "model_item_id": "EAID_49A74F3C_39D9_48f3_B093_30475E15E881",
-                    "model_id": "3",
-                    "type": "String",
-                    "description": "Название страны.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "name",
-                    "id": "41A37E30-CA0E-4797-AEA3-F4915C9B906A",
-                    "model_item_id": "EAID_E03E5C6F_5E70_4221_9EC7_DBB89BC2A5C2",
-                    "model_id": "3",
-                    "type": "String",
-                    "description": "Название города.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "section",
-                    "id": "019637DB-D87D-4CC6-B02E-48E761E6BF97",
-                    "model_item_id": "EAID_9DF65EE7_F15F_4606_8FC4_448E99486722",
-                    "model_id": "3",
-                    "type": "String",
-                    "description": "Район города.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "stateOrProvince",
-                    "id": "67D9C85A-A124-463D-A720-E3647FE5E3BD",
-                    "model_item_id": "EAID_9339FD3D_2207_418e_A11C_DE6FB8AC1F03",
-                    "model_id": "3",
-                    "type": "String",
-                    "description": "Регион страны.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  }
-                ],
-                "links": []
-              },
-              {
-                "id": "C82C8B49-53FE-409B-8264-977923E7A408",
-                "model_item_id": "EAID_D5CD6178_2C8C_4551_BBA3_D1D2534ED8E3",
-                "model_id": "3",
-                "name": "UserAttribute",
-                "type": "Class",
-                "description": null,"description_ru": "",
-                "visibility": "public",
-                "isAbstract": false,
-                "attributeCount": 3,
-                "linkCount": 1,
-                "attributes": [
-                  {
-                    "name": "name",
-                    "id": "BB246581-B411-4ECF-B739-557A20FF2625",
-                    "model_item_id": "EAID_C939769D_D706_417b_9CA1_C6F1D9126D74",
-                    "model_id": "3",
-                    "type": "String",
-                    "description": "Наименование атрибута.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "sequenceNumber",
-                    "id": "C1A98667-544C-4641-B163-B01F8601F864",
-                    "model_item_id": "EAID_75625041_400B_4fd0_96CE_A24D58DE25BA",
-                    "model_id": "3",
-                    "type": "Integer",
-                    "description": "Порядковый номер атрибута в списке атрибутов.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  },
-                  {
-                    "name": "value",
-                    "id": "94781F04-BDEF-43DE-BA2F-941B0C891856",
-                    "model_item_id": "EAID_01826081_9B00_422d_AABC_15FAE26F9C14",
-                    "model_id": "3",
-                    "type": "StringQuantity",
-                    "description": "Значение атрибута.","description_ru": "",
-                    "multiplicity": "0..1",
-                    "visibility": "public"
-                  }
-                ],
-                "links": [
-                  {
-                    "assoc_id": "7823C012-9D70-4D48-B0BA-40884CC37C58",
-                    "model_item_id": "EAID_6A3E5CD2_F2C7_44a0_8BC0_D1DBE69E0AEB",
-                    "model_id": "3",
-                    "relation_kind": "Association",
-                    "role": "unspecified",
-                    "target_class_id": "EAID_69526261_F2D9_4f06_86B3_638695E07849",
-                    "target_class_name": "IdentifiedObject",
-                    "target_class_role_name": "Object",
-                    "src_class_role_name": "CustomAttributes",
-                    "target_description": "Объект, использующий специализированный атрибут.",
-                    "multiplicity": "0..1"
-                  }
-                ]
-              }
-            ],
-            "children": []
           }
         ]
       }

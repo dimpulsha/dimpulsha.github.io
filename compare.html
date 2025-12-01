@@ -46,6 +46,12 @@
       .tree-item-with-checkbox:hover {
         background-color: #f5f5f5;
       }
+      .tree-item-error-icon {
+        color: #e74c3c;
+        font-size: 14px;
+        margin-left: 5px;
+        font-weight: bold;
+      }
     </style>
   </head>
   <body>
@@ -160,9 +166,12 @@
 
               <div class="divider mt-15 mb-10"></div>
 
-              <div class="quick-actions">
+              <div class="quick-compare-actions">
                 <button class="btn btn-primary" onclick="compareProfiles()">
                   🔍 Сравнить
+                </button>
+                <button id="show-results-btn" class="btn btn-primary" onclick="showComparisonResults()" style="display: none; ">
+                  📊 Показать результаты
                 </button>
               </div>
             </div>
@@ -176,7 +185,7 @@
               <h3>Результаты сравнения</h3>
 
               <!-- Summary Stats -->
-              <div class="comparison-stats">
+              <!-- <div class="comparison-stats">
                 <div class="stat-box">
                   <div class="stat-value" id="stat-common">0</div>
                   <div class="stat-label">Общих классов</div>
@@ -189,7 +198,7 @@
                   <div class="stat-value" id="stat-unique2">0</div>
                   <div class="stat-label">Только в профиле 2</div>
                 </div>
-              </div>
+              </div> -->
 
               <!-- Detailed Comparison -->
               <div class="diff-container">
@@ -207,6 +216,13 @@
               <div class="differences-section">
                 <h4>Детальные различия</h4>
                 <div id="differences-list"></div>
+              </div>
+
+              <!-- Save Results Button -->
+              <div style="margin-top: 20px; text-align: center;">
+                <button class="btn btn-primary" onclick="saveComparisonResults()">
+                  💾 Сохранить результат
+                </button>
               </div>
             </div>
           </div>
@@ -362,6 +378,7 @@
       // State for selective tree
       let selectiveExpanded = new Set();
       let selectiveSelected = new Set();
+      let selectiveItemsWithErrors = new Set(); // Track items with comparison errors
       let currentSelectiveObject = null; // Store current object for re-rendering
       let currentSelectiveObject2 = null; // Store second object for analysis mode
 
@@ -387,11 +404,14 @@
         const isExpanded = selectiveExpanded.has(itemKey);
         const isChecked = selectiveSelected.has(itemKey);
 
+        const hasError = selectiveItemsWithErrors.has(itemKey);
+        const errorIcon = hasError ? '<span class="tree-item-error-icon" title="Обнаружены различия">⚠️</span>' : '';
+        
         let html = `
           <div class="tree-item-with-checkbox" onclick="toggleSelectiveActive('${itemKey}', event)">
             <span class="tree-toggle" onclick="toggleSelectiveExpand('${itemKey}'); event.stopPropagation();">${hasChildren ? (isExpanded ? '▾' : '▸') : ''}</span>
             <input type="checkbox" id="${itemKey}" class="tree-item-checkbox" ${isChecked ? 'checked' : ''} onclick="toggleSelectiveCheck('${itemKey}', event)">
-            <span class="tree-item-label">📦 ${name}</span>
+            <span class="tree-item-label">📦 ${name}${errorIcon}</span>
           </div>
         `;
 
@@ -402,11 +422,13 @@
             const eKey = `${itemKey}-elem-${eidx}`;
             const eName = esc(el?.name || el);
             const eChecked = selectiveSelected.has(eKey);
+            const eHasError = selectiveItemsWithErrors.has(eKey);
+            const eErrorIcon = eHasError ? '<span class="tree-item-error-icon" title="Обнаружены различия">⚠️</span>' : '';
             html += `
               <div class="tree-item-with-checkbox" onclick="toggleSelectiveActive('${eKey}', event)">
                 <span class="tree-toggle"></span>
                 <input type="checkbox" id="${eKey}" class="tree-item-checkbox" ${eChecked ? 'checked' : ''} onclick="toggleSelectiveCheck('${eKey}', event)">
-                <span class="tree-item-label">📄 ${eName}</span>
+                <span class="tree-item-label">📄 ${eName}${eErrorIcon}</span>
               </div>
             `;
           });
@@ -497,7 +519,16 @@
           return;
         }
 
-        renderComparison(object1, object2);
+        // Check compare mode
+        const mode = document.querySelector('input[name="compareMode"]:checked')?.value || 'full';
+        
+        if (mode === 'selective') {
+          performSelectiveComparison(object1, object2);
+        } else if (mode === 'analysis') {
+          performAnalysisComparison(object1, object2);
+        } else {
+          renderComparison(object1, object2);
+        }
       }
 
       function parseObjectValue(value) {
@@ -519,6 +550,7 @@
               ...model,
               objectType: "model",
               projectName: project.name,
+              projectId: projectId
             };
           }
         } else if (type === "profile") {
@@ -528,6 +560,7 @@
               ...profile,
               objectType: "profile",
               projectName: project.name,
+              projectId: projectId
             };
           }
         }
@@ -535,19 +568,586 @@
         return null;
       }
 
+      // Selective comparison: compare selected items from object1 with object2
+      function performSelectiveComparison(object1, object2) {
+        if (selectiveSelected.size === 0) {
+          alert('Выберите элементы для сравнения в дереве объекта 1');
+          return;
+        }
+
+        const results = [];
+        
+        // Clear previous error markers
+        selectiveItemsWithErrors.clear();
+        
+        // Process each selected item
+        selectiveSelected.forEach(itemKey => {
+          const itemData = resolveSelectiveItem(itemKey, object1);
+          if (!itemData) return;
+
+          // Find corresponding item in object2
+          const matchingItem = findMatchingItemInObject(itemData, object2);
+          
+          if (!matchingItem) {
+            results.push({
+              itemKey: itemKey,
+              name: itemData.name,
+              type: itemData.type,
+              status: 'not-found',
+              message: `Объект не найден в ${object2.objectType === 'model' ? 'модели' : 'профиле'} "${object2.name}"`
+            });
+            selectiveItemsWithErrors.add(itemKey);
+          } else {
+            // Compare the items
+            const differences = compareItems(itemData.data, matchingItem);
+            results.push({
+              itemKey: itemKey,
+              name: itemData.name,
+              type: itemData.type,
+              status: differences.length > 0 ? 'different' : 'identical',
+              differences: differences,
+              message: differences.length === 0 ? 'Расхождений не обнаружено' : `Найдено расхождений: ${differences.length}`
+            });
+            
+            // Mark items with differences
+            if (differences.length > 0 || differences.length === 0) {
+              if (differences.length > 0) {
+                selectiveItemsWithErrors.add(itemKey);
+              }
+            }
+          }
+        });
+
+        // Store results globally for later display
+        window.lastComparisonResults = { object1, object2, results };
+        
+        // Re-render tree to show error icons
+        if (currentSelectiveObject) {
+          document.getElementById('compare-object-one-content').innerHTML = renderObjectTreePanel(currentSelectiveObject);
+        }
+        
+        // Show the "Show Results" button instead of displaying results immediately
+        document.getElementById('show-results-btn').style.display = 'inline-block';
+        document.getElementById('comparison-results').style.display = 'none';
+      }
+
+      // Resolve item from selective tree key
+      function resolveSelectiveItem(itemKey, sourceObject) {
+        const parts = itemKey.split('-');
+        // Format: sel-{type}-{id}-pkg-{idx}[-pkg-{idx}]*[-elem-{idx}]
+        
+        let packages = sourceObject.rootPackages || [];
+        let current = null;
+        let itemType = 'package';
+        
+        // Skip first 3 parts (sel-{type}-{id})
+        for (let i = 3; i < parts.length; i += 2) {
+          const token = parts[i];
+          const idx = parseInt(parts[i + 1]);
+          
+          if (token === 'pkg') {
+            current = packages[idx];
+            if (!current) return null;
+            packages = current.children || current.packages || [];
+            itemType = 'package';
+          } else if (token === 'elem') {
+            const elements = current ? (current.elements || []) : [];
+            current = elements[idx];
+            itemType = 'element';
+            break;
+          }
+        }
+        
+        if (!current) return null;
+        
+        return {
+          name: current.name || current.className,
+          type: itemType,
+          data: current
+        };
+      }
+
+      // Find matching item in target object by type and name
+      function findMatchingItemInObject(sourceItem, targetObject) {
+        const searchIn = targetObject.rootPackages || [];
+        return searchForMatchingItem(sourceItem, searchIn);
+      }
+
+      function searchForMatchingItem(sourceItem, packages) {
+        if (!packages || !Array.isArray(packages)) return null;
+        
+        for (const pkg of packages) {
+          // Check if this package matches
+          if (sourceItem.type === 'package' && pkg.name === sourceItem.name) {
+            return pkg;
+          }
+          
+          // Check elements in this package
+          if (sourceItem.type === 'element' && pkg.elements) {
+            const match = pkg.elements.find(el => 
+              (el.name || el.className) === sourceItem.name
+            );
+            if (match) return match;
+          }
+          
+          // Recursively search in child packages
+          if (pkg.children || pkg.packages) {
+            const childMatch = searchForMatchingItem(sourceItem, pkg.children || pkg.packages);
+            if (childMatch) return childMatch;
+          }
+        }
+        
+        return null;
+      }
+
+      // Compare two items and return list of differences
+    //   тянет на универсальную функцию сравнения. атрибуты и связи надо сделать так же
+      function compareItems(item1, item2) {
+        const differences = [];
+        
+        if (!item1 || !item2) return differences;
+        
+        // Compare basic properties
+        const compareProps = ['name', 'className', 'type', 'description', 'description_ru', 'isAbstract', 'multiplicity'];
+        
+        compareProps.forEach(prop => {
+          const val1 = item1[prop];
+          const val2 = item2[prop];
+          
+          if (val1 !== val2 && (val1 !== undefined || val2 !== undefined)) {
+            differences.push({
+              field: prop,
+              type: 'property',
+              value1: val1 === undefined ? '(отсутствует)' : val1,
+              value2: val2 === undefined ? '(отсутствует)' : val2,
+              message: `Свойство "${prop}": "${val1 || '(пусто)'}" → "${val2 || '(пусто)'}"`
+            });
+          }
+        });
+        
+        // Compare attributes
+        const attrs1 = item1.attributes || [];
+        const attrs2 = item2.attributes || [];
+        
+        if (attrs1.length !== attrs2.length) {
+          differences.push({
+            field: 'attributes',
+            type: 'count',
+            value1: attrs1.length,
+            value2: attrs2.length,
+            message: `Количество атрибутов: ${attrs1.length} → ${attrs2.length}`
+          });
+        }
+        
+        // Compare each attribute
+        attrs1.forEach(attr1 => {
+          const attr2 = attrs2.find(a => a.name === attr1.name);
+          if (!attr2) {
+            differences.push({
+              field: 'attributes',
+              type: 'missing',
+              value1: attr1.name,
+              value2: null,
+              message: `Атрибут "${attr1.name}" отсутствует во втором объекте`
+            });
+          } else {
+            // Compare attribute properties
+            if (attr1.type !== attr2.type || attr1.dataType !== attr2.dataType) {
+              differences.push({
+                field: 'attributes',
+                type: 'type',
+                value1: attr1.type || attr1.dataType,
+                value2: attr2.type || attr2.dataType,
+                message: `Атрибут "${attr1.name}": тип "${attr1.type || attr1.dataType}" → "${attr2.type || attr2.dataType}"`
+              });
+            }
+            if (attr1.multiplicity !== attr2.multiplicity) {
+              differences.push({
+                field: 'attributes',
+                type: 'multiplicity',
+                value1: attr1.multiplicity,
+                value2: attr2.multiplicity,
+                message: `Атрибут "${attr1.name}": кратность "${attr1.multiplicity || '(не указана)'}" → "${attr2.multiplicity || '(не указана)'}"`
+              });
+            }
+            // Compare description separately
+            const desc1 = attr1.description || '';
+            const desc2 = attr2.description || '';
+            if (desc1 !== desc2) {
+              differences.push({
+                field: 'attributes',
+                type: 'description',
+                value1: desc1,
+                value2: desc2,
+                message: `Атрибут "${attr1.name}": description "${desc1 || '(пусто)'}" → "${desc2 || '(пусто)'}"`
+              });
+            }
+            // Compare description_ru separately
+            const descRu1 = attr1.description_ru || '';
+            const descRu2 = attr2.description_ru || '';
+            if (descRu1 !== descRu2) {
+              differences.push({
+                field: 'attributes',
+                type: 'description_ru',
+                value1: descRu1,
+                value2: descRu2,
+                message: `Атрибут "${attr1.name}": description_ru "${descRu1 || '(пусто)'}" → "${descRu2 || '(пусто)'}"`
+              });
+            }
+          }
+        });
+        
+        // Check for attributes only in item2
+        attrs2.forEach(attr2 => {
+          const attr1 = attrs1.find(a => a.name === attr2.name);
+          if (!attr1) {
+            differences.push({
+              field: 'attributes',
+              type: 'added',
+              value1: null,
+              value2: attr2.name,
+              message: `Атрибут "${attr2.name}" присутствует только во втором объекте`
+            });
+          }
+        });
+        
+        // Compare links/associations
+        const links1 = item1.links || [];
+        const links2 = item2.links || [];
+        
+        if (links1.length !== links2.length) {
+          differences.push({
+            field: 'links',
+            type: 'count',
+            value1: links1.length,
+            value2: links2.length,
+            message: `Количество связей: ${links1.length} → ${links2.length}`
+          });
+        }
+        
+        // Compare each link
+        links1.forEach(link1 => {
+          const link2 = links2.find(l => 
+            l.target_class_name === link1.target_class_name && 
+            l.relation_kind === link1.relation_kind &&
+            l.target_class_role_name === link1.target_class_role_name
+          );
+          
+          if (!link2) {
+            differences.push({
+              field: 'links',
+              type: 'missing',
+              value1: `${link1.target_class_role_name || ''} → ${link1.target_class_name} (${link1.relation_kind})`,
+              value2: null,
+              message: `Связь "${link1.target_class_role_name || ''}" → "${link1.target_class_name}" (${link1.relation_kind}) отсутствует во втором объекте`
+            });
+          } else {
+            // Compare link properties - description separately
+            const desc1 = link1.description || '';
+            const desc2 = link2.description || '';
+            if (desc1 !== desc2) {
+              differences.push({
+                field: 'links',
+                type: 'description',
+                value1: desc1,
+                value2: desc2,
+                message: `Связь "${link1.target_class_role_name || ''}" → "${link1.target_class_name}": description "${desc1 || '(пусто)'}" → "${desc2 || '(пусто)'}"`
+              });
+            }
+            // Compare target_description separately
+            const targetDesc1 = link1.target_description || '';
+            const targetDesc2 = link2.target_description || '';
+            if (targetDesc1 !== targetDesc2) {
+              differences.push({
+                field: 'links',
+                type: 'target_description',
+                value1: targetDesc1,
+                value2: targetDesc2,
+                message: `Связь "${link1.target_class_role_name || ''}" → "${link1.target_class_name}": target_description "${targetDesc1 || '(пусто)'}" → "${targetDesc2 || '(пусто)'}"`
+              });
+            }
+          }
+        });
+        
+        // Check for links only in item2
+        links2.forEach(link2 => {
+          const link1 = links1.find(l => 
+            l.target_class_name === link2.target_class_name && 
+            l.relation_kind === link2.relation_kind &&
+            l.target_class_role_name === link2.target_class_role_name
+          );
+          
+          if (!link1) {
+            differences.push({
+              field: 'links',
+              type: 'added',
+              value1: null,
+              value2: `${link2.target_class_role_name || ''} → ${link2.target_class_name} (${link2.relation_kind})`,
+              message: `Связь "${link2.target_class_role_name || ''}" → "${link2.target_class_name}" (${link2.relation_kind}) присутствует только во втором объекте`
+            });
+          }
+        });
+        
+        return differences;
+      }
+
+      // Render selective comparison results
+      function renderSelectiveComparisonResults(object1, object2, results) {
+        document.getElementById("comparison-results").style.display = "block";
+        
+        // Calculate stats (but don't render comparison-stats block)
+        const identical = results.filter(r => r.status === 'identical').length;
+        const different = results.filter(r => r.status === 'different').length;
+        const notFound = results.filter(r => r.status === 'not-found').length;
+        
+        // Update headers
+        document.getElementById("profile1-name").textContent = `${object1.name} (${object1.objectType === 'model' ? 'Модель' : 'Профиль'})`;
+        document.getElementById("profile2-name").textContent = `${object2.name} (${object2.objectType === 'model' ? 'Модель' : 'Профиль'})`;
+        
+        // Update details
+        document.getElementById("profile1-details").innerHTML = 
+          `<p><strong>Выбрано для сравнения:</strong> ${results.length} объект(ов)</p>` +
+          `<p><strong>Идентичных:</strong> ${identical}</p>` +
+          `<p><strong>С различиями:</strong> ${different}</p>` +
+          `<p><strong>Не найдено:</strong> ${notFound}</p>`;
+        
+        document.getElementById("profile2-details").innerHTML = 
+          `<p><strong>Проект:</strong> ${object2.projectName}</p>` +
+          `<p><strong>Тип:</strong> ${object2.objectType === 'model' ? object2.type : 'Профиль'}</p>`;
+        
+        // Render differences list
+        let diffHtml = '';
+        
+        results.forEach(result => {
+          const statusIcon = result.status === 'identical' ? '✅' : 
+                            result.status === 'not-found' ? '❌' : '⚠️';
+          const statusClass = result.status === 'identical' ? 'diff-added' : 
+                             result.status === 'not-found' ? 'diff-removed' : 'badge';
+          
+          diffHtml += `
+            <div class="card difference-item">
+              <h4><span class="${statusClass}">${statusIcon}</span> ${esc(result.name)} (${result.type === 'package' ? 'Пакет' : 'Класс'})</h4>
+              <p><strong>${result.message}</strong></p>
+          `;
+          
+          if (result.differences && result.differences.length > 0) {
+            diffHtml += `
+              <table class="table" style="margin-top: 10px;">
+                 <colgroup>
+                    <col style="width: 20%;"/>
+                    <col style="width: 45%;"/>
+                    <col style="width: 20%;"/>
+                    <col style="width: 15%;"/>
+                  </colgroup>
+                <thead>
+                  <tr>
+                    <th>Объект и характеристика</th>
+                    <th>${esc(object1.name)}</th>
+                    <th>${esc(object2.name)}</th>
+                    <th>Тип изменения</th>
+                  </tr>
+                </thead>
+                <tbody>
+            `;
+            
+            result.differences.forEach(diff => {
+              const objLabel = formatDifferenceLabel(diff);
+              const value1 = formatDifferenceValue(diff.value1);
+              const value2 = formatDifferenceValue(diff.value2);
+              const changeType = formatChangeType(diff, object1.name, object2.name);
+              
+              diffHtml += `
+                <tr>
+                  <td>${objLabel}</td>
+                  <td>${value1}</td>
+                  <td>${value2}</td>
+                  <td>${changeType}</td>
+                </tr>
+              `;
+            });
+            
+            diffHtml += `
+                </tbody>
+              </table>
+            `;
+          }
+          
+          diffHtml += '</div>';
+        });
+        
+        document.getElementById("differences-list").innerHTML = diffHtml || '<p class="text-muted">Нет результатов для отображения</p>';
+      }
+
+      // Helper function to format difference label (column 1)
+      function formatDifferenceLabel(diff) {
+        if (diff.field === 'attributes') {
+          if (diff.type === 'missing' || diff.type === 'added') {
+            return `Атрибут "${esc(diff.value1 || diff.value2)}"`;
+          }
+          
+          const attrName = extractAttributeName(diff.message);
+          
+          if (diff.type === 'type') {
+            return `Атрибут "${attrName}": тип данных`;
+          } else if (diff.type === 'multiplicity') {
+            return `Атрибут "${attrName}": кратность`;
+          } else if (diff.type === 'description') {
+            return `Атрибут "${attrName}": описание`;
+          } else if (diff.type === 'description_ru') {
+            return `Атрибут "${attrName}": описание (рус)`;
+          }
+        } else if (diff.field === 'links') {
+          if (diff.type === 'missing' || diff.type === 'added') {
+            const linkInfo = extractLinkInfo(diff.value1 || diff.value2);
+            return `Связь "${linkInfo.target}"`;
+          }
+          
+          const linkName = extractLinkName(diff.message);
+          
+          if (diff.type === 'description') {
+            return `Связь "${linkName}": описание`;
+          } else if (diff.type === 'target_description') {
+            return `Связь "${linkName}": целевой класс`;
+          }
+        } else {
+          // Property-level differences
+          return `Свойство "${esc(diff.field)}"`;
+        }
+        
+        return esc(diff.field);
+      }
+
+      // Helper function to extract attribute name from message
+      function extractAttributeName(message) {
+        const match = message.match(/Атрибут "([^"]+)"/);
+        return match ? esc(match[1]) : '';
+      }
+
+      // Helper function to extract link name from message
+      function extractLinkName(message) {
+        const match = message.match(/Связь "([^"]+)"/);
+        return match ? esc(match[1]) : '';
+      }
+
+      // Helper function to extract link info from value string
+      function extractLinkInfo(valueStr) {
+        if (!valueStr) return { target: '' };
+        // Format: "role → TargetClass (kind)"
+        const match = String(valueStr).match(/(.+?)\s*→\s*(.+?)\s*\(/);
+        if (match) {
+          return { role: match[1], target: match[2] };
+        }
+        return { target: String(valueStr) };
+      }
+
+      // Helper function to format values (columns 2 and 3)
+      function formatDifferenceValue(value) {
+        if (value === null || value === undefined) {
+          return '<span style="color: #999; font-style: italic;">отсутствует</span>';
+        }
+        if (value === '' || value === '(пусто)') {
+          return '<span style="color: #999; font-style: italic;">(пусто)</span>';
+        }
+        if (value === '(отсутствует)') {
+          return '<span style="color: #999; font-style: italic;">отсутствует</span>';
+        }
+        return esc(String(value));
+      }
+
+      // Helper function to format change type (column 4)
+      function formatChangeType(diff, obj1Name, obj2Name) {
+        if (diff.type === 'missing') {
+          return `Присутствует только в ${esc(obj1Name)}`;
+        } else if (diff.type === 'added') {
+          return `Присутствует только в ${esc(obj2Name)}`;
+        } else if (diff.type === 'count') {
+          return 'Изменено количество';
+        } else {
+          return 'Изменено значение';
+        }
+      }
+
+      // Show comparison results when button is clicked
+      function showComparisonResults() {
+        if (window.lastComparisonResults) {
+          const { object1, object2, results } = window.lastComparisonResults;
+          renderSelectiveComparisonResults(object1, object2, results);
+          // Scroll to results
+          document.getElementById('comparison-results').scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+
+      // Save comparison results to file
+      function saveComparisonResults() {
+        if (!window.lastComparisonResults) {
+          alert('Нет результатов для сохранения');
+          return;
+        }
+
+        const { object1, object2, results } = window.lastComparisonResults;
+        
+        // Generate report content
+        let reportText = `ОТЧЕТ О СРАВНЕНИИ\n`;
+        reportText += `${'='.repeat(80)}\n\n`;
+        reportText += `Дата сравнения: ${new Date().toLocaleString('ru-RU')}\n\n`;
+        reportText += `Объект 1: ${object1.name} (${object1.objectType === 'model' ? 'Модель' : 'Профиль'})\n`;
+        reportText += `Проект: ${object1.projectName}\n\n`;
+        reportText += `Объект 2: ${object2.name} (${object2.objectType === 'model' ? 'Модель' : 'Профиль'})\n`;
+        reportText += `Проект: ${object2.projectName}\n\n`;
+        reportText += `${'='.repeat(80)}\n\n`;
+
+        // Statistics
+        const identical = results.filter(r => r.status === 'identical').length;
+        const different = results.filter(r => r.status === 'different').length;
+        const notFound = results.filter(r => r.status === 'not-found').length;
+        
+        reportText += `СТАТИСТИКА\n`;
+        reportText += `${'-'.repeat(80)}\n`;
+        reportText += `Всего объектов сравнено: ${results.length}\n`;
+        reportText += `Идентичных: ${identical}\n`;
+        reportText += `С различиями: ${different}\n`;
+        reportText += `Не найдено: ${notFound}\n\n`;
+        reportText += `${'='.repeat(80)}\n\n`;
+
+        // Detailed differences
+        reportText += `ДЕТАЛЬНЫЕ РЕЗУЛЬТАТЫ\n`;
+        reportText += `${'='.repeat(80)}\n\n`;
+
+        results.forEach((result, index) => {
+          reportText += `${index + 1}. ${result.name} (${result.type === 'package' ? 'Пакет' : 'Класс'})\n`;
+          reportText += `   Статус: ${result.status === 'identical' ? 'Идентичен' : result.status === 'not-found' ? 'Не найден' : 'Имеет различия'}\n`;
+          reportText += `   ${result.message}\n`;
+
+          if (result.differences && result.differences.length > 0) {
+            reportText += `\n   Обнаруженные различия:\n`;
+            result.differences.forEach((diff, diffIndex) => {
+              reportText += `   ${diffIndex + 1}) ${diff.message}\n`;
+            });
+          }
+          
+          reportText += `\n${'-'.repeat(80)}\n\n`;
+        });
+
+        // Create and download file
+        const blob = new Blob([reportText], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `comparison_${object1.name}_vs_${object2.name}_${new Date().toISOString().slice(0, 10)}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+
+      // Analysis mode comparison (for future implementation)
+      function performAnalysisComparison(object1, object2) {
+        alert('Режим анализа будет реализован позже');
+        // TODO: Implement bidirectional comparison with both trees
+      }
+
       function renderComparison(obj1, obj2) {
         document.getElementById("comparison-results").style.display = "block";
-
-        // Mock statistics
-        const common =
-          Math.min(obj1.classes || 0, obj2.classes || 0) -
-          Math.floor(Math.random() * 10);
-        const unique1 = (obj1.classes || 0) - common;
-        const unique2 = (obj2.classes || 0) - common;
-
-        document.getElementById("stat-common").textContent = common;
-        document.getElementById("stat-unique1").textContent = unique1;
-        document.getElementById("stat-unique2").textContent = unique2;
 
         // Object names with type indicator
         document.getElementById("profile1-name").textContent = `${obj1.name} (${
